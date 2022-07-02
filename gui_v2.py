@@ -604,7 +604,6 @@ class Ui_MainWindow(object):
             mostRecentSharedVariablePointer -= 1
         microstep = self.microSteps[mostRecentSharedVariablePointer]
         sharedVariableList = microstep['shared']
-        # TODO: are pc and address primitive?
         primitiveTypes = {'int', 'bool', 'atom', 'pc'}
         # iterate through harmony values in sharedVariableList
         counter = 0 
@@ -630,6 +629,10 @@ class Ui_MainWindow(object):
                     self.recursiveAdd(item_0, self.sharedVariables.topLevelItem(counter), variable, variableName)
             elif variable['type'] == 'dict':
                 self.recursiveAdd(item_0, self.sharedVariables.topLevelItem(counter), variable, variableName)
+            elif variable['type'] == 'context':
+                self.recursiveAdd(item_0, self.sharedVariables.topLevelItem(counter), variable, variableName)
+            else:
+                raise Exception("Unexpected Harmony type")
             counter += 1
     
     def localVariableUpdate(self):
@@ -642,7 +645,6 @@ class Ui_MainWindow(object):
         microstep = self.microSteps[mostRecentLocalVariablePointer]
         localVariableList = microstep['local']
         assert microstep['tid'] == self.microSteps[self.microStepPointer]['tid']
-        # TODO: are pc and address primitive?
         primitiveTypes = {'int', 'bool', 'atom', 'pc'}
         # iterate through harmony values in localVariableList
         counter = 0 
@@ -668,6 +670,10 @@ class Ui_MainWindow(object):
                     self.recursiveAdd(item_0, self.localVariables.topLevelItem(counter), variable, variableName)
             elif variable['type'] == 'dict':
                 self.recursiveAdd(item_0, self.localVariables.topLevelItem(counter), variable, variableName)
+            elif variable['type'] == 'context':
+                self.recursiveAdd(item_0, self.localVariables.topLevelItem(counter), variable, variableName)
+            else:
+                raise Exception("Unexpected Harmony type")
             counter += 1
 
     def recursiveAdd(self, item, node, variable, variableName):
@@ -678,6 +684,15 @@ class Ui_MainWindow(object):
         if variable['type'] in primitiveTypes:
             # base case 1
             node.setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
+        elif variable['type'] == 'context':
+            # base case
+            node.setText(0, f"{variableName} <context>")
+            ctxKeys = ['pc', 'atomic', 'initial', 'atomicFlag', 'stopped', 'sp']
+            for i in range(len(ctxKeys)):
+                new_items = []
+                new_items.append(QtWidgets.QTreeWidgetItem(item))
+            for i in range(len(ctxKeys)):
+                node.child(i).setText(0, f"{ctxKeys[i]}: {self.variableToText(variable['value'][ctxKeys[i]]['type'], variable['value'][ctxKeys[i]])}")
         elif variable['type'] == 'address':
             if self.isNaive(variable):
                 # base case
@@ -720,8 +735,6 @@ class Ui_MainWindow(object):
                     new_items.append(QtWidgets.QTreeWidgetItem(item))
                 for i in range(len(variable['value'])):
                     keyValue = variable['value'][i]['key']
-                    # !!! here we are assuming dictionary key is of primitive type
-                    # is it safe to assume so?
                     assert keyValue['type'] in primitiveTypes
                     key = self.variableToText(keyValue['type'], keyValue)
                     self.recursiveAdd(node.child(i), node.child(i), variable['value'][i]['value'], f"[{key}]")
@@ -738,6 +751,9 @@ class Ui_MainWindow(object):
 
     # TODO: context variable
     def variableToText(self, type, value):
+        """
+        Transform non-recursive variables to text (primitive values and naive non-primitive values)
+        """
         if type == 'int':
             # e.g, { "type": "int", "value": "1" } -> "1"
             return value['value']
@@ -800,23 +816,29 @@ class Ui_MainWindow(object):
 
     def isNaive(self, value):
         """
-        determine whether a list/set or dictionary or address is naive 
+        determine whether a non-primitive value (list/set or dictionary or address) is naive 
         A list/set is naive iff all entries are primitive values
         A dictionary is naive iff all keys are primitive values
         An address is naive iff all values in the list are primitive values
         """
         assert value['type'] in {'list', 'set', 'dict', 'address'}
-        primitiveTypes = {'int', 'bool', 'atom', 'pc', 'address'}
+        primitiveTypes = {'int', 'bool', 'atom', 'pc'}
         # handle the case of a list/set
         if value['type'] in {'list', 'set'}:
             for element in value['value']:
                 if element['type'] not in primitiveTypes:
+                    # Do not return False if this is a naive address
+                    if element['type'] == 'address' and self.isNaive(value):
+                        continue
                     return False
             return True
         # handle the case of a dictonary
         elif value['type'] == 'dict':
             for keyValuePair in value['value']:
                 if keyValuePair['key']['type'] not in primitiveTypes:
+                    # Do not return False if this is a naive address
+                    if element['type'] == 'address' and self.isNaive(value):
+                        continue
                     return False
             return True
         # handle the case of a dictionary
@@ -865,3 +887,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
