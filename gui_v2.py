@@ -605,13 +605,19 @@ class Ui_MainWindow(object):
         microstep = self.microSteps[mostRecentSharedVariablePointer]
         sharedVariableList = microstep['shared']
         # TODO: are pc and address primitive?
-        primitiveTypes = {'int', 'bool', 'atom', 'pc', 'address'}
+        primitiveTypes = {'int', 'bool', 'atom', 'pc'}
         # iterate through harmony values in sharedVariableList
         counter = 0 
         for variableName, variable in sharedVariableList.items():
             item_0 = QtWidgets.QTreeWidgetItem(self.sharedVariables)
             if variable['type'] in primitiveTypes: 
                 self.sharedVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
+            elif variable['type'] == 'address':
+                if self.isNaive(variable):
+                    self.sharedVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
+                else:
+                    self.recursiveAdd(item_0, self.sharedVariables.topLevelItem(counter), variable, variableName)
+                    print("!")
             elif variable['type'] == 'list':
                 if self.isNaive(variable):
                     self.sharedVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
@@ -637,13 +643,19 @@ class Ui_MainWindow(object):
         localVariableList = microstep['local']
         assert microstep['tid'] == self.microSteps[self.microStepPointer]['tid']
         # TODO: are pc and address primitive?
-        primitiveTypes = {'int', 'bool', 'atom', 'pc', 'address'}
+        primitiveTypes = {'int', 'bool', 'atom', 'pc'}
         # iterate through harmony values in localVariableList
         counter = 0 
         for variableName, variable in localVariableList.items():
             item_0 = QtWidgets.QTreeWidgetItem(self.localVariables)
             if variable['type'] in primitiveTypes: 
                 self.localVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
+            elif variable['type'] == 'address':
+                if self.isNaive(variable):
+                    self.localVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
+                else:
+                    self.recursiveAdd(item_0, self.localVariables.topLevelItem(counter), variable, variableName)
+                    print("!")
             elif variable['type'] == 'list':
                 if self.isNaive(variable):
                     self.localVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
@@ -662,11 +674,22 @@ class Ui_MainWindow(object):
         """
         recursively display harmony values to treelist view
         """
-        primitiveTypes = {'int', 'bool', 'atom', 'pc', 'address'}
+        primitiveTypes = {'int', 'bool', 'atom', 'pc'}
         if variable['type'] in primitiveTypes:
             # base case 1
             node.setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
-        if variable['type'] == 'list':
+        elif variable['type'] == 'address':
+            if self.isNaive(variable):
+                # base case
+                node.setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
+                return
+            node.setText(0, f"{variableName} <address>")
+            for i in range(len(variable['value'])):
+                new_items = []
+                new_items.append(QtWidgets.QTreeWidgetItem(item))
+            for i in range(len(variable['value'])):
+                self.recursiveAdd(node.child(i), node.child(i), variable['value'][i], f"[{i}]")
+        elif variable['type'] == 'list':
             if self.isNaive(variable):
                 # base case
                 node.setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
@@ -676,7 +699,7 @@ class Ui_MainWindow(object):
                 new_items = []
                 new_items.append(QtWidgets.QTreeWidgetItem(item))
             for i in range(len(variable['value'])):
-                self.recursiveAdd(node.child(i), node.child(i), variable['value'][i], f"{variableName}[{i}]")
+                self.recursiveAdd(node.child(i), node.child(i), variable['value'][i], f"[{i}]")
         elif variable['type'] == 'set':
             if self.isNaive(variable):
                 # base case
@@ -687,19 +710,31 @@ class Ui_MainWindow(object):
                 new_items = []
                 new_items.append(QtWidgets.QTreeWidgetItem(item))
             for i in range(len(variable['value'])):
-                self.recursiveAdd(node.child(i), node.child(i), variable['value'][i], f"{variableName}[{i}]")
+                self.recursiveAdd(node.child(i), node.child(i), variable['value'][i], f"[{i}]")
         elif variable['type'] == 'dict':
-            node.setText(0, f"{variableName} <dict>")
-            for i in range(len(variable['value'])):
-                new_items = []
-                new_items.append(QtWidgets.QTreeWidgetItem(item))
-            for i in range(len(variable['value'])):
-                keyValue = variable['value'][i]['key']
-                # !!! here we are assuming dictionary key is of primitive type
-                # is it safe to assume so?
-                assert keyValue['type'] in primitiveTypes
-                key = self.variableToText(keyValue['type'], keyValue)
-                self.recursiveAdd(node.child(i), node.child(i), variable['value'][i]['value'], f"{variableName}[{key}]")
+            # dictionary is naive (all keys are primitive types)
+            if self.isNaive(variable):
+                node.setText(0, f"{variableName} <dict>")
+                for i in range(len(variable['value'])):
+                    new_items = []
+                    new_items.append(QtWidgets.QTreeWidgetItem(item))
+                for i in range(len(variable['value'])):
+                    keyValue = variable['value'][i]['key']
+                    # !!! here we are assuming dictionary key is of primitive type
+                    # is it safe to assume so?
+                    assert keyValue['type'] in primitiveTypes
+                    key = self.variableToText(keyValue['type'], keyValue)
+                    self.recursiveAdd(node.child(i), node.child(i), variable['value'][i]['value'], f"[{key}]")
+            # special the case where dictionary is not naive
+            else:
+                node.setText(0, f"{variableName} <dict>")
+                for i in range(len(variable['value'])):
+                    new_items = []
+                    new_items.append(QtWidgets.QTreeWidgetItem(item))
+                    new_items.append(QtWidgets.QTreeWidgetItem(item))
+                for i in range(len(variable['value'])):
+                    self.recursiveAdd(node.child(2*i), node.child(2*i), variable['value'][i]['key'], f"key[{i}]")
+                    self.recursiveAdd(node.child(2*i + 1), node.child(2*i + 1), variable['value'][i]['value'], f"value[{i}]")
 
     # TODO: context variable
     def variableToText(self, type, value):
@@ -726,6 +761,7 @@ class Ui_MainWindow(object):
             # Precondition: everything in adress is of type string and int
             # TODO: what if is not string or int? list/dictionary/set? boolean? 
             # value['value'] is a list of harmony values
+            assert self.isNaive(value)
             if len(value['value']) == 0:
                 return "None"
             addrStr = "?"
@@ -764,14 +800,32 @@ class Ui_MainWindow(object):
 
     def isNaive(self, value):
         """
-        determine whether a list or set is naive
+        determine whether a list/set or dictionary or address is naive 
+        A list/set is naive iff all entries are primitive values
+        A dictionary is naive iff all keys are primitive values
+        An address is naive iff all values in the list are primitive values
         """
-        assert value['type'] == 'list' or value['type'] == 'set'
+        assert value['type'] in {'list', 'set', 'dict', 'address'}
         primitiveTypes = {'int', 'bool', 'atom', 'pc', 'address'}
-        for element in value['value']:
-            if element['type'] not in primitiveTypes:
-                return False
-        return True
+        # handle the case of a list/set
+        if value['type'] in {'list', 'set'}:
+            for element in value['value']:
+                if element['type'] not in primitiveTypes:
+                    return False
+            return True
+        # handle the case of a dictonary
+        elif value['type'] == 'dict':
+            for keyValuePair in value['value']:
+                if keyValuePair['key']['type'] not in primitiveTypes:
+                    return False
+            return True
+        # handle the case of a dictionary
+        elif value['type'] == 'address':
+            for element in value['value']:
+                if element['type'] not in primitiveTypes:
+                    return False
+            return True
+        
 
 
     # TODO: merge self.threadBrowser and self.stackTrace
