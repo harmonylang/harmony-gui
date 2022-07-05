@@ -331,14 +331,14 @@ class Ui_MainWindow(object):
         # update the highlight part
         self.sourceFile = fname
         self.highlightUpdate()
+        # initialize thread images
+        self.createThreadImg()
         # display thread browser
-        self.displayThreadBrowser()
+        self.threadBrowserUpdate()
         # update shared variable
         self.sharedVariableUpdate()
         # update local variable
         self.localVariableUpdate()
-        # update stack trace
-        self.stackTraceUpdate()
         # display issue
         self.displayIssue()
         # update checkbox
@@ -375,7 +375,7 @@ class Ui_MainWindow(object):
         # update highlight part
         pc = int(self.microSteps[self.microStepPointer]["pc"])
         # update microstepExplain label
-        explanation = self.hco['explain'][pc]
+        explanation = self.microSteps[self.microStepPointer]['explain']
         threadId = int(self.microSteps[self.microStepPointer]['tid'])
         assert int(self.microSteps[self.microStepPointer]['contexts'][threadId]['tid']) == threadId
         threadName = self.microSteps[self.microStepPointer]['contexts'][threadId]['name']
@@ -428,8 +428,8 @@ class Ui_MainWindow(object):
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
-        self.stackTraceUpdate()
         self.updateCheckBox()
+        self.threadBrowserUpdate()
 
     def prevMicroStep(self):
         if self.byteCode.toPlainText() == "":
@@ -440,8 +440,8 @@ class Ui_MainWindow(object):
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
-        self.stackTraceUpdate()
         self.updateCheckBox()
+        self.threadBrowserUpdate()
 
     def sliderMoveUpdate(self):
         if self.byteCode.toPlainText() == "":
@@ -450,8 +450,8 @@ class Ui_MainWindow(object):
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
-        self.stackTraceUpdate()
         self.updateCheckBox()
+        self.threadBrowserUpdate()
     
     def openFileByTypedPath(self):
         filepath = self.filePathText.text()
@@ -594,10 +594,9 @@ class Ui_MainWindow(object):
                 os.mkdir(f"{imageDirName}")
                 img.save(f"{imageDirName}/{imageName}")
 
-    def displayThreadBrowser(self):
+    def threadBrowserUpdate(self):
         self.threadBrowser.setText("")
-        self.createThreadImg()
-        cursorPosition = -2
+        cursorPosition = 4
         filePath = self.hco["locations"]["0"]["file"][:-4]
         fileName = filePath.rsplit('/', 1)[-1]
         imageDirName = f"{self.sourceFile[:-4]}_threadImg"
@@ -605,7 +604,6 @@ class Ui_MainWindow(object):
         # print(imageDirName)
         for i in range(self.threadNumber):
             imageName = f"{fileName}_t{i}.png"
-            cursorPosition += 6
             # i can be 1-digit, 2-digit, or 3-digit
             if i < 10:
                 self.threadBrowser.append(f"T{i}  ")
@@ -619,6 +617,11 @@ class Ui_MainWindow(object):
             cursor = QTextCursor(document)
             cursor.setPosition(cursorPosition)
             cursor.insertImage(f"{imageDirName}/{imageName}")
+            cursorPosition += 1
+            cursor.setPosition(cursorPosition)
+            cursor.insertText(f" {self.stackTraceTextList[self.microStepPointer][i]}")
+            cursorPosition += (len(self.stackTraceTextList[self.microStepPointer][i]) + 6)
+
         
         # self.threadBrowser.append("T0  ")
         # document = self.threadBrowser.document()
@@ -649,7 +652,6 @@ class Ui_MainWindow(object):
                     self.sharedVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
                 else:
                     self.recursiveAdd(item_0, self.sharedVariables.topLevelItem(counter), variable, variableName)
-                    print("!")
             elif variable['type'] == 'list':
                 if self.isNaive(variable):
                     self.sharedVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
@@ -690,7 +692,6 @@ class Ui_MainWindow(object):
                     self.localVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
                 else:
                     self.recursiveAdd(item_0, self.localVariables.topLevelItem(counter), variable, variableName)
-                    print("!")
             elif variable['type'] == 'list':
                 if self.isNaive(variable):
                     self.localVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
@@ -902,36 +903,33 @@ class Ui_MainWindow(object):
                 tid = int(self.microSteps[i]['tid'])
                 self.stackTraceList[tid] = traceLine
                 # update the ith entry in self.stackTraceTextList
-                text = ""
+                self.stackTraceTextList[i] = []
                 for stackTraceLine in self.stackTraceList:
-                    text = text + stackTraceLine + "\n"
-                self.stackTraceTextList[i] = text
+                    self.stackTraceTextList[i].append(stackTraceLine)
             else:
                 # there is no change in stack trace
                 self.stackTraceTextList[i] = self.stackTraceTextList[i - 1]
 
-    def stackTraceUpdate(self):
-        pass
-        # self.stackTrace.setPlainText(self.stackTraceTextList[self.microStepPointer])
 
     def displayIssue(self):
         issueText = self.hco["issue"]
         self.issue.setText(f"Issue: {issueText}")
 
     def updateCheckBox(self):
-        # TODO: update atomic checkbox
-        self.atomic.setChecked(False)
-        if 'atomic' in self.microSteps[self.microStepPointer]:
-            atomicCounter = int(self.microSteps[self.microStepPointer]['atomic'])
-            if atomicCounter > 0:
-                self.atomic.setChecked(True)
-        # TODO: update readOnly checkbox
-        self.readOnly.setChecked(False)
-        if 'readonly' in self.microSteps[self.microStepPointer]:
-            readonlyCounter = int(self.microSteps[self.microStepPointer]['readonly'])
-            if readonlyCounter > 0:
-                self.readOnly.setChecked(True)
-        # TODO: update interrupt disabled checkbox
+        pass
+        # # TODO: update atomic checkbox
+        # self.atomic.setChecked(False)
+        # if 'atomic' in self.microSteps[self.microStepPointer]:
+        #     atomicCounter = int(self.microSteps[self.microStepPointer]['atomic'])
+        #     if atomicCounter > 0:
+        #         self.atomic.setChecked(True)
+        # # TODO: update readOnly checkbox
+        # self.readOnly.setChecked(False)
+        # if 'readonly' in self.microSteps[self.microStepPointer]:
+        #     readonlyCounter = int(self.microSteps[self.microStepPointer]['readonly'])
+        #     if readonlyCounter > 0:
+        #         self.readOnly.setChecked(True)
+        # # TODO: update interrupt disabled checkbox
     
 
 
