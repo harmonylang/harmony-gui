@@ -1,5 +1,0 @@
-def f(x, z):
-    x->y = z
-d = {.y: 5}
-f(?d, 7)
-assert d.y == 7

@@ -1,2 +1,0 @@
-var (x, y) = (5, 7) 
-print(x, y)

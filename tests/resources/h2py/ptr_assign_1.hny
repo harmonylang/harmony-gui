@@ -1,5 +1,0 @@
-def f(x_ptr):
-    !x_ptr = 5
-x = 3
-f(?x)
-print(x)

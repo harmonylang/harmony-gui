@@ -1,5 +1,0 @@
-x = {.a: 5}
-y = ?x
-z = ?y->a
-!z = 7
-assert x.a == 7
