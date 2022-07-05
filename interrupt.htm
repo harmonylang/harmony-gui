@@ -1,0 +1,2325 @@
+<html>
+<head>
+  <meta charset='UTF-8'></meta>
+  <style>
+#table-wrapper {
+  position:relative;
+}
+#table-scroll {
+  height:200px;
+  overflow:auto;  
+}
+#table-wrapper table {
+  width:100%;
+}
+#table-wrapper table * {
+  color:black;
+}
+#table-wrapper table thead th .text {
+  position:absolute;   
+  top:-20px;
+  z-index:2;
+  height:20px;
+  width:35%;
+  border:1px solid red;
+}
+table {
+    border-collapse: collapse;
+    border-style: hidden;
+}
+table td, table th {
+    border: 1px solid black;
+}
+
+  </style>
+</head>
+<body>
+<table>
+  <tr>
+    <td colspan='2'>
+<table border='1'>
+  <thead>
+    <tr>
+      <th colspan='4' style='color:red;'>
+        Issue: Safety violation
+      </th>
+      <th align='center' colspan='2'>
+        Shared Variables
+      </th>
+      <th align='center' colspan='2'>
+        Output
+      </th>
+    </tr>
+    <tr>
+      <th align='center' rowspan='1'>
+        Turn
+      </th>
+      <th align='center' rowspan='1'>
+        Thread
+      </th>
+      <th align='center' rowspan='1'>
+        Instructions Executed
+      </th>
+      <th align='center' rowspan='1'>
+        &nbsp;PC&nbsp;
+      </th>
+<td align='center' style='font-style: italic' colspan='1' rowspan='1'>count</td>
+<td align='center' style='font-style: italic' colspan='1' rowspan='1'>done</td>
+</tr><tr>
+    </tr>
+  </thead>
+  <tbody id='mestable'>
+<tr id='mes0'>
+  <td align='right'>
+    1&nbsp;
+  </td>
+  <td>
+    T0: __init__()  </td>
+  <td>
+    <canvas id='timeline0' width='300px' height='10px'>
+    </canvas>
+  </td>
+  <td align='center'>
+  </td>
+  <td align='center'>
+  </td>
+  <td align='center'>
+  </td>
+  <td>
+    <table id='log0' border='1'>
+    </table>
+  </td>
+</tr>
+<tr id='mes1'>
+  <td align='right'>
+    2&nbsp;
+  </td>
+  <td>
+    T1: main()  </td>
+  <td>
+    <canvas id='timeline1' width='300px' height='10px'>
+    </canvas>
+  </td>
+  <td align='center'>
+  </td>
+  <td align='center'>
+  </td>
+  <td align='center'>
+  </td>
+  <td>
+    <table id='log1' border='1'>
+    </table>
+  </td>
+</tr>
+  </tbody>
+</table>
+    </td>
+  </tr>
+  <tr><td></td></tr>
+  <tr>
+    <td colspan='2'>
+      <h3 style='color:blue;'>
+        <div id='coderow'>
+        </div>
+      </h3>
+    </td>
+  </tr>
+  <tr><td></td></tr>
+  <tr>
+    <td valign='top'>
+<div id='table-wrapper'>
+  <div id='table-scroll'>
+    <table border='1'>
+      <tbody>
+        <tr id='P0'>
+          <td align='right'>
+            <a name='P0'>0</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='start of method __init__' id='C0'>
+              Frame __init__ ()
+            </span>
+          </td>
+        </tr>
+        <tr id='P1'>
+          <td align='right'>
+            <a name='P1'>1</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push constant ?done' id='C1'>
+              Push ?done
+            </span>
+          </td>
+        </tr>
+        <tr id='P2'>
+          <td align='right'>
+            <a name='P2'>2</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='sequential consistency for variable on top of stack' id='C2'>
+              Sequential
+            </span>
+          </td>
+        </tr>
+        <tr id='P3'>
+          <td align='right'>
+            <a name='P3'>3</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push constant 0' id='C3'>
+              Push 0
+            </span>
+          </td>
+        </tr>
+        <tr id='P4'>
+          <td align='right'>
+            <a name='P4'>4</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a value and store it in shared variable count' id='C4'>
+              Store count
+            </span>
+          </td>
+        </tr>
+        <tr id='P5'>
+          <td align='right'>
+            <a name='P5'>5</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push constant False' id='C5'>
+              Push False
+            </span>
+          </td>
+        </tr>
+        <tr id='P6'>
+          <td align='right'>
+            <a name='P6'>6</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a value and store it in shared variable done' id='C6'>
+              Store done
+            </span>
+          </td>
+        </tr>
+        <tr id='P7'>
+          <td align='right'>
+            <a name='P7'>7</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='set program counter to 40' id='C7'>
+              Jump 40
+            </span>
+          </td>
+        </tr>
+        <tr id='P8'>
+          <td align='right'>
+            <a name='P8'>8</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='start of method handler' id='C8'>
+              Frame handler ()
+            </span>
+          </td>
+        </tr>
+        <tr id='P9'>
+          <td align='right'>
+            <a name='P9'>9</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push value of shared variable count' id='C9'>
+              Load count
+            </span>
+          </td>
+        </tr>
+        <tr id='P10'>
+          <td align='right'>
+            <a name='P10'>10</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='push constant 1' id='C10'>
+              Push 1
+            </span>
+          </td>
+        </tr>
+        <tr id='P11'>
+          <td align='right'>
+            <a name='P11'>11</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='pop 2 values and push the result of applying +' id='C11'>
+              2-ary +
+            </span>
+          </td>
+        </tr>
+        <tr id='P12'>
+          <td align='right'>
+            <a name='P12'>12</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a value and store it in shared variable count' id='C12'>
+              Store count
+            </span>
+          </td>
+        </tr>
+        <tr id='P13'>
+          <td align='right'>
+            <a name='P13'>13</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push constant True' id='C13'>
+              Push True
+            </span>
+          </td>
+        </tr>
+        <tr id='P14'>
+          <td align='right'>
+            <a name='P14'>14</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a value and store it in shared variable done' id='C14'>
+              Store done
+            </span>
+          </td>
+        </tr>
+        <tr id='P15'>
+          <td align='right'>
+            <a name='P15'>15</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='restore caller method state and push result' id='C15'>
+              Return
+            </span>
+          </td>
+        </tr>
+        <tr id='P16'>
+          <td align='right'>
+            <a name='P16'>16</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='set program counter to 40' id='C16'>
+              Jump 40
+            </span>
+          </td>
+        </tr>
+        <tr id='P17'>
+          <td align='right'>
+            <a name='P17'>17</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='start of method main' id='C17'>
+              Frame main ()
+            </span>
+          </td>
+        </tr>
+        <tr id='P18'>
+          <td align='right'>
+            <a name='P18'>18</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='push constant ()' id='C18'>
+              Push ()
+            </span>
+          </td>
+        </tr>
+        <tr id='P19'>
+          <td align='right'>
+            <a name='P19'>19</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push constant PC(8)' id='C19'>
+              Push PC(8)
+            </span>
+          </td>
+        </tr>
+        <tr id='P20'>
+          <td align='right'>
+            <a name='P20'>20</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a pc and argument and set trap' id='C20'>
+              Trap
+            </span>
+          </td>
+        </tr>
+        <tr id='P21'>
+          <td align='right'>
+            <a name='P21'>21</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push value of shared variable done' id='C21'>
+              Load done
+            </span>
+          </td>
+        </tr>
+        <tr id='P22'>
+          <td align='right'>
+            <a name='P22'>22</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a value and jump to 21 if the value is False' id='C22'>
+              JumpCond False 21
+            </span>
+          </td>
+        </tr>
+        <tr id='P23'>
+          <td align='right'>
+            <a name='P23'>23</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='set program counter to 25' id='C23'>
+              Jump 25
+            </span>
+          </td>
+        </tr>
+        <tr id='P24'>
+          <td align='right'>
+            <a name='P24'>24</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='set program counter to 21' id='C24'>
+              Jump 21
+            </span>
+          </td>
+        </tr>
+        <tr id='P25'>
+          <td align='right'>
+            <a name='P25'>25</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='increment readonly counter of context; thread cannot mutate shared variables if > 0' id='C25'>
+              ReadonlyInc
+            </span>
+          </td>
+        </tr>
+        <tr id='P26'>
+          <td align='right'>
+            <a name='P26'>26</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='increment atomic counter of context; thread runs uninterrupted if larger than 0' id='C26'>
+              AtomicInc(lazy)
+            </span>
+          </td>
+        </tr>
+        <tr id='P27'>
+          <td align='right'>
+            <a name='P27'>27</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push value of shared variable count' id='C27'>
+              Load count
+            </span>
+          </td>
+        </tr>
+        <tr id='P28'>
+          <td align='right'>
+            <a name='P28'>28</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='push constant 1' id='C28'>
+              Push 1
+            </span>
+          </td>
+        </tr>
+        <tr id='P29'>
+          <td align='right'>
+            <a name='P29'>29</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='pop 2 values and push the result of applying ==' id='C29'>
+              2-ary ==
+            </span>
+          </td>
+        </tr>
+        <tr id='P30'>
+          <td align='right'>
+            <a name='P30'>30</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a condition and raise exception if condition is false' id='C30'>
+              Assert
+            </span>
+          </td>
+        </tr>
+        <tr id='P31'>
+          <td align='right'>
+            <a name='P31'>31</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='decrement atomic counter of context' id='C31'>
+              AtomicDec
+            </span>
+          </td>
+        </tr>
+        <tr id='P32'>
+          <td align='right'>
+            <a name='P32'>32</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='decrement readonly counter of context' id='C32'>
+              ReadonlyDec
+            </span>
+          </td>
+        </tr>
+        <tr id='P33'>
+          <td align='right'>
+            <a name='P33'>33</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='increment readonly counter of context; thread cannot mutate shared variables if > 0' id='C33'>
+              ReadonlyInc
+            </span>
+          </td>
+        </tr>
+        <tr id='P34'>
+          <td align='right'>
+            <a name='P34'>34</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='increment atomic counter of context; thread runs uninterrupted if larger than 0' id='C34'>
+              AtomicInc(lazy)
+            </span>
+          </td>
+        </tr>
+        <tr id='P35'>
+          <td align='right'>
+            <a name='P35'>35</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push constant False' id='C35'>
+              Push False
+            </span>
+          </td>
+        </tr>
+        <tr id='P36'>
+          <td align='right'>
+            <a name='P36'>36</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='pop a condition and raise exception if condition is false' id='C36'>
+              Assert
+            </span>
+          </td>
+        </tr>
+        <tr id='P37'>
+          <td align='right'>
+            <a name='P37'>37</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='decrement atomic counter of context' id='C37'>
+              AtomicDec
+            </span>
+          </td>
+        </tr>
+        <tr id='P38'>
+          <td align='right'>
+            <a name='P38'>38</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='decrement readonly counter of context' id='C38'>
+              ReadonlyDec
+            </span>
+          </td>
+        </tr>
+        <tr id='P39'>
+          <td align='right'>
+            <a name='P39'>39</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='restore caller method state and push result' id='C39'>
+              Return
+            </span>
+          </td>
+        </tr>
+        <tr id='P40'>
+          <td align='right'>
+            <a name='P40'>40</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='push constant PC(17)' id='C40'>
+              Push PC(17)
+            </span>
+          </td>
+        </tr>
+        <tr id='P41'>
+          <td align='right'>
+            <a name='P41'>41</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='push constant ()' id='C41'>
+              Push ()
+            </span>
+          </td>
+        </tr>
+        <tr id='P42'>
+          <td align='right'>
+            <a name='P42'>42</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='push constant {:}' id='C42'>
+              Push {:}
+            </span>
+          </td>
+        </tr>
+        <tr id='P43'>
+          <td align='right'>
+            <a name='P43'>43</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='pop thread-local state, argument, and pc and spawn a new thread' id='C43'>
+              Spawn
+            </span>
+          </td>
+        </tr>
+        <tr id='P44'>
+          <td align='right'>
+            <a name='P44'>44</a>&nbsp;
+          </td>
+          <td style='background-color: #E6E6E6;'>
+            <span title='restore caller method state and push result' id='C44'>
+              Return
+            </span>
+          </td>
+        </tr>
+        <tr id='P45'>
+          <td align='right'>
+            <a name='P45'>45</a>&nbsp;
+          </td>
+          <td style='background-color: white;'>
+            <span title='delete method variable result' id='C45'>
+              DelVar result
+            </span>
+          </td>
+        </tr>
+      </body>
+    </table>
+  </div>
+</div>
+    </td>
+    <td valign='top'>
+<table border='1'
+  <thead>
+    <tr>
+      <th colspan='4'>Threads</th>
+    </tr>
+    <tr>
+      <th>
+        ID
+      </th>
+      <th>
+        Status
+      </th>
+      <th>
+        Stack Trace
+      </th>
+      <th>
+        Stack Top
+      </th>
+    </tr>
+  </thead>
+  <tbody id='threadtable'>
+    <tr id='thread0'>
+      <td align='center'>
+        T0
+      </td>
+      <td align='center'>
+        init
+      </td>
+      <td>
+        <table id='threadinfo0' border='1'>
+        </table>
+      </td>
+      <td align='left'>
+      </td>
+    </tr>
+    <tr id='thread1'>
+      <td align='center'>
+        T1
+      </td>
+      <td align='center'>
+        init
+      </td>
+      <td>
+        <table id='threadinfo1' border='1'>
+        </table>
+      </td>
+      <td align='left'>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    </td>
+  </tr>
+</table>
+<script>
+var nthreads = 2;
+var nmegasteps = 2;
+var vardir = [
+  ['count'],
+  ['done']
+];
+var state =
+{
+  "issue": "Safety violation",
+  "macrosteps": [
+    {
+      "id": "1",
+      "len": "1",
+      "tid": "0",
+      "ctx": "7fa57e592a89",
+      "name": "__init__()",
+      "microsteps": [
+        {
+          "shared": { },
+          "npc": "1",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "1",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "atomic": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "0"
+        },
+        {
+          "npc": "2",
+          "push": [ { "type": "address", "value": [{ "type": "atom", "value": "done" } ] } ],
+          "pc": "1"
+        },
+        {
+          "npc": "3",
+          "pop": "1",
+          "push": [ ],
+          "pc": "2"
+        },
+        {
+          "npc": "4",
+          "push": [ { "type": "int", "value": "0" } ],
+          "pc": "3"
+        },
+        {
+          "shared": { "count": { "type": "int", "value": "0" } },
+          "npc": "5",
+          "pop": "1",
+          "push": [ ],
+          "pc": "4"
+        },
+        {
+          "npc": "6",
+          "push": [ { "type": "bool", "value": "False" } ],
+          "pc": "5"
+        },
+        {
+          "shared": { "count": { "type": "int", "value": "0" }, "done": { "type": "bool", "value": "False" } },
+          "npc": "7",
+          "pop": "1",
+          "push": [ ],
+          "pc": "6"
+        },
+        {
+          "npc": "40",
+          "push": [ ],
+          "pc": "7"
+        },
+        {
+          "npc": "41",
+          "push": [ { "type": "pc", "value": "17" } ],
+          "pc": "40"
+        },
+        {
+          "npc": "42",
+          "push": [ { "type": "list", "value": [] } ],
+          "pc": "41"
+        },
+        {
+          "npc": "43",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "42"
+        },
+        {
+          "npc": "44",
+          "pop": "3",
+          "push": [ ],
+          "pc": "43"
+        },
+        {
+          "npc": "44",
+          "local": { },
+          "mode": "terminated",
+          "pop": "1",
+          "push": [ ],
+          "pc": "44"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f9d20d9": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f9d20d9",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "17",
+          "trace": [
+            {
+              "pc": "17",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f9d20d9",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "18",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "18",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "17"
+        },
+        {
+          "npc": "19",
+          "push": [ { "type": "list", "value": [] } ],
+          "pc": "18"
+        },
+        {
+          "npc": "20",
+          "push": [ { "type": "pc", "value": "8" } ],
+          "pc": "19"
+        },
+        {
+          "npc": "21",
+          "pop": "2",
+          "push": [ ],
+          "pc": "20"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f8d2009": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f8d2009",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "21",
+          "trace": [
+            {
+              "pc": "21",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "trap": "PC(8)([])",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f8d2009",
+      "name": "main()",
+      "microsteps": [
+        {
+          "interrupt": "True",
+          "npc": "8",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "8",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "list", "value": [] } ],
+          "pc": "21"
+        },
+        {
+          "npc": "9",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] } ],
+          "pc": "8"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f9d2209": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f9d2209",
+          "fp": "3",
+          "name": "main()",
+          "entry": "17",
+          "pc": "9",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "9",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "interruptlevel": "1",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f9d2209",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "10",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "10",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "int", "value": "0" } ],
+          "pc": "9"
+        },
+        {
+          "npc": "11",
+          "pop": "4",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "int", "value": "0" }, { "type": "int", "value": "1" } ],
+          "pc": "10"
+        },
+        {
+          "npc": "12",
+          "pop": "4",
+          "push": [ { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "int", "value": "1" } ],
+          "pc": "11"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f6d2029": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f6d2029",
+          "fp": "3",
+          "name": "main()",
+          "entry": "17",
+          "pc": "12",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "12",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "interruptlevel": "1",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f6d2029",
+      "name": "main()",
+      "microsteps": [
+        {
+          "shared": { "count": { "type": "int", "value": "1" }, "done": { "type": "bool", "value": "False" } },
+          "npc": "13",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "13",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] } ],
+          "pc": "12"
+        },
+        {
+          "npc": "14",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "bool", "value": "True" } ],
+          "pc": "13"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f9d2409": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f9d2409",
+          "fp": "3",
+          "name": "main()",
+          "entry": "17",
+          "pc": "14",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "14",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "interruptlevel": "1",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f9d2409",
+      "name": "main()",
+      "microsteps": [
+        {
+          "shared": { "count": { "type": "int", "value": "1" }, "done": { "type": "bool", "value": "True" } },
+          "npc": "15",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "15",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] } ],
+          "pc": "14"
+        },
+        {
+          "npc": "21",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "21",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "interruptlevel": "0",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "15"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f8d2189": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f8d2189",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "21",
+          "trace": [
+            {
+              "pc": "21",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f8d2189",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "22",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "push": [ { "type": "dict", "value": [] }, { "type": "bool", "value": "True" } ],
+          "pc": "21"
+        },
+        {
+          "npc": "23",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "22"
+        },
+        {
+          "npc": "25",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "23"
+        },
+        {
+          "npc": "26",
+          "readonly": "1",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "25"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f6d2189": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f6d2189",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "26",
+          "trace": [
+            {
+              "pc": "26",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "this": { "type": "dict", "value": [] },
+          "readonly": "1",
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f6d2189",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "27",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "27",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "atomic": "1",
+          "readonly": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "26"
+        },
+        {
+          "npc": "28",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "1" } ],
+          "pc": "27"
+        },
+        {
+          "npc": "29",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "1" }, { "type": "int", "value": "1" } ],
+          "pc": "28"
+        },
+        {
+          "npc": "30",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] }, { "type": "bool", "value": "True" } ],
+          "pc": "29"
+        },
+        {
+          "npc": "31",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "30"
+        },
+        {
+          "npc": "32",
+          "atomic": "0",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "31"
+        },
+        {
+          "npc": "33",
+          "readonly": "0",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "32"
+        },
+        {
+          "npc": "34",
+          "readonly": "1",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "33"
+        },
+        {
+          "npc": "35",
+          "atomic": "1",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "34"
+        },
+        {
+          "npc": "36",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "bool", "value": "False" } ],
+          "pc": "35"
+        },
+        {
+          "npc": "36",
+          "failure": "Harmony assertion failed",
+          "mode": "failed",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "36"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f7d20a9": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f7d20a9",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "36",
+          "trace": [
+            {
+              "pc": "36",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "failure": "Harmony assertion failed",
+          "this": { "type": "dict", "value": [] },
+          "atomic": "1",
+          "readonly": "1",
+          "mode": "failed"
+        }
+      ]
+    }
+  ],
+  "code": [
+    "Frame __init__ ()",
+    "Push ?done",
+    "Sequential",
+    "Push 0",
+    "Store count",
+    "Push False",
+    "Store done",
+    "Jump 40",
+    "Frame handler ()",
+    "Load count",
+    "Push 1",
+    "2-ary +",
+    "Store count",
+    "Push True",
+    "Store done",
+    "Return",
+    "Jump 40",
+    "Frame main ()",
+    "Push ()",
+    "Push PC(8)",
+    "Trap",
+    "Load done",
+    "JumpCond False 21",
+    "Jump 25",
+    "Jump 21",
+    "ReadonlyInc",
+    "AtomicInc(lazy)",
+    "Load count",
+    "Push 1",
+    "2-ary ==",
+    "Assert",
+    "AtomicDec",
+    "ReadonlyDec",
+    "ReadonlyInc",
+    "AtomicInc(lazy)",
+    "Push False",
+    "Assert",
+    "AtomicDec",
+    "ReadonlyDec",
+    "Return",
+    "Push PC(17)",
+    "Push ()",
+    "Push {:}",
+    "Spawn",
+    "Return",
+    "DelVar result"
+  ],
+  "explain": [
+    "start of method __init__",
+    "push constant ?done",
+    "sequential consistency for variable on top of stack",
+    "push constant 0",
+    "pop a value and store it in shared variable count",
+    "push constant False",
+    "pop a value and store it in shared variable done",
+    "set program counter to 40",
+    "start of method handler",
+    "push value of shared variable count",
+    "push constant 1",
+    "pop 2 values and push the result of applying +",
+    "pop a value and store it in shared variable count",
+    "push constant True",
+    "pop a value and store it in shared variable done",
+    "restore caller method state and push result",
+    "set program counter to 40",
+    "start of method main",
+    "push constant ()",
+    "push constant PC(8)",
+    "pop a pc and argument and set trap",
+    "push value of shared variable done",
+    "pop a value and jump to 21 if the value is False",
+    "set program counter to 25",
+    "set program counter to 21",
+    "increment readonly counter of context; thread cannot mutate shared variables if > 0",
+    "increment atomic counter of context; thread runs uninterrupted if larger than 0",
+    "push value of shared variable count",
+    "push constant 1",
+    "pop 2 values and push the result of applying ==",
+    "pop a condition and raise exception if condition is false",
+    "decrement atomic counter of context",
+    "decrement readonly counter of context",
+    "increment readonly counter of context; thread cannot mutate shared variables if > 0",
+    "increment atomic counter of context; thread runs uninterrupted if larger than 0",
+    "push constant False",
+    "pop a condition and raise exception if condition is false",
+    "decrement atomic counter of context",
+    "decrement readonly counter of context",
+    "restore caller method state and push result",
+    "push constant PC(17)",
+    "push constant ()",
+    "push constant {:}",
+    "pop thread-local state, argument, and pc and spawn a new thread",
+    "restore caller method state and push result",
+    "delete method variable result"
+  ],
+  "locations": {
+    "43": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "1", "endline": "16", "endcolumn": "12", "code": "spawn main()" },
+    "42": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "1", "endline": "16", "endcolumn": "12", "code": "spawn main()" },
+    "2": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "1", "endcolumn": "15", "code": "sequential done" },
+    "3": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "3", "column": "9", "endline": "3", "endcolumn": "9", "code": "count = 0" },
+    "12": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "5", "endline": "7", "endcolumn": "12", "code": "    count += 1" },
+    "9": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "5", "endline": "7", "endcolumn": "14", "code": "    count += 1" },
+    "41": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "11", "endline": "16", "endcolumn": "12", "code": "spawn main()" },
+    "8": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "6", "column": "1", "endline": "9", "endcolumn": "1", "code": "def handler():" },
+    "13": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "8", "column": "12", "endline": "8", "endcolumn": "15", "code": "    done = True" },
+    "11": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "5", "endline": "7", "endcolumn": "14", "code": "    count += 1" },
+    "40": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "7", "endline": "16", "endcolumn": "10", "code": "spawn main()" },
+    "10": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "14", "endline": "7", "endcolumn": "14", "code": "    count += 1" },
+    "20": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "11", "column": "5", "endline": "11", "endcolumn": "18", "code": "    trap handler()" },
+    "4": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "3", "column": "1", "endline": "3", "endcolumn": "7", "code": "count = 0" },
+    "30": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "7": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "6", "column": "1", "endline": "6", "endcolumn": "3", "code": "def handler():" },
+    "6": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "4", "column": "1", "endline": "4", "endcolumn": "6", "code": "done = False" },
+    "17": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "10", "column": "1", "endline": "15", "endcolumn": "1", "code": "def main():" },
+    "22": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "5", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "32": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "0": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "16", "endcolumn": "19", "code": "sequential done" },
+    "15": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "6", "column": "1", "endline": "9", "endcolumn": "1", "code": "def handler():" },
+    "39": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "10", "column": "1", "endline": "15", "endcolumn": "1", "code": "def main():" },
+    "29": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "12", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "1": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "12", "endline": "1", "endcolumn": "15", "code": "sequential done" },
+    "5": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "4", "column": "8", "endline": "4", "endcolumn": "12", "code": "done = False" },
+    "45": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "16", "endcolumn": "19", "code": "sequential done" },
+    "18": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "11", "column": "17", "endline": "11", "endcolumn": "18", "code": "    trap handler()" },
+    "25": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "35": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "12", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "34": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "24": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "11", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "19": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "11", "column": "10", "endline": "11", "endcolumn": "16", "code": "    trap handler()" },
+    "27": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "12", "endline": "13", "endcolumn": "16", "code": "    assert count == 1" },
+    "37": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "26": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "36": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "31": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "21": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "11", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "16": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "10", "column": "1", "endline": "10", "endcolumn": "3", "code": "def main():" },
+    "44": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "16", "endcolumn": "19", "code": "sequential done" },
+    "33": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "14": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "8", "column": "5", "endline": "8", "endcolumn": "10", "code": "    done = True" },
+    "23": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "11", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "28": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "21", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "38": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" }
+  }
+}
+
+;
+var boxSize = 10;
+var currentTime = 0;
+var totalTime = 0;
+var microsteps = [];
+var megasteps = []
+var threads = [];
+var curMegaStep = 0;
+var mestable = document.getElementById("mestable");
+var threadtable = document.getElementById("threadtable");
+var coderow = document.getElementById("coderow");
+var container = document.getElementById('table-scroll');
+var currOffset = 0;
+var currCloc = null;
+
+function drawTimeLine(mes) {
+  var c = mes.canvas.getContext("2d");
+  c.beginPath();
+  c.clearRect(0, 0, mes.canvas.width, mes.canvas.height);
+  var t = mes.startTime;
+  var yboxes = Math.floor((mes.nsteps + 29) / 30);
+  var nsteps = mes.nsteps;
+  for (var y = 0; y < yboxes; y++) {
+    var xboxes = nsteps > 30 ? 30 : nsteps;
+    for (var x = 0; x < xboxes; x++) {
+      c.fillStyle = t < currentTime ? "orange" : "white";
+      c.fillRect(x * boxSize, y * boxSize, boxSize, boxSize);
+      c.rect(x * boxSize, y * boxSize, boxSize, boxSize);
+      c.stroke();
+      t += 1;
+    }
+    nsteps -= xboxes;
+  }
+}
+
+function currentMegaStep() {
+  if (currentTime == totalTime) {
+    return microsteps[currentTime - 1].mesidx;
+  }
+  return microsteps[currentTime].mesidx;
+}
+
+function json_string_list(obj) {
+  var result = "";
+  for (var i = 0; i < obj.length; i++) {
+    if (result != "") {
+      result += ", ";
+    }
+    result += json_string(obj[i]);
+  }
+  return "[ " + result + " ]";
+}
+
+function json_string_set(obj) {
+  var result = "";
+  for (var i = 0; i < obj.length; i++) {
+    if (result != "") {
+      result += ", ";
+    }
+    result += json_string(obj[i]);
+  }
+  return "{ " + result + " }";
+}
+
+function json_string_dict(obj) {
+  if (obj.length == 0) {
+    return "{:}"
+  }
+
+  var islist = true;
+  for (var i = 0; i < obj.length; i++) {
+    if (obj[i].key.type != "int" || obj[i].key.value != i.toString()) {
+      islist = false;
+      break;
+    }
+  }
+
+  var result = "";
+  if (islist) {
+    for (var i = 0; i < obj.length; i++) {
+      if (i != 0) {
+        result += ", ";
+      }
+      result += json_string(obj[i].value);
+    }
+    if (obj.length == 1) {
+      result += ",";
+    }
+    return "[" + result + "]";
+  }
+
+  for (var i = 0; i < obj.length; i++) {
+    if (result != "") {
+      result += ", ";
+    }
+    var kv = obj[i];
+    var k = json_string(kv.key);
+    var v = json_string(kv.value);
+    result += k + ": " + v;
+  }
+  return "{ " + result + " }";
+}
+
+function json_string_address(obj) {
+  if (obj.length == 0) {
+    return "None";
+  }
+  var result = "?" + obj[0].value;
+  for (var i = 1; i < obj.length; i++) {
+    result += "[" + json_string(obj[i]) + "]";
+  }
+  return result;
+}
+
+function json_string_context(obj) {
+  var pc = json_string(obj.pc);
+  return "CTX(" + pc + ")";
+}
+
+function json_string(obj) {
+  switch (obj.type) {
+  case "bool": case "int":
+    return obj.value;
+    break;
+  case "atom":
+    return '"' + obj.value + '"';
+  case "set":
+    return json_string_set(obj.value);
+  case "list":
+    return json_string_list(obj.value);
+  case "dict":
+    return json_string_dict(obj.value);
+  case "pc":
+    return "PC(" + obj.value + ")"
+  case "address":
+    return json_string_address(obj.value);
+  case "context":
+    return json_string_context(obj.value);
+  default:
+    return JSON.stringify(obj);
+  }
+}
+
+function stringify_vars(obj) {
+  var result = "";
+  for (var k in obj) {
+    if (k == "result" && obj[k].type == "address" && obj[k].value.length == 0) {
+      continue;
+    }
+    if (result != "") {
+      result += ", ";
+    }
+    result += k + ": " + json_string(obj[k]);
+  }
+  return result;
+}
+
+function convert_var(obj) {
+  if (obj.type != "dict") {
+    return json_string(obj);
+  }
+  if (obj.value.length == 0) {
+    return "";
+  }
+  var result = {};
+  for (var i = 0; i < obj.value.length; i++) {
+    var kv = obj.value[i];
+    var k = json_string(kv.key);      // TODO.  convert_var???
+    result[k] = convert_var(kv.value);
+  }
+  return result;
+}
+
+function convert_vars(obj) {
+  var result = {};
+  for (var k in obj) {
+    result[k] = convert_var(obj[k]);
+  }
+  return result;
+}
+
+function stackTrace(tid, trace, failure) {
+  var table = threads[tid].tracetable;
+  table.innerHTML = "";
+  if (trace.length == 0) {
+    var row = table.insertRow();
+    var mcell = row.insertCell();
+    mcell.innerHTML = threads[tid].name;
+  }
+  for (var i = 0; i < trace.length; i++) {
+    var row = table.insertRow();
+
+    var mcell = row.insertCell();
+    mcell.innerHTML = trace[i].method;
+    switch (trace[i].calltype) {
+    case "process":
+        mcell.style.color = "blue";
+        break;
+    case "normal":
+        mcell.style.color = "black";
+        break;
+    case "interrupt":
+        mcell.style.color = "orange";
+        break;
+    default:
+        mcell.style.color = "red";
+    }
+
+    var vcell = row.insertCell();
+    var vtext = document.createTextNode(stringify_vars(trace[i].vars));
+    vcell.appendChild(vtext);
+  }
+  if (failure != null) {
+    var row = table.insertRow();
+    var fcell = row.insertCell();
+    fcell.innerHTML = failure;
+    fcell.colSpan = 2;
+    fcell.style.color = "red";
+  }
+}
+
+function addToLog(step, entry) {
+  var table = megasteps[step].log;
+  var row = table.insertRow();
+  var mcell = row.insertCell();
+  mcell.innerHTML = entry;
+}
+
+function handleClick(e, mesIdx) {
+  var x = Math.floor(e.offsetX / boxSize);
+  var y = Math.floor(e.offsetY / boxSize);
+  currentTime = megasteps[mesIdx].startTime + y*30 + x + 1;
+  run_microsteps()
+}
+
+var noloc = { file: "", line: "", code: "" };
+
+function getCode(pc) {
+  var locs = state.locations;
+  while (pc >= 0) {
+    s = "" + pc;
+    if (locs.hasOwnProperty(s)) {
+      return locs[s];
+    }
+    pc--;
+  }
+  return noloc;
+}
+
+function handleKeyPress(e) {
+  switch (e.key) {
+    case '0':
+      currentTime = 0;
+      run_microsteps();
+      break;
+    case 'ArrowLeft':
+      if (currentTime > 0) {
+        currentTime -= 1;
+      }
+      run_microsteps();
+      break;
+    case 'ArrowRight':
+      if (currentTime < totalTime) {
+        currentTime += 1;
+      }
+      run_microsteps();
+      break;
+    case 'ArrowUp':
+      var mesidx = currentMegaStep();
+      var mes = megasteps[mesidx];
+      if (currentTime == mes.startTime && mesidx > 0) {
+          mes = megasteps[mesidx - 1];
+      }
+      currentTime = mes.startTime;
+      run_microsteps();
+      break;
+    case 'ArrowDown':
+      var mesidx = currentMegaStep();
+      var mes = megasteps[mesidx];
+      currentTime = mes.startTime + mes.nsteps;
+      if (currentTime > totalTime) {
+        currentTime = totalTime;
+      }
+      run_microsteps();
+      break;
+    case 'Enter':
+      if (currentTime < totalTime) {
+        var cloc = getCode(microsteps[currentTime].pc);
+        while (++currentTime < totalTime) {
+          var nloc = getCode(microsteps[currentTime].pc);
+          if (nloc.file != cloc.file || nloc.line != cloc.line || nloc.code != cloc.code) {
+            break;
+          }
+        }
+        run_microsteps();
+      }
+      break;
+    default:
+      // alert("unknown key " + e.code);
+  }
+}
+
+function init_microstep(masidx, misidx) {
+  var mas = state.macrosteps[masidx];
+  var mis = mas.microsteps[misidx];
+  var t = microsteps.length;
+  if (t > 0 && microsteps[t - 1].tid != mas.tid) {
+    curMegaStep++;
+    megasteps[curMegaStep].startTime = t;
+  }
+  var mes = megasteps[curMegaStep];
+  mes.nsteps++;
+  microsteps[t] = {
+    mesidx: curMegaStep,
+    masidx: masidx,
+    misidx: misidx,
+    tid: parseInt(mas.tid),
+    pc: parseInt(mis.pc),
+    invfails: misidx == mas.microsteps.length - 1 ? mas.invfails : [],
+    contexts: mas.contexts
+  };
+
+  if (mis.hasOwnProperty("npc")) {
+    microsteps[t].npc = mis.npc;
+  }
+  else {
+    microsteps[t].npc = mis.pc;
+  }
+
+  microsteps[t].code = getCode(microsteps[t].npc);
+
+  microsteps[t].cloc = document.getElementById('C' + microsteps[t].npc);
+  var npc = microsteps[t].npc - 4;
+  if (npc < 0) {
+    npc = 0;
+  }
+  microsteps[t].offset = document.getElementById('P' + npc);
+
+  if (mis.hasOwnProperty("mode")) {
+    microsteps[t].mode = mis.mode;
+  }
+  else {
+    microsteps[t].mode = misidx == 0 ? "running" : microsteps[t-1].mode;
+  }
+
+  if (mis.hasOwnProperty("atomic")) {
+    microsteps[t].atomic = mis["atomic"];
+  }
+  else if (misidx == 0) {
+    microsteps[t].atomic = 0;
+  }
+  else {
+    microsteps[t].atomic = microsteps[t-1].atomic;
+  }
+
+  if (mis.hasOwnProperty("readonly")) {
+    microsteps[t].readonly = mis["readonly"];
+  }
+  else if (misidx == 0) {
+    microsteps[t].readonly = 0;
+  }
+  else {
+    microsteps[t].readonly = microsteps[t-1].readonly;
+  }
+
+  if (mis.hasOwnProperty("interruptlevel")) {
+    microsteps[t].interruptlevel = mis["interruptlevel"];
+  }
+  else if (misidx == 0) {
+    microsteps[t].interruptlevel = 0;
+  }
+  else {
+    microsteps[t].interruptlevel = microsteps[t-1].interruptlevel;
+  }
+
+  if (mis.hasOwnProperty("choose")) {
+    microsteps[t].choose = "chose " + json_string(mis["choose"]);
+  }
+  else {
+    microsteps[t].choose = null;
+  }
+  if (mis.hasOwnProperty("print")) {
+    microsteps[t].print = json_string(mis["print"]);
+  }
+  else {
+    microsteps[t].print = null;
+  }
+
+  if (mis.hasOwnProperty("failure")) {
+    microsteps[t].failure = mis.failure;
+    microsteps[t].cloc = null;
+  }
+  else {
+    microsteps[t].failure = null;
+  }
+
+  if (mis.hasOwnProperty("trace")) {
+    microsteps[t].trace = mis.trace;
+  }
+  else if (misidx == 0) {
+    microsteps[t].trace = [];
+  }
+  else {
+    microsteps[t].trace = microsteps[t-1].trace;
+  }
+
+  // Update local variables
+  var trl = microsteps[t].trace.length; 
+  if (trl > 0 && mis.hasOwnProperty("local")) {
+    // deep copy first
+    microsteps[t].trace = JSON.parse(JSON.stringify(microsteps[t].trace))
+    microsteps[t].trace[trl - 1].vars = mis.local;
+  }
+
+  if (mis.hasOwnProperty("shared")) {
+    microsteps[t].shared = convert_vars(mis.shared);
+  }
+  else if (t == 0) {
+    microsteps[t].shared = {};
+  }
+  else {
+    microsteps[t].shared = microsteps[t-1].shared;
+  }
+
+  if (mis.hasOwnProperty("fp")) {
+    microsteps[t].fp = mis.fp;
+  }
+  else if (misidx == 0) {
+    microsteps[t].fp = 0;
+  }
+  else {
+    microsteps[t].fp = microsteps[t-1].fp;
+  }
+  if (mis.hasOwnProperty("pop")) {
+    var n = parseInt(mis.pop);
+    microsteps[t].stack = microsteps[t-1].stack.slice(0,
+                              microsteps[t-1].stack.length - n);
+  }
+  else if (misidx == 0) {
+    microsteps[t].stack = [];
+  }
+  else {
+    microsteps[t].stack = microsteps[t-1].stack;
+  }
+  if (mis.hasOwnProperty("push")) {
+    var vals = mis.push.map(x => json_string(x));
+    microsteps[t].stack = microsteps[t].stack.concat(vals);
+  }
+  // microsteps[t].choose = microsteps[t].stack;
+}
+
+function init_macrostep(i) {
+  var mas = state.macrosteps[i];
+  for (var j = 0; j < mas.microsteps.length; j++) {
+    init_microstep(i, j);
+  }
+  for (var ctx = 0; ctx < mas.contexts.length; ctx++) {
+    var tid = parseInt(mas.contexts[ctx].tid);
+    threads[tid].name = mas.contexts[ctx].name;
+  }
+}
+
+function dict_convert(d) {
+  if (typeof d === "string") {
+    return d;
+  }
+  result = "";
+  for (var k in d) {
+    if (result != "") {
+      result += ", ";
+    }
+    result += dict_convert(k) + ":" + dict_convert(d[k]);;
+  }
+  return "{" + result + "}";
+}
+
+function get_shared(shared, path) {
+  if (!shared.hasOwnProperty(path[0])) {
+    return "";
+  }
+  if (path.length == 1) {
+    return dict_convert(shared[path[0]]);
+  }
+  return get_shared(shared[path[0]], path.slice(1));
+}
+
+function get_status(ctx) {
+  var status = ctx.mode;
+  if (status != "terminated") {
+    if (ctx.atomic > 0) {
+      status += " atomic";
+    }
+    if (ctx.readonly > 0) {
+      status += " read-only";
+    }
+    if (ctx.interruptlevel > 0) {
+      status += " interrupts-disabled";
+    }
+  }
+  return status;
+}
+
+function escapeHTML(s) {
+  return s
+     .replace(/&/g, "&amp;")
+     .replace(/</g, "&lt;")
+     .replace(/>/g, "&gt;")
+     .replace(/"/g, "&quot;")
+     .replace(/'/g, "&#039;");
+}
+
+function run_microstep(t) {
+  var mis = microsteps[t];
+  var mesrow = mestable.rows[mis.mesidx];
+  mesrow.cells[3].innerHTML = mis.npc;
+
+  for (var i = 0; i < vardir.length; i++) {
+    mesrow.cells[i + 4].innerHTML = get_shared(mis.shared, vardir[i])
+  }
+
+  if (mis.failure != null) {
+    stackTrace(mis.tid, mis.trace, mis.failure);
+  }
+  else if (mis.print != null) {
+    stackTrace(mis.tid, mis.trace, "print " + mis.print);
+    addToLog(mis.mesidx, mis.print)
+  }
+  else {
+    stackTrace(mis.tid, mis.trace, mis.choose);
+  }
+
+  for (var ctx = 0; ctx < mis.contexts.length; ctx++) {
+    var tid = parseInt(mis.contexts[ctx].tid);
+    threads[tid].name = mis.contexts[ctx].name;
+    threadtable.rows[tid].cells[1].innerHTML = get_status(mis.contexts[ctx]);
+  }
+  var mes = megasteps[mis.mesidx];
+  if (t != mes.startTime + mes.nsteps - 1) {
+    threadtable.rows[mis.tid].cells[1].innerHTML = get_status(mis);
+  }
+  threadtable.rows[mis.tid].cells[3].innerHTML = mis.stack.slice(mis.fp);
+
+  if (mis.invfails.length > 0) {
+    inv = mis.invfails[0];
+    code = getCode(inv.pc);
+    coderow.style.color = "red";
+    coderow.innerHTML = code.file + ":" + code.line + "&nbsp;&nbsp;&nbsp;" + escapeHTML(code.code) + " (" + inv.reason + ")";
+    mis.cloc = null;
+  }
+  else {
+    coderow.style.color = "blue";
+    coderow.innerHTML = mis.code.file + ":" + mis.code.line + "&nbsp;&nbsp;&nbsp;" + escapeHTML(mis.code.code);
+  }
+
+  currCloc = mis.cloc;
+  currOffset = mis.offset;
+}
+
+function run_microsteps() {
+  coderow.innerHTML = "";
+  if (currCloc != null) {
+    currCloc.style.color = "black";
+    currCloc = null;
+  }
+  for (var i = 0; i < nmegasteps; i++) {
+    mestable.rows[i].cells[3].innerHTML = "";
+    for (var j = 0; j < vardir.length; j++) {
+      mestable.rows[i].cells[j + 4].innerHTML = "";
+    }
+    megasteps[i].log.innerHTML = "";
+  }
+  for (var tid = 0; tid < nthreads; tid++) {
+    threadtable.rows[tid].cells[1].innerHTML = "init";
+    stackTrace(tid, [], null);
+    threadtable.rows[tid].cells[3].innerHTML = "";
+  }
+  for (var t = 0; t < currentTime; t++) {
+    run_microstep(t);
+  }
+  for (var i = 0; i < nmegasteps; i++) {
+    drawTimeLine(megasteps[i]);
+  }
+  container.scrollTop = currOffset.offsetTop;
+
+  if (currCloc != null) {
+    currCloc.style.color = "red";
+  }
+
+  var curmes = microsteps[currentTime == 0 ? 0 : (currentTime-1)].mesidx;
+  for (var mes = 0; mes < nmegasteps; mes++) {
+    var row = document.getElementById("mes" + mes)
+    if (mes == curmes) {
+      row.style = 'background-color: #A5FF33;';
+    }
+    else {
+      row.style = 'background-color: white;';
+    }
+  }
+
+  var curtid = microsteps[currentTime == 0 ? 0 : (currentTime-1)].tid;
+  for (var tid = 0; tid < nthreads; tid++) {
+    var row = document.getElementById("thread" + tid)
+    if (tid == curtid) {
+      row.style = 'background-color: #A5FF33;';
+    }
+    else {
+      row.style = 'background-color: white;';
+    }
+  }
+}
+
+// Initialization starts here
+
+for (var tid = 0; tid < nthreads; tid++) {
+  threads[tid] = {
+    name: "T" + tid,
+    status: "normal",
+    stack: [],
+    stacktrace: [],
+    tracetable: document.getElementById("threadinfo" + tid)
+  };
+}
+for (let i = 0; i < nmegasteps; i++) {
+  var canvas = document.getElementById("timeline" + i);
+  megasteps[i] = {
+    canvas: canvas,
+    startTime: 0,
+    nsteps: 0,
+    contexts: [],
+    log: document.getElementById("log" + i)
+  };
+  canvas.addEventListener('mousedown', function(e){handleClick(e, i)});
+}
+for (var j = 0; j < state.macrosteps.length; j++) {
+  init_macrostep(j);
+}
+
+currentTime = totalTime = microsteps.length;
+run_microsteps();
+document.addEventListener('keydown', handleKeyPress);
+
+</script>
+</body>
+</html>

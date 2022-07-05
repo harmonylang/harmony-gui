@@ -25,8 +25,8 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
@@ -39,6 +39,47 @@ class Ui_MainWindow(object):
         self.browse.setObjectName("browse")
         self.horizontalLayout_5.addWidget(self.browse)
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.issue = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.issue.setFont(font)
+        self.issue.setObjectName("issue")
+        self.horizontalLayout_2.addWidget(self.issue)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
+        self.atomic = QtWidgets.QCheckBox(self.centralwidget)
+        self.atomic.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.atomic.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.atomic.setCheckable(True)
+        self.atomic.setChecked(False)
+        self.atomic.setTristate(False)
+        self.atomic.setObjectName("atomic")
+        self.atomic.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
+        self.atomic.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalLayout_2.addWidget(self.atomic)
+        self.readOnly = QtWidgets.QCheckBox(self.centralwidget)
+        self.readOnly.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.readOnly.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.readOnly.setCheckable(True)
+        self.readOnly.setChecked(False)
+        self.readOnly.setTristate(False)
+        self.readOnly.setObjectName("readOnly")
+        self.readOnly.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
+        self.readOnly.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalLayout_2.addWidget(self.readOnly)
+        self.interruptDisabled = QtWidgets.QCheckBox(self.centralwidget)
+        self.interruptDisabled.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.interruptDisabled.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.interruptDisabled.setCheckable(True)
+        self.interruptDisabled.setChecked(False)
+        self.interruptDisabled.setTristate(False)
+        self.interruptDisabled.setObjectName("interruptDisabled")
+        self.interruptDisabled.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
+        self.interruptDisabled.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.horizontalLayout_2.addWidget(self.interruptDisabled)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
@@ -102,13 +143,14 @@ class Ui_MainWindow(object):
         self.stackTop = QtWidgets.QTreeWidget(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Monaco")
+        font.setPointSize(12)
         self.stackTop.setFont(font)
         self.stackTop.setObjectName("stackTop")
         self.verticalLayout.addWidget(self.stackTop)
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem1)
         self.prevIns = QtWidgets.QPushButton(self.centralwidget)
         self.prevIns.setObjectName("prevIns")
         self.horizontalLayout_7.addWidget(self.prevIns)
@@ -120,8 +162,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setStretch(0, 5)
         self.horizontalLayout_3.setStretch(1, 2)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
-        self.gridLayout_2 = QtWidgets.QGridLayout()
-        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.threadOffsetLabel = QtWidgets.QLabel(self.centralwidget)
@@ -129,6 +171,7 @@ class Ui_MainWindow(object):
         font.setFamily("Monaco")
         font.setPointSize(12)
         self.threadOffsetLabel.setFont(font)
+        self.threadOffsetLabel.setText("")
         self.threadOffsetLabel.setObjectName("threadOffsetLabel")
         self.horizontalLayout_6.addWidget(self.threadOffsetLabel)
         self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
@@ -137,42 +180,23 @@ class Ui_MainWindow(object):
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.horizontalLayout_6.addWidget(self.horizontalSlider)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_6.addItem(spacerItem1)
-        self.gridLayout_2.addLayout(self.horizontalLayout_6, 0, 0, 1, 1)
-        self.stackTraceLabel = QtWidgets.QLabel(self.centralwidget)
-        font = QtGui.QFont()
-        font.setFamily("Monaco")
-        font.setPointSize(12)
-        self.stackTraceLabel.setFont(font)
-        self.stackTraceLabel.setAlignment(QtCore.Qt.AlignBottom|QtCore.Qt.AlignHCenter)
-        self.stackTraceLabel.setObjectName("stackTraceLabel")
-        self.gridLayout_2.addWidget(self.stackTraceLabel, 0, 1, 1, 1)
-        self.stackTrace = QtWidgets.QPlainTextEdit(self.centralwidget)
-        font = QtGui.QFont()
-        font.setFamily("Monaco")
-        self.stackTrace.setFont(font)
-        self.stackTrace.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.stackTrace.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        self.stackTrace.setLineWrapMode(QtWidgets.QPlainTextEdit.NoWrap)
-        self.stackTrace.setPlainText("")
-        self.stackTrace.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-        self.stackTrace.setObjectName("stackTrace")
-        self.gridLayout_2.addWidget(self.stackTrace, 1, 1, 1, 1)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem2)
+        self.horizontalLayout_4.addLayout(self.horizontalLayout_6)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
         self.threadBrowser = QtWidgets.QTextEdit(self.centralwidget)
-        self.threadBrowser.setMinimumSize(QtCore.QSize(650, 0))
-        self.threadBrowser.setMaximumSize(QtCore.QSize(650, 16777215))
+        self.threadBrowser.setMinimumSize(QtCore.QSize(670, 0))
+        self.threadBrowser.setMaximumSize(QtCore.QSize(10000000, 16777215))
         font = QtGui.QFont()
         font.setFamily("Monaco")
         self.threadBrowser.setFont(font)
-        self.threadBrowser.setObjectName("threadBrowser")
+        self.threadBrowser.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.threadBrowser.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.threadBrowser.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-        self.gridLayout_2.addWidget(self.threadBrowser, 1, 0, 1, 1)
-        self.gridLayout_2.setColumnStretch(0, 1)
-        self.gridLayout_2.setColumnStretch(1, 10)
-        self.verticalLayout_3.addLayout(self.gridLayout_2)
-        self.verticalLayout_3.setStretch(1, 10)
-        self.verticalLayout_7.addLayout(self.verticalLayout_3)
+        self.threadBrowser.setObjectName("threadBrowser")
+        self.verticalLayout_3.addWidget(self.threadBrowser)
+        self.verticalLayout_3.setStretch(2, 10)
+        self.verticalLayout_4.addLayout(self.verticalLayout_3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
@@ -181,7 +205,6 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-
 
         self.browse.clicked.connect(self.browseFiles)
         self.nextIns.clicked.connect(self.nextMicrostep)
@@ -208,7 +231,6 @@ class Ui_MainWindow(object):
         # self.stackTraceTextList contains stack trace to display at each microstep
         self.stackTraceTextList = []
 
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -216,6 +238,10 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.browse.setText(_translate("MainWindow", "Browse"))
+        self.issue.setText(_translate("MainWindow", "Issue:"))
+        self.atomic.setText(_translate("MainWindow", "Atomic"))
+        self.readOnly.setText(_translate("MainWindow", "Read-only"))
+        self.interruptDisabled.setText(_translate("MainWindow", "Interrupt-disabled"))
         self.sharedVariables.headerItem().setText(0, _translate("MainWindow", "Shared Variables"))
         self.localVariables.headerItem().setText(0, _translate("MainWindow", "Local Variables"))
         self.stackTop.headerItem().setText(0, _translate("MainWindow", "Stack Top"))
@@ -224,7 +250,6 @@ class Ui_MainWindow(object):
         self.nextIns.setText(_translate("MainWindow", "Next >"))
         self.nextIns.setShortcut(_translate("MainWindow", "Right"))
         self.threadOffsetLabel.setText(_translate("MainWindow", "    "))
-        self.stackTraceLabel.setText(_translate("MainWindow", "Stack Trace"))
 
 
     def openFile(self, editor, file):
@@ -314,6 +339,10 @@ class Ui_MainWindow(object):
         self.localVariableUpdate()
         # update stack trace
         self.stackTraceUpdate()
+        # display issue
+        self.displayIssue()
+        # update checkbox
+        self.updateCheckBox()
         # print(self.hco["code"][49])
 
     def constructMicrosteps(self):
@@ -400,6 +429,7 @@ class Ui_MainWindow(object):
         self.sharedVariableUpdate()
         self.localVariableUpdate()
         self.stackTraceUpdate()
+        self.updateCheckBox()
 
     def prevMicroStep(self):
         if self.byteCode.toPlainText() == "":
@@ -411,6 +441,7 @@ class Ui_MainWindow(object):
         self.sharedVariableUpdate()
         self.localVariableUpdate()
         self.stackTraceUpdate()
+        self.updateCheckBox()
 
     def sliderMoveUpdate(self):
         if self.byteCode.toPlainText() == "":
@@ -420,6 +451,7 @@ class Ui_MainWindow(object):
         self.sharedVariableUpdate()
         self.localVariableUpdate()
         self.stackTraceUpdate()
+        self.updateCheckBox()
     
     def openFileByTypedPath(self):
         filepath = self.filePathText.text()
@@ -781,9 +813,6 @@ class Ui_MainWindow(object):
                 methodName = self.hco['code'][int(self.microSteps[i]["pc"])][6:]
                 return f"pc({pc} = {methodName} + {offset})"
         elif type == 'address':
-            # Precondition: everything in adress is of type string and int
-            # TODO: what if is not string or int? list/dictionary/set? boolean? 
-            # value['value'] is a list of harmony values
             assert self.isNaive(value)
             if len(value['value']) == 0:
                 return "None"
@@ -882,7 +911,29 @@ class Ui_MainWindow(object):
                 self.stackTraceTextList[i] = self.stackTraceTextList[i - 1]
 
     def stackTraceUpdate(self):
-        self.stackTrace.setPlainText(self.stackTraceTextList[self.microStepPointer])
+        pass
+        # self.stackTrace.setPlainText(self.stackTraceTextList[self.microStepPointer])
+
+    def displayIssue(self):
+        issueText = self.hco["issue"]
+        self.issue.setText(f"Issue: {issueText}")
+
+    def updateCheckBox(self):
+        # TODO: update atomic checkbox
+        self.atomic.setChecked(False)
+        if 'atomic' in self.microSteps[self.microStepPointer]:
+            atomicCounter = int(self.microSteps[self.microStepPointer]['atomic'])
+            if atomicCounter > 0:
+                self.atomic.setChecked(True)
+        # TODO: update readOnly checkbox
+        self.readOnly.setChecked(False)
+        if 'readonly' in self.microSteps[self.microStepPointer]:
+            readonlyCounter = int(self.microSteps[self.microStepPointer]['readonly'])
+            if readonlyCounter > 0:
+                self.readOnly.setChecked(True)
+        # TODO: update interrupt disabled checkbox
+    
+
 
 
 
@@ -894,4 +945,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-

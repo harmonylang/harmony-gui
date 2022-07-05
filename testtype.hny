@@ -1,0 +1,13 @@
+def diner(which):
+    let left, right = (which, (which + 1) % N):
+        while choose({ False, True }):
+            acquire(?forks[left])
+            acquire(?forks[right])
+            # dine
+            release(?forks[left])
+            release(?forks[right])
+            # think
+
+LB: x = diner
+y = LB
+assert False

@@ -1,0 +1,1019 @@
+{
+  "issue": "Safety violation",
+  "macrosteps": [
+    {
+      "id": "1",
+      "len": "1",
+      "tid": "0",
+      "ctx": "7fa57e592a89",
+      "name": "__init__()",
+      "microsteps": [
+        {
+          "shared": { },
+          "npc": "1",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "1",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "atomic": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "0"
+        },
+        {
+          "npc": "2",
+          "push": [ { "type": "address", "value": [{ "type": "atom", "value": "done" } ] } ],
+          "pc": "1"
+        },
+        {
+          "npc": "3",
+          "pop": "1",
+          "push": [ ],
+          "pc": "2"
+        },
+        {
+          "npc": "4",
+          "push": [ { "type": "int", "value": "0" } ],
+          "pc": "3"
+        },
+        {
+          "shared": { "count": { "type": "int", "value": "0" } },
+          "npc": "5",
+          "pop": "1",
+          "push": [ ],
+          "pc": "4"
+        },
+        {
+          "npc": "6",
+          "push": [ { "type": "bool", "value": "False" } ],
+          "pc": "5"
+        },
+        {
+          "shared": { "count": { "type": "int", "value": "0" }, "done": { "type": "bool", "value": "False" } },
+          "npc": "7",
+          "pop": "1",
+          "push": [ ],
+          "pc": "6"
+        },
+        {
+          "npc": "40",
+          "push": [ ],
+          "pc": "7"
+        },
+        {
+          "npc": "41",
+          "push": [ { "type": "pc", "value": "17" } ],
+          "pc": "40"
+        },
+        {
+          "npc": "42",
+          "push": [ { "type": "list", "value": [] } ],
+          "pc": "41"
+        },
+        {
+          "npc": "43",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "42"
+        },
+        {
+          "npc": "44",
+          "pop": "3",
+          "push": [ ],
+          "pc": "43"
+        },
+        {
+          "npc": "44",
+          "local": { },
+          "mode": "terminated",
+          "pop": "1",
+          "push": [ ],
+          "pc": "44"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f9d20d9": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f9d20d9",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "17",
+          "trace": [
+            {
+              "pc": "17",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f9d20d9",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "18",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "18",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "17"
+        },
+        {
+          "npc": "19",
+          "push": [ { "type": "list", "value": [] } ],
+          "pc": "18"
+        },
+        {
+          "npc": "20",
+          "push": [ { "type": "pc", "value": "8" } ],
+          "pc": "19"
+        },
+        {
+          "npc": "21",
+          "pop": "2",
+          "push": [ ],
+          "pc": "20"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f8d2009": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f8d2009",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "21",
+          "trace": [
+            {
+              "pc": "21",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "trap": "PC(8)([])",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f8d2009",
+      "name": "main()",
+      "microsteps": [
+        {
+          "interrupt": "True",
+          "npc": "8",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "8",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "list", "value": [] } ],
+          "pc": "21"
+        },
+        {
+          "npc": "9",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] } ],
+          "pc": "8"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f9d2209": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f9d2209",
+          "fp": "3",
+          "name": "main()",
+          "entry": "17",
+          "pc": "9",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "9",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "interruptlevel": "1",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f9d2209",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "10",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "10",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "int", "value": "0" } ],
+          "pc": "9"
+        },
+        {
+          "npc": "11",
+          "pop": "4",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "int", "value": "0" }, { "type": "int", "value": "1" } ],
+          "pc": "10"
+        },
+        {
+          "npc": "12",
+          "pop": "4",
+          "push": [ { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "int", "value": "1" } ],
+          "pc": "11"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f6d2029": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f6d2029",
+          "fp": "3",
+          "name": "main()",
+          "entry": "17",
+          "pc": "12",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "12",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "interruptlevel": "1",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f6d2029",
+      "name": "main()",
+      "microsteps": [
+        {
+          "shared": { "count": { "type": "int", "value": "1" }, "done": { "type": "bool", "value": "False" } },
+          "npc": "13",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "13",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] } ],
+          "pc": "12"
+        },
+        {
+          "npc": "14",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] }, { "type": "bool", "value": "True" } ],
+          "pc": "13"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f9d2409": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f9d2409",
+          "fp": "3",
+          "name": "main()",
+          "entry": "17",
+          "pc": "14",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "14",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "interruptlevel": "1",
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f9d2409",
+      "name": "main()",
+      "microsteps": [
+        {
+          "shared": { "count": { "type": "int", "value": "1" }, "done": { "type": "bool", "value": "True" } },
+          "npc": "15",
+          "fp": "3",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            },
+            {
+              "pc": "15",
+              "xpc": "8",
+              "method": "handler()",
+              "calltype": "interrupt",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 2
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "interruptlevel": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "339" }, { "type": "dict", "value": [{ "key": { "type": "atom", "value": "result" }, "value": { "type": "address", "value": [] } } ] } ],
+          "pc": "14"
+        },
+        {
+          "npc": "21",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "21",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "interruptlevel": "0",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "15"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f8d2189": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f8d2189",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "21",
+          "trace": [
+            {
+              "pc": "21",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "this": { "type": "dict", "value": [] },
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f8d2189",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "22",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "22",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "push": [ { "type": "dict", "value": [] }, { "type": "bool", "value": "True" } ],
+          "pc": "21"
+        },
+        {
+          "npc": "23",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "22"
+        },
+        {
+          "npc": "25",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "23"
+        },
+        {
+          "npc": "26",
+          "readonly": "1",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "25"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f6d2189": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f6d2189",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "26",
+          "trace": [
+            {
+              "pc": "26",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "this": { "type": "dict", "value": [] },
+          "readonly": "1",
+          "mode": "runnable"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "len": "2",
+      "tid": "1",
+      "ctx": "7fa57f6d2189",
+      "name": "main()",
+      "microsteps": [
+        {
+          "npc": "27",
+          "fp": "1",
+          "trace": [
+            {
+              "pc": "27",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "local": { "result": { "type": "address", "value": [] } },
+          "atomic": "1",
+          "readonly": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "26"
+        },
+        {
+          "npc": "28",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "1" } ],
+          "pc": "27"
+        },
+        {
+          "npc": "29",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] }, { "type": "int", "value": "1" }, { "type": "int", "value": "1" } ],
+          "pc": "28"
+        },
+        {
+          "npc": "30",
+          "pop": "3",
+          "push": [ { "type": "dict", "value": [] }, { "type": "bool", "value": "True" } ],
+          "pc": "29"
+        },
+        {
+          "npc": "31",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "30"
+        },
+        {
+          "npc": "32",
+          "atomic": "0",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "31"
+        },
+        {
+          "npc": "33",
+          "readonly": "0",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "32"
+        },
+        {
+          "npc": "34",
+          "readonly": "1",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "33"
+        },
+        {
+          "npc": "35",
+          "atomic": "1",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "34"
+        },
+        {
+          "npc": "36",
+          "pop": "1",
+          "push": [ { "type": "dict", "value": [] }, { "type": "bool", "value": "False" } ],
+          "pc": "35"
+        },
+        {
+          "npc": "36",
+          "failure": "Harmony assertion failed",
+          "mode": "failed",
+          "pop": "2",
+          "push": [ { "type": "dict", "value": [] } ],
+          "pc": "36"
+        }
+      ],
+      "invfails": [
+      ],
+      "ctxbag": {
+          "7fa57f7d20a9": "1"
+      },
+      "contexts": [
+        {
+          "tid": "0",
+          "hvalue": "7fa57f9d2109",
+          "fp": "1",
+          "name": "__init__()",
+          "entry": "0",
+          "pc": "44",
+          "trace": [
+            {
+              "pc": "44",
+              "xpc": "0",
+              "method": "__init__()",
+              "calltype": "process",
+              "vars": { },
+              "sp": 0
+            }
+          ],
+          "atomic": "1",
+          "mode": "terminated"
+        },
+        {
+          "tid": "1",
+          "hvalue": "7fa57f7d20a9",
+          "fp": "1",
+          "name": "main()",
+          "entry": "17",
+          "pc": "36",
+          "trace": [
+            {
+              "pc": "36",
+              "xpc": "17",
+              "method": "main()",
+              "calltype": "process",
+              "vars": { "result": { "type": "address", "value": [] } },
+              "sp": 0
+            }
+          ],
+          "failure": "Harmony assertion failed",
+          "this": { "type": "dict", "value": [] },
+          "atomic": "1",
+          "readonly": "1",
+          "mode": "failed"
+        }
+      ]
+    }
+  ],
+  "code": [
+    "Frame __init__ ()",
+    "Push ?done",
+    "Sequential",
+    "Push 0",
+    "Store count",
+    "Push False",
+    "Store done",
+    "Jump 40",
+    "Frame handler ()",
+    "Load count",
+    "Push 1",
+    "2-ary +",
+    "Store count",
+    "Push True",
+    "Store done",
+    "Return",
+    "Jump 40",
+    "Frame main ()",
+    "Push ()",
+    "Push PC(8)",
+    "Trap",
+    "Load done",
+    "JumpCond False 21",
+    "Jump 25",
+    "Jump 21",
+    "ReadonlyInc",
+    "AtomicInc(lazy)",
+    "Load count",
+    "Push 1",
+    "2-ary ==",
+    "Assert",
+    "AtomicDec",
+    "ReadonlyDec",
+    "ReadonlyInc",
+    "AtomicInc(lazy)",
+    "Push False",
+    "Assert",
+    "AtomicDec",
+    "ReadonlyDec",
+    "Return",
+    "Push PC(17)",
+    "Push ()",
+    "Push {:}",
+    "Spawn",
+    "Return",
+    "DelVar result"
+  ],
+  "explain": [
+    "start of method __init__",
+    "push constant ?done",
+    "sequential consistency for variable on top of stack",
+    "push constant 0",
+    "pop a value and store it in shared variable count",
+    "push constant False",
+    "pop a value and store it in shared variable done",
+    "set program counter to 40",
+    "start of method handler",
+    "push value of shared variable count",
+    "push constant 1",
+    "pop 2 values and push the result of applying +",
+    "pop a value and store it in shared variable count",
+    "push constant True",
+    "pop a value and store it in shared variable done",
+    "restore caller method state and push result",
+    "set program counter to 40",
+    "start of method main",
+    "push constant ()",
+    "push constant PC(8)",
+    "pop a pc and argument and set trap",
+    "push value of shared variable done",
+    "pop a value and jump to 21 if the value is False",
+    "set program counter to 25",
+    "set program counter to 21",
+    "increment readonly counter of context; thread cannot mutate shared variables if > 0",
+    "increment atomic counter of context; thread runs uninterrupted if larger than 0",
+    "push value of shared variable count",
+    "push constant 1",
+    "pop 2 values and push the result of applying ==",
+    "pop a condition and raise exception if condition is false",
+    "decrement atomic counter of context",
+    "decrement readonly counter of context",
+    "increment readonly counter of context; thread cannot mutate shared variables if > 0",
+    "increment atomic counter of context; thread runs uninterrupted if larger than 0",
+    "push constant False",
+    "pop a condition and raise exception if condition is false",
+    "decrement atomic counter of context",
+    "decrement readonly counter of context",
+    "restore caller method state and push result",
+    "push constant PC(17)",
+    "push constant ()",
+    "push constant {:}",
+    "pop thread-local state, argument, and pc and spawn a new thread",
+    "restore caller method state and push result",
+    "delete method variable result"
+  ],
+  "locations": {
+    "43": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "1", "endline": "16", "endcolumn": "12", "code": "spawn main()" },
+    "42": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "1", "endline": "16", "endcolumn": "12", "code": "spawn main()" },
+    "2": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "1", "endcolumn": "15", "code": "sequential done" },
+    "3": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "3", "column": "9", "endline": "3", "endcolumn": "9", "code": "count = 0" },
+    "12": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "5", "endline": "7", "endcolumn": "12", "code": "    count += 1" },
+    "9": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "5", "endline": "7", "endcolumn": "14", "code": "    count += 1" },
+    "41": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "11", "endline": "16", "endcolumn": "12", "code": "spawn main()" },
+    "8": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "6", "column": "1", "endline": "9", "endcolumn": "1", "code": "def handler():" },
+    "13": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "8", "column": "12", "endline": "8", "endcolumn": "15", "code": "    done = True" },
+    "11": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "5", "endline": "7", "endcolumn": "14", "code": "    count += 1" },
+    "40": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "16", "column": "7", "endline": "16", "endcolumn": "10", "code": "spawn main()" },
+    "10": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "7", "column": "14", "endline": "7", "endcolumn": "14", "code": "    count += 1" },
+    "20": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "11", "column": "5", "endline": "11", "endcolumn": "18", "code": "    trap handler()" },
+    "4": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "3", "column": "1", "endline": "3", "endcolumn": "7", "code": "count = 0" },
+    "30": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "7": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "6", "column": "1", "endline": "6", "endcolumn": "3", "code": "def handler():" },
+    "6": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "4", "column": "1", "endline": "4", "endcolumn": "6", "code": "done = False" },
+    "17": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "10", "column": "1", "endline": "15", "endcolumn": "1", "code": "def main():" },
+    "22": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "5", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "32": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "0": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "16", "endcolumn": "19", "code": "sequential done" },
+    "15": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "6", "column": "1", "endline": "9", "endcolumn": "1", "code": "def handler():" },
+    "39": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "10", "column": "1", "endline": "15", "endcolumn": "1", "code": "def main():" },
+    "29": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "12", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "1": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "12", "endline": "1", "endcolumn": "15", "code": "sequential done" },
+    "5": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "4", "column": "8", "endline": "4", "endcolumn": "12", "code": "done = False" },
+    "45": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "16", "endcolumn": "19", "code": "sequential done" },
+    "18": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "11", "column": "17", "endline": "11", "endcolumn": "18", "code": "    trap handler()" },
+    "25": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "35": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "12", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "34": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "24": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "11", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "19": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "11", "column": "10", "endline": "11", "endcolumn": "16", "code": "    trap handler()" },
+    "27": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "12", "endline": "13", "endcolumn": "16", "code": "    assert count == 1" },
+    "37": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "26": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "36": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "31": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "5", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "21": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "11", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "16": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "10", "column": "1", "endline": "10", "endcolumn": "3", "code": "def main():" },
+    "44": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "1", "column": "1", "endline": "16", "endcolumn": "19", "code": "sequential done" },
+    "33": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" },
+    "14": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "8", "column": "5", "endline": "8", "endcolumn": "10", "code": "    done = True" },
+    "23": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "12", "column": "11", "endline": "12", "endcolumn": "14", "code": "    await done" },
+    "28": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "13", "column": "21", "endline": "13", "endcolumn": "21", "code": "    assert count == 1" },
+    "38": { "file": "/Users/lirenyu/Downloads/harmony-gui/harmony-gui/interrupt.hny", "line": "14", "column": "5", "endline": "14", "endcolumn": "16", "code": "    assert False" }
+  }
+}
