@@ -145,10 +145,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem2)
-        self.Up = QtWidgets.QPushButton(self.centralwidget)
-        self.Up.setMinimumSize(QtCore.QSize(65, 0))
-        self.Up.setObjectName("Up")
-        self.horizontalLayout_6.addWidget(self.Up)
+        self.up = QtWidgets.QPushButton(self.centralwidget)
+        self.up.setMinimumSize(QtCore.QSize(65, 0))
+        self.up.setObjectName("Up")
+        self.horizontalLayout_6.addWidget(self.up)
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem3)
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
@@ -167,9 +167,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_7.addItem(spacerItem5)
-        self.Down = QtWidgets.QPushButton(self.centralwidget)
-        self.Down.setObjectName("Down")
-        self.horizontalLayout_7.addWidget(self.Down)
+        self.down = QtWidgets.QPushButton(self.centralwidget)
+        self.down.setObjectName("Down")
+        self.horizontalLayout_7.addWidget(self.down)
         spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_7.addItem(spacerItem6)
         self.verticalLayout_4.addLayout(self.horizontalLayout_7)
@@ -225,6 +225,10 @@ class Ui_MainWindow(object):
         self.browse.clicked.connect(self.browseFiles)
         self.next.clicked.connect(self.nextMicrostep)
         self.prev.clicked.connect(self.prevMicroStep)
+        self.up.clicked.connect(self.upMicroStep)
+        self.down.clicked.connect(self.downMicroStep)
+
+
         self.horizontalSlider.valueChanged.connect(self.sliderMoveUpdate)
         # self.open.clicked.connect(self.openFileByTypedPath)
         # self.save.clicked.connect(self.save_file)
@@ -263,10 +267,14 @@ class Ui_MainWindow(object):
         self.localVariables.headerItem().setText(0, _translate("MainWindow", "Local Variables"))
         self.stackTop.headerItem().setText(0, _translate("MainWindow", "Stack Top"))
         self.singleStep.setText(_translate("MainWindow", "Single Step"))
-        self.Up.setText(_translate("MainWindow", "Up"))
+        self.up.setText(_translate("MainWindow", "Up"))
+        self.up.setShortcut(_translate("MainWindow", "Up"))
         self.prev.setText(_translate("MainWindow", "< Prev"))
+        self.prev.setShortcut(_translate("MainWindow", "Left"))
         self.next.setText(_translate("MainWindow", "Next >"))
-        self.Down.setText(_translate("MainWindow", "Down"))
+        self.next.setShortcut(_translate("MainWindow", "Right"))
+        self.down.setText(_translate("MainWindow", "Down"))
+        self.down.setShortcut(_translate("MainWindow", "Down"))
         self.threadOffsetLabel.setText(_translate("MainWindow", "    "))
 
 
@@ -463,6 +471,41 @@ class Ui_MainWindow(object):
         if self.microStepPointer == 0:
             return
         self.microStepPointer = self.microStepPointer - 1
+        self.highlightUpdate()
+        self.sharedVariableUpdate()
+        self.localVariableUpdate()
+        self.updateCheckBox()
+        self.threadBrowserUpdate()
+    
+    def upMicroStep(self):
+        if self.byteCode.toPlainText() == "":
+            return
+        if self.microStepPointer == 0:
+            return
+        i = self.microStepPointer
+        tid = int(self.microSteps[i]['tid'])
+        curStackLength = len(self.stackTraceTextList[i][tid].split(" -> "))
+        while i >= 0 and len(self.stackTraceTextList[i][tid].split(" -> ")) >= curStackLength:
+            i -= 1
+        self.microStepPointer = i + 1
+        self.highlightUpdate()
+        self.sharedVariableUpdate()
+        self.localVariableUpdate()
+        self.updateCheckBox()
+        self.threadBrowserUpdate()
+
+
+    def downMicroStep(self):
+        if self.byteCode.toPlainText() == "":
+            return
+        if self.microStepPointer == len(self.microSteps) - 1:
+            return
+        i = self.microStepPointer
+        tid = int(self.microSteps[i]['tid'])
+        curStackLength = len(self.stackTraceTextList[i][tid].split(" -> "))
+        while i < len(self.microSteps) and len(self.stackTraceTextList[i][tid].split(" -> ")) >= curStackLength:
+            i += 1
+        self.microStepPointer = i - 1
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
@@ -963,7 +1006,7 @@ class Ui_MainWindow(object):
                 if i > 0:
                     self.checkBoxList[i][tid]['readonly'] = self.checkBoxList[i - 1][tid]['readonly']
             # construct interrupt-disabled status for each microstep and each thread
-            # TODO: small differences from .hco file Frame handler()
+            # TODO: small differences from .hco file, e.g. Frame handler()
             if 'interruptlevel' in self.microSteps[i]:
                 self.checkBoxList[i][tid]['interrupt-disabled'] = int(self.microSteps[i]['interruptlevel']) > 0
             elif 'interruptlevel' in self.microSteps[i]['context']:

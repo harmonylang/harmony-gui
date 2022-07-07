@@ -124,6 +124,11 @@
           </item>
           <item>
            <widget class="QPlainTextEdit" name="microstepExplain">
+            <property name="font">
+             <font>
+              <family>Monaco</family>
+             </font>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -132,7 +137,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1,1,1,0">
           <item>
            <widget class="QLabel" name="microstepsLabel">
             <property name="layoutDirection">
@@ -201,6 +206,19 @@
              </widget>
             </item>
             <item>
+             <spacer name="horizontalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -218,7 +236,7 @@
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="Up">
+                 <widget class="QPushButton" name="up">
                   <property name="minimumSize">
                    <size>
                     <width>65</width>
@@ -226,6 +244,9 @@
                    </size>
                   </property>
                   <property name="text">
+                   <string>Up</string>
+                  </property>
+                  <property name="shortcut">
                    <string>Up</string>
                   </property>
                  </widget>
@@ -248,9 +269,12 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="prev">
                   <property name="text">
                    <string>&lt; Prev</string>
+                  </property>
+                  <property name="shortcut">
+                   <string>Left</string>
                   </property>
                  </widget>
                 </item>
@@ -272,6 +296,9 @@
                   <property name="text">
                    <string>Next &gt;</string>
                   </property>
+                  <property name="shortcut">
+                   <string>Right</string>
+                  </property>
                  </widget>
                 </item>
                </layout>
@@ -292,8 +319,11 @@
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="Down">
+                 <widget class="QPushButton" name="down">
                   <property name="text">
+                   <string>Down</string>
+                  </property>
+                  <property name="shortcut">
                    <string>Down</string>
                   </property>
                  </widget>
