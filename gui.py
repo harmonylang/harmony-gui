@@ -230,6 +230,8 @@ class Ui_MainWindow(object):
         self.stackTraceList = []
         # self.stackTraceTextList contains stack trace to display at each microstep
         self.stackTraceTextList = []
+        # self.checkBoxList contains checkbox to display at each microstep
+        self.checkBoxList = []
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -359,6 +361,7 @@ class Ui_MainWindow(object):
                 cpMicroStep['name'] = macroStep['name']
                 cpMicroStep['invfails'] = macroStep['invfails']
                 cpMicroStep['contexts'] = macroStep['contexts']
+                cpMicroStep['context'] = macroStep['context']
                 self.microSteps.append(cpMicroStep)
         # initialize self.stackTraceList
         for i in range(self.threadNumber):
@@ -366,6 +369,13 @@ class Ui_MainWindow(object):
         # initialize 
         for i in range(len(self.microSteps)):
             self.stackTraceTextList.append("")
+        # initialize self.checkBoxList
+        for i in range(len(self.microSteps)):
+            self.checkBoxList.append([])
+            for j in range(self.threadNumber):
+                self.checkBoxList[i].append({"atomic": False, "readonly": False, "interrupt-disabled": False})
+        # construct self.checkBoxList
+        self.constructCheckBox()
 
     def highlightUpdate(self):
         # update microsteps label
@@ -915,24 +925,46 @@ class Ui_MainWindow(object):
         issueText = self.hco["issue"]
         self.issue.setText(f"Issue: {issueText}")
 
+    def constructCheckBox(self):
+        for i in range(len(self.microSteps)):
+            assert 'context' in self.microSteps[i]
+            assert 'tid' in self.microSteps[i]
+            tid = int(self.microSteps[i]['tid'])
+            # construct atomic status for each microstep and each thread
+            if 'atomic' in self.microSteps[i]:
+                self.checkBoxList[i][tid]['atomic'] = int(self.microSteps[i]['atomic']) > 0
+            elif 'atomic' in self.microSteps[i]['context']:
+                self.checkBoxList[i][tid]['atomic'] = int(self.microSteps[i]['context']['atomic']) > 0
+            else:
+                if i > 0:
+                    self.checkBoxList[i][tid]['atomic'] = self.checkBoxList[i - 1][tid]['atomic']
+            # construct readonly status for each microstep and each thread
+            if 'readonly' in self.microSteps[i]:
+                self.checkBoxList[i][tid]['readonly'] = int(self.microSteps[i]['readonly']) > 0
+            elif 'readonly' in self.microSteps[i]['context']:
+                self.checkBoxList[i][tid]['readonly'] = int(self.microSteps[i]['context']['readonly']) > 0
+            else:
+                if i > 0:
+                    self.checkBoxList[i][tid]['readonly'] = self.checkBoxList[i - 1][tid]['readonly']
+            # construct interrupt-disabled status for each microstep and each thread
+            # TODO: small differences from .hco file Frame handler()
+            if 'interruptlevel' in self.microSteps[i]:
+                self.checkBoxList[i][tid]['interrupt-disabled'] = int(self.microSteps[i]['interruptlevel']) > 0
+            elif 'interruptlevel' in self.microSteps[i]['context']:
+                self.checkBoxList[i][tid]['interrupt-disabled'] = int(self.microSteps[i]['context']['interruptlevel']) > 0
+            else:
+                if i > 0:
+                    self.checkBoxList[i][tid]['interrupt-disabled'] = self.checkBoxList[i - 1][tid]['interrupt-disabled']
+
     def updateCheckBox(self):
-        pass
-        # # TODO: update atomic checkbox
-        # self.atomic.setChecked(False)
-        # if 'atomic' in self.microSteps[self.microStepPointer]:
-        #     atomicCounter = int(self.microSteps[self.microStepPointer]['atomic'])
-        #     if atomicCounter > 0:
-        #         self.atomic.setChecked(True)
-        # # TODO: update readOnly checkbox
-        # self.readOnly.setChecked(False)
-        # if 'readonly' in self.microSteps[self.microStepPointer]:
-        #     readonlyCounter = int(self.microSteps[self.microStepPointer]['readonly'])
-        #     if readonlyCounter > 0:
-        #         self.readOnly.setChecked(True)
-        # # TODO: update interrupt disabled checkbox
-    
-
-
+        i = self.microStepPointer
+        tid = int(self.microSteps[i]['tid'])
+        # update atomic checkbox
+        self.atomic.setChecked(self.checkBoxList[i][tid]['atomic'])
+        # update readonly checkbox
+        self.readOnly.setChecked(self.checkBoxList[i][tid]['readonly'])
+        # update interrupt-disabled checkbox
+        self.interruptDisabled.setChecked(self.checkBoxList[i][tid]['interrupt-disabled'])
 
 
 if __name__ == "__main__":
