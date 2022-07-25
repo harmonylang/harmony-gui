@@ -418,21 +418,76 @@ class Ui_MainWindow(object):
         self.microstepExplain.setPlainText(explanationText)
         # highlight source code
         sourceFileName = self.hco["locations"]["0"]["file"]
-        # start row; start col; end row; end col
+        # start row; start col; end row; end col of current microstep
         sourceCodeR1 = int(self.hco["locations"][str(pc)]["line"])
         sourceCodeR2 = int(self.hco["locations"][str(pc)]["endline"])
         sourceCodeC1 = int(self.hco["locations"][str(pc)]["column"])
         sourceCodeC2 = int(self.hco["locations"][str(pc)]["endcolumn"]) + 1
+        # start row; start col; end row; end col of stmt
+        stmtR1 = int(self.hco['locations'][str(pc)]['stmt'][0])
+        stmtC1 = int(self.hco['locations'][str(pc)]['stmt'][1])
+        stmtR2 = int(self.hco['locations'][str(pc)]['stmt'][2])
+        stmtC2 = int(self.hco['locations'][str(pc)]['stmt'][3])
         # # update thread browser scroll bar
         # self.threadBrowser.verticalScrollBar().setValue(threadId)
         if self.hco["locations"][str(pc)]["file"] == sourceFileName: 
             # if code is in sourcefile
             self.openFile(self.sourceCode, self.sourceFile)
-            self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
+
+            self.clearFormat(self.sourceCodeCursor)
+            
+            stmtStartPos = self.getPosition(self.sourceCode, stmtR1, stmtC1)
+            stmtEndPos = self.getPosition(self.sourceCode, stmtR2, stmtC2)   
+            self.sourceCodeCursor.setPosition(stmtStartPos - 1)
+            self.sourceCodeCursor.setPosition(stmtEndPos - 1, QtGui.QTextCursor.KeepAnchor)
+            fmt = QtGui.QTextCharFormat()
+            fmt.setBackground(QtCore.Qt.yellow)
+            self.sourceCodeCursor.setCharFormat(fmt)
+
+            startPos = self.getPosition(self.sourceCode, sourceCodeR1, sourceCodeC1)
+            endPos = self.getPosition(self.sourceCode, sourceCodeR2, sourceCodeC2)
+            self.sourceCodeCursor.setPosition(startPos - 1)
+            self.sourceCodeCursor.setPosition(endPos - 1, QtGui.QTextCursor.KeepAnchor)
+            fmt = QtGui.QTextCharFormat()
+            fmt.setBackground(QtCore.Qt.green)
+            self.sourceCodeCursor.setCharFormat(fmt)
+            self.sourceCode.verticalScrollBar().setValue(sourceCodeR1 - 8)
+
+            # self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
         else:
             # if code is in library file
             self.openFile(self.sourceCode, self.hco["locations"][str(pc)]["file"])
-            self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
+
+            self.clearFormat(self.sourceCodeCursor)
+            
+            stmtStartPos = self.getPosition(self.sourceCode, stmtR1, stmtC1)
+            stmtEndPos = self.getPosition(self.sourceCode, stmtR2, stmtC2)   
+            self.sourceCodeCursor.setPosition(stmtStartPos - 1)
+            self.sourceCodeCursor.setPosition(stmtEndPos - 1, QtGui.QTextCursor.KeepAnchor)
+            fmt = QtGui.QTextCharFormat()
+            fmt.setBackground(QtCore.Qt.yellow)
+            self.sourceCodeCursor.setCharFormat(fmt)
+
+            startPos = self.getPosition(self.sourceCode, sourceCodeR1, sourceCodeC1)
+            endPos = self.getPosition(self.sourceCode, sourceCodeR2, sourceCodeC2)
+            self.sourceCodeCursor.setPosition(startPos - 1)
+            self.sourceCodeCursor.setPosition(endPos - 1, QtGui.QTextCursor.KeepAnchor)
+            fmt = QtGui.QTextCharFormat()
+            fmt.setBackground(QtCore.Qt.green)
+            self.sourceCodeCursor.setCharFormat(fmt)
+            self.sourceCode.verticalScrollBar().setValue(sourceCodeR1 - 8)
+
+            # stmtStartPos = self.getPosition(self.sourceCode, stmtR1, stmtC1)
+            # stmtEndPos = self.getPosition(self.sourceCode, stmtR2, stmtC2)   
+            # self.sourceCodeCursor.setPosition(stmtStartPos - 1)
+            # self.sourceCodeCursor.setPosition(stmtEndPos - 1, QtGui.QTextCursor.KeepAnchor)
+            # fmt = QtGui.QTextCharFormat()
+            # fmt.setBackground(QtCore.Qt.blue)
+            # self.sourceCodeCursor.setCharFormat(fmt)
+
+            # self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
+
+
         # hightlight machine code
         pcMAX = len(self.hco["code"]) - 1
         offsetDigit = len(str(pcMAX))
@@ -458,7 +513,16 @@ class Ui_MainWindow(object):
             return
         if self.microStepPointer == len(self.microSteps) - 1:
             return
-        self.microStepPointer = self.microStepPointer + 1
+        # next microstep if self.singleStep is selected
+        if self.singleStep.isChecked():
+            self.microStepPointer = self.microStepPointer + 1
+        # next statement if self.singleStep NOT selected
+        else:
+            currentMicroStep = self.microStepPointer
+            while self.microStepPointer < len(self.microSteps) and int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]) == int(self.hco['locations'][str(currentMicroStep)]['stmt'][0]):
+                # print(int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]))
+                self.microStepPointer = self.microStepPointer + 1
+            # print("!")
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
@@ -470,12 +534,25 @@ class Ui_MainWindow(object):
             return
         if self.microStepPointer == 0:
             return
-        self.microStepPointer = self.microStepPointer - 1
+        # next microstep if self.singleStep is selected
+        if self.singleStep.isChecked():
+            self.microStepPointer = self.microStepPointer - 1
+        # next statement if self.singleStep NOT selected
+        else:
+            currentMicroStep = self.microStepPointer
+            while self.microStepPointer > 0 and int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]) == int(self.hco['locations'][str(currentMicroStep)]['stmt'][0]):
+                # print(int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]))
+                self.microStepPointer = self.microStepPointer - 1
+            # print("!")
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
         self.updateCheckBox()
         self.threadBrowserUpdate()
+
+
+    def prevStatement(self):
+        pass
     
     def upMicroStep(self):
         if self.byteCode.toPlainText() == "":
