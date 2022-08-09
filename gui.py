@@ -17,6 +17,7 @@ from gui_import.codeeditor import CodeEditor
 import json
 import os
 import subprocess
+import copy
 
 
 class Ui_MainWindow(object):
@@ -251,6 +252,15 @@ class Ui_MainWindow(object):
         self.stackTraceTextList = []
         # self.checkBoxList contains checkbox to display at each microstep
         self.checkBoxList = []
+        # self.stackTopDisplay is a list of stack top at each microstep
+        # self.stackTopDisplay[i] is a list of variables that are on stack top at microstep i
+        self.stackTopDisplay = []
+        # self.threadMode is a list of thread modes at each microstep
+        self.threadMode = []
+        # self.prevstmt is a list that stores the microstep number of prev stmt at each microstep
+        self.prevstmt = []
+        # self.nextstmt is a list that stores the microstep number of next stmt at each microstep
+        self.nextstmt = []
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -330,8 +340,18 @@ class Ui_MainWindow(object):
         self.hvm = hvmData
         # construct self.microSteps to be a list of microsteps
         self.constructMicrosteps()
+        # construct self.threadMode
+        self.constructThreadMode()
         # construct self.stackTraceText to be stack trace to display at each microstep
         self.constructStackTraceTextList()
+        # construct self.stackTopDisplay
+        self.constructStackTopDisplay()
+        # construct self.prevstmt and self.nextstmt
+        self.constructPrevStmt()
+        self.constructNextStmt()
+        
+
+
         # initialize bytecode display, <adding pc value before each line>
         text = ""
         pcMAX = len(self.hco["code"]) - 1
@@ -365,6 +385,8 @@ class Ui_MainWindow(object):
         self.sharedVariableUpdate()
         # update local variable
         self.localVariableUpdate()
+        # update stack top
+        self.stackTopUpdate()
         # display issue
         self.displayIssue()
         # update checkbox
@@ -518,14 +540,17 @@ class Ui_MainWindow(object):
             self.microStepPointer = self.microStepPointer + 1
         # next statement if self.singleStep NOT selected
         else:
-            currentMicroStep = self.microStepPointer
-            while self.microStepPointer < len(self.microSteps) and int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]) == int(self.hco['locations'][str(currentMicroStep)]['stmt'][0]):
-                # print(int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]))
-                self.microStepPointer = self.microStepPointer + 1
+            self.microStepPointer = self.nextstmt[self.microStepPointer]
+
+            # currentMicroStep = self.microStepPointer
+            # while self.microStepPointer < len(self.microSteps) and int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]) == int(self.hco['locations'][str(currentMicroStep)]['stmt'][0]):
+            #     # print(int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]))
+            #     self.microStepPointer = self.microStepPointer + 1
             # print("!")
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
+        self.stackTopUpdate()
         self.updateCheckBox()
         self.threadBrowserUpdate()
 
@@ -539,20 +564,54 @@ class Ui_MainWindow(object):
             self.microStepPointer = self.microStepPointer - 1
         # next statement if self.singleStep NOT selected
         else:
+
+            # p = 0
+            # while p < len(self.nextstmt) and self.nextstmt[p] < self.microStepPointer:
+            #     p += 1
+            # if p == 0:
+            #     self.microStepPointer = 0
+            # else:
+            #     self.microstepPointer = self.nextstmt[p - 1]
+
+            
             currentMicroStep = self.microStepPointer
             while self.microStepPointer > 0 and int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]) == int(self.hco['locations'][str(currentMicroStep)]['stmt'][0]):
                 # print(int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]))
                 self.microStepPointer = self.microStepPointer - 1
-            # print("!")
+            # # print("!")
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
+        self.stackTopUpdate()
         self.updateCheckBox()
         self.threadBrowserUpdate()
 
 
-    def prevStatement(self):
-        pass
+    def constructPrevStmt(self):
+        self.prevstmt = copy.deepcopy(self.nextstmt)
+        self.prevstmt.insert(0, 0)
+        print(self.prevstmt)
+
+
+    def constructNextStmt(self):
+        for i in range(len(self.microSteps)):
+            microstepPtr = i
+            curTid = int(self.microSteps[i]['tid'])
+            if (microstepPtr < len(self.microSteps) - 1) and (int(self.microSteps[microstepPtr + 1]['tid']) != curTid):
+                microstepPtr += 1
+            else:
+                while (microstepPtr < len(self.microSteps) - 1) and (int(self.microSteps[microstepPtr + 1]['tid']) == curTid) and (int(self.hco['locations'][str(microstepPtr + 1)]['stmt'][0]) == int(self.hco['locations'][str(i)]['stmt'][0])):
+                    microstepPtr += 1
+                if(microstepPtr < len(self.microSteps) - 1):
+                    microstepPtr += 1
+            if i < len(self.microSteps) - 1 and microstepPtr == i:
+                assert False
+                microstepPtr += 1
+            
+            self.nextstmt.append(microstepPtr)
+        print(self.nextstmt)
+
+        
     
     def upMicroStep(self):
         if self.byteCode.toPlainText() == "":
@@ -568,6 +627,7 @@ class Ui_MainWindow(object):
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
+        self.stackTopUpdate()
         self.updateCheckBox()
         self.threadBrowserUpdate()
 
@@ -586,6 +646,7 @@ class Ui_MainWindow(object):
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
+        self.stackTopUpdate()
         self.updateCheckBox()
         self.threadBrowserUpdate()
 
@@ -596,6 +657,7 @@ class Ui_MainWindow(object):
         self.highlightUpdate()
         self.sharedVariableUpdate()
         self.localVariableUpdate()
+        self.stackTopUpdate()
         self.updateCheckBox()
         self.threadBrowserUpdate()
     
@@ -856,6 +918,41 @@ class Ui_MainWindow(object):
                 raise Exception("Unexpected Harmony type")
             counter += 1
 
+    def stackTopUpdate(self):
+        # clear all displayed content
+        self.stackTop.clear() 
+        stackTopVariableList = self.stackTopDisplay[self.microStepPointer]
+        primitiveTypes = {'int', 'bool', 'atom', 'pc'}
+        # iterate through harmony values in stackTopVariableList
+        counter = 0 
+            
+        for variable in stackTopVariableList:
+            item_0 = QtWidgets.QTreeWidgetItem(self.stackTop)
+            if variable['type'] in primitiveTypes: 
+                self.stackTop.topLevelItem(counter).setText(0, f"{self.variableToText(variable['type'], variable)}")
+            elif variable['type'] == 'address':
+                if self.isNaive(variable):
+                    self.stackTop.topLevelItem(counter).setText(0, f"{self.variableToText(variable['type'], variable)}")
+                else:
+                    self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
+            elif variable['type'] == 'list':
+                if self.isNaive(variable):
+                    self.stackTop.topLevelItem(counter).setText(0, f"{self.variableToText(variable['type'], variable)}")
+                else:
+                    self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
+            elif variable['type'] == 'set':
+                if self.isNaive(variable):
+                    self.stackTop.topLevelItem(counter).setText(0, f"{self.variableToText(variable['type'], variable)}")
+                else:
+                    self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
+            elif variable['type'] == 'dict':
+                self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
+            elif variable['type'] == 'context':
+                self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
+            else:
+                raise Exception("Unexpected Harmony type")
+            counter += 1
+
     def recursiveAdd(self, item, node, variable, variableName):
         """
         recursively display harmony values to treelist view
@@ -1031,12 +1128,9 @@ class Ui_MainWindow(object):
                     return False
             return True
         
-
-
-    # TODO: merge self.threadBrowser and self.stackTrace
     def constructStackTraceTextList(self):
-        # assert len(self.stackTraceList) == self.threadNumber
-        # assert len(self.stackTraceTextList) == len(self.microSteps)
+        assert len(self.stackTraceList) == self.threadNumber
+        assert len(self.stackTraceTextList) == len(self.microSteps)
         for i in range(len(self.microSteps)):
             if 'trace' in self.microSteps[i]:
                 # there is a change in stack trace
@@ -1054,9 +1148,76 @@ class Ui_MainWindow(object):
                     self.stackTraceTextList[i].append(stackTraceLine)
             else:
                 # there is no change in stack trace
-                self.stackTraceTextList[i] = self.stackTraceTextList[i - 1]
+                self.stackTraceTextList[i] = copy.deepcopy(self.stackTraceTextList[i - 1])
+        for i in range(len(self.stackTraceTextList)):
+            for j in range(len(self.stackTraceTextList[i])):
+                self.stackTraceTextList[i][j] = f"[{self.threadMode[i][j]}] " + self.stackTraceTextList[i][j] 
+
+    def constructStackTopDisplay(self):
+        """
+        construct self.stackTopDisplay
+        """
+        stacks = []
+        for i in range(self.threadNumber):
+            stacks.append([])
+        # default stack for each thread
+        for t in range(self.threadNumber):
+            i = 0
+            while int(self.microSteps[i]['tid']) != t:
+                i += 1
+            stacks[t] = self.microSteps[i]['context']['stack']
+        framePointer = -1
+        for i in range(len(self.microSteps)):
+            tid = int(self.microSteps[i]['tid'])
+            # update frame pointer
+            if 'fp' in self.microSteps[i]:
+                framePointer = int(self.microSteps[i]['fp'])
+            # pop items first
+            if 'pop' in self.microSteps[i]:
+                assert len(stacks[tid]) >= int(self.microSteps[i]['pop'])
+                for j in range(int(self.microSteps[i]['pop'])):
+                    del stacks[tid][-1]
+            if 'push' in self.microSteps[i]:
+                for variable in self.microSteps[i]['push']:
+                    stacks[tid].append(variable)
+            # update self.stackTopDisplay
+            self.stackTopDisplay.append([])
+            for k in range(framePointer, len(stacks[tid])):
+                self.stackTopDisplay[i].append(stacks[tid][k])
+
+    def constructThreadMode(self):
+        # initialize self.threadMode
+        for i in range(len(self.microSteps)):
+            self.threadMode.append([])
+            for j in range(self.threadNumber):
+                self.threadMode[i].append("runnable")
+        # construct thread mode for each microstep
+        i = 0
+        for macrostep in self.hco['macrosteps']:
+            if i > 0:
+                self.threadMode[i] = copy.deepcopy(self.threadMode[i - 1])
+            if ('context' in macrostep) and ('mode' in macrostep['context']):
+                self.threadMode[i][int(macrostep['context']['tid'])] = macrostep['context']['mode']
+            for j in range(len(macrostep['microsteps'])):
+                if j > 0:
+                    self.threadMode[i] = copy.deepcopy(self.threadMode[i - 1])
+                if 'mode' in macrostep['microsteps'][j]:
+                    self.threadMode[i][int(self.microSteps[i]['tid'])] = macrostep['microsteps'][j]['mode']
+                if j < len(macrostep['microsteps']) - 1:
+                    i += 1
+            if 'contexts' in macrostep:
+                for context in macrostep['contexts']:
+                    if 'mode' in context:
+                        self.threadMode[i][int(context['tid'])] = context['mode']
+            i += 1
+        # for k in range(len(self.threadMode)):
+        #     print(self.threadMode[k])
+        
+
+        
 
 
+                
     def displayIssue(self):
         issueText = self.hco["issue"]
         self.issue.setText(f"Issue: {issueText}")
