@@ -590,7 +590,7 @@ class Ui_MainWindow(object):
     def constructPrevStmt(self):
         self.prevstmt = copy.deepcopy(self.nextstmt)
         self.prevstmt.insert(0, 0)
-        print(self.prevstmt)
+        # print(self.prevstmt)
 
 
     def constructNextStmt(self):
@@ -609,7 +609,7 @@ class Ui_MainWindow(object):
                 microstepPtr += 1
             
             self.nextstmt.append(microstepPtr)
-        print(self.nextstmt)
+        # print(self.nextstmt)
 
         
     
@@ -946,7 +946,11 @@ class Ui_MainWindow(object):
                 else:
                     self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
             elif variable['type'] == 'dict':
-                self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
+                if len(variable['value']) == 0:
+                    # special case: empty dictionary - show {:}
+                    self.stackTop.topLevelItem(counter).setText(0, f"{{:}}")
+                else:
+                    self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
             elif variable['type'] == 'context':
                 self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
             else:
@@ -1196,19 +1200,23 @@ class Ui_MainWindow(object):
         for macrostep in self.hco['macrosteps']:
             if i > 0:
                 self.threadMode[i] = copy.deepcopy(self.threadMode[i - 1])
+            if 'contexts' in macrostep:
+                for context in macrostep['contexts']:
+                    if 'mode' in context:
+                        self.threadMode[i][int(context['tid'])] = 'runnable' if context['mode'] == 'choosing' else context['mode'] # change choosing to runnable
             if ('context' in macrostep) and ('mode' in macrostep['context']):
-                self.threadMode[i][int(macrostep['context']['tid'])] = macrostep['context']['mode']
+                self.threadMode[i][int(macrostep['context']['tid'])] = 'runnable' if macrostep['context']['mode'] == 'choosing' else macrostep['context']['mode']
             for j in range(len(macrostep['microsteps'])):
                 if j > 0:
                     self.threadMode[i] = copy.deepcopy(self.threadMode[i - 1])
                 if 'mode' in macrostep['microsteps'][j]:
-                    self.threadMode[i][int(self.microSteps[i]['tid'])] = macrostep['microsteps'][j]['mode']
+                    self.threadMode[i][int(self.microSteps[i]['tid'])] = 'runnable' if macrostep['microsteps'][j]['mode'] == 'choosing' else macrostep['microsteps'][j]['mode']
                 if j < len(macrostep['microsteps']) - 1:
                     i += 1
             if 'contexts' in macrostep:
                 for context in macrostep['contexts']:
                     if 'mode' in context:
-                        self.threadMode[i][int(context['tid'])] = context['mode']
+                        self.threadMode[i][int(context['tid'])] = 'runnable' if context['mode'] == 'choosing' else context['mode']
             i += 1
         # for k in range(len(self.threadMode)):
         #     print(self.threadMode[k])
