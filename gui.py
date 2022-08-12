@@ -349,7 +349,6 @@ class Ui_MainWindow(object):
         # construct self.prevstmt and self.nextstmt
         self.constructPrevStmt()
         self.constructNextStmt()
-        
 
 
         # initialize bytecode display, <adding pc value before each line>
@@ -410,6 +409,8 @@ class Ui_MainWindow(object):
                 cpMicroStep['context'] = macroStep['context']
                 self.microSteps.append(cpMicroStep)
         # initialize self.stackTraceList
+        self.stackTraceList = []
+        self.stackTraceTextList = []
         for i in range(self.threadNumber):
             self.stackTraceList.append("")
         # initialize 
@@ -753,7 +754,8 @@ class Ui_MainWindow(object):
         pos = 0
         # disallow row number to be out of bound
         if row > len(lines):
-            raise Exception("Row number out of bound")
+            row = len(lines)
+            # raise Exception("Row number out of bound")
         for i in range(row - 1):
             pos += len(lines[i])
         # allow column number to be out of bound
@@ -1162,6 +1164,7 @@ class Ui_MainWindow(object):
         construct self.stackTopDisplay
         """
         stacks = []
+        self.stackTopDisplay = []
         for i in range(self.threadNumber):
             stacks.append([])
         # default stack for each thread
@@ -1270,6 +1273,9 @@ class Ui_MainWindow(object):
         self.readOnly.setChecked(self.checkBoxList[i][tid]['readonly'])
         # update interrupt-disabled checkbox
         self.interruptDisabled.setChecked(self.checkBoxList[i][tid]['interrupt-disabled'])
+    
+    def dummy(self):
+        pass
 
 
 if __name__ == "__main__":
