@@ -619,23 +619,30 @@ class Ui_MainWindow(object):
         #     print(self.microStepPointer)
 
     def upMicroStep(self):
-        pass
-        # if self.byteCode.toPlainText() == "":
-        #     return
-        # if self.microStepPointer == 0:
-        #     return
-        # i = self.microStepPointer
-        # tid = int(self.microSteps[i]['tid'])
-        # curStackLength = len(self.stackTraceTextList[i][tid].split(" -> "))
-        # while i >= 0 and len(self.stackTraceTextList[i][tid].split(" -> ")) >= curStackLength:
-        #     i -= 1
-        # self.microStepPointer = i + 1
-        # self.highlightUpdate()
-        # self.sharedVariableUpdate()
-        # self.localVariableUpdate()
-        # self.stackTopUpdate()
-        # self.updateCheckBox()
-        # self.threadBrowserUpdate()
+        if self.byteCode.toPlainText() == "":
+            return
+        if self.microStepPointer == 0:
+            return
+        if self.microStepPointer == len(self.microSteps):
+            # if in final extra microstep
+            self.microStepPointer -= 1
+        else:
+            # not in final extra microstep
+            i = self.microStepPointer
+            tid = int(self.microSteps[i]['tid'])
+            curStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
+            while i >= 0 and len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> ")) >= curStackLength and int(self.microSteps[i]['tid']) == tid:
+                i -= 1
+            if i < 0:
+                i = 0
+            self.microStepPointer = i
+
+        self.highlightUpdate(self.microStepPointer)
+        self.sharedVariableUpdate(self.microStepPointer)
+        self.localVariableUpdate(self.microStepPointer)
+        self.stackTopUpdate(self.microStepPointer)
+        self.updateCheckBox(self.microStepPointer)
+        self.threadBrowserUpdate(self.microStepPointer)
 
 
     def downMicroStep(self):
@@ -648,7 +655,7 @@ class Ui_MainWindow(object):
         curStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
         while i < len(self.microSteps) and len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> ")) >= curStackLength and int(self.microSteps[i]['tid']) == tid:
             i += 1
-        if i  == len(self.microSteps):
+        if i == len(self.microSteps):
             i = len(self.microSteps) - 1
         self.microStepPointer = i
 
