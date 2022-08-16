@@ -257,10 +257,8 @@ class Ui_MainWindow(object):
         self.stackTopDisplay = []
         # self.threadMode is a list of thread modes at each microstep
         self.threadMode = []
-        # self.prevstmt is a list that stores the microstep number of prev stmt at each microstep
-        self.prevstmt = []
-        # self.nextstmt is a list that stores the microstep number of next stmt at each microstep
-        self.nextstmt = []
+        # self.stmtIndicator is a list of True/False value, where True indicates next microstep is in the same line, False not
+        self.stmtIndicator = []
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -346,10 +344,8 @@ class Ui_MainWindow(object):
         self.constructStackTraceTextList()
         # construct self.stackTopDisplay
         self.constructStackTopDisplay()
-        # construct self.prevstmt and self.nextstmt
-        self.constructPrevStmt()
-        self.constructNextStmt()
-
+        # construct stmt indicator
+        self.constructSTMT()
 
         # initialize bytecode display, <adding pc value before each line>
         text = ""
@@ -423,6 +419,32 @@ class Ui_MainWindow(object):
                 self.checkBoxList[i].append({"atomic": False, "readonly": False, "interrupt-disabled": False})
         # construct self.checkBoxList
         self.constructCheckBox()
+
+    def constructSTMT(self):
+        # construct self.stmtIndicator
+        # self.stmtIndicator is a list of True/False value
+        # True means current microstep and next microstep are in the same statement, False otherwise
+        self.stmtIndicator = []
+        for i in range(len(self.microSteps) - 1):
+            pc = int(self.microSteps[i]["pc"])
+            nextMicroStepPc = int(self.microSteps[i + 1]["pc"])
+            # compare file name
+            if self.hco['locations'][str(pc)]['file'] != self.hco['locations'][str(nextMicroStepPc)]['file']:
+                self.stmtIndicator.append(False)
+            # compare thread id
+            elif int(self.microSteps[i]['tid']) != int(self.microSteps[i + 1]['tid']):
+                self.stmtIndicator.append(False)
+            # compare line 
+            elif self.hco['locations'][str(pc)]['stmt'][0] != self.hco['locations'][str(nextMicroStepPc)]['stmt'][0]:
+                self.stmtIndicator.append(False)
+            # all three checks passes
+            else:
+                self.stmtIndicator.append(True)
+        # add an extra False for the last microstep
+        self.stmtIndicator.append(False)
+        # add an extra False for the extra microstep for final state
+        self.stmtIndicator.append(False)
+        assert len(self.stmtIndicator) == len(self.microSteps) + 1
 
     def highlightUpdate(self, microStepPointer):
         # update microsteps label
@@ -502,17 +524,6 @@ class Ui_MainWindow(object):
             self.sourceCodeCursor.setCharFormat(fmt)
             self.sourceCode.verticalScrollBar().setValue(sourceCodeR1 - 8)
 
-            # stmtStartPos = self.getPosition(self.sourceCode, stmtR1, stmtC1)
-            # stmtEndPos = self.getPosition(self.sourceCode, stmtR2, stmtC2)   
-            # self.sourceCodeCursor.setPosition(stmtStartPos - 1)
-            # self.sourceCodeCursor.setPosition(stmtEndPos - 1, QtGui.QTextCursor.KeepAnchor)
-            # fmt = QtGui.QTextCharFormat()
-            # fmt.setBackground(QtCore.Qt.blue)
-            # self.sourceCodeCursor.setCharFormat(fmt)
-
-            # self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
-
-
         # hightlight machine code
         pcMAX = len(self.hco["code"]) - 1
         offsetDigit = len(str(pcMAX))
@@ -539,49 +550,49 @@ class Ui_MainWindow(object):
         if self.microStepPointer == len(self.microSteps):
             return
         # next microstep if self.singleStep is selected
-        # if self.singleStep.isChecked():
-        self.microStepPointer = self.microStepPointer + 1
-        # next statement if self.singleStep NOT selected
-        # else:
-        #     self.microStepPointer = self.nextstmt[self.microStepPointer]
-
-            # currentMicroStep = self.microStepPointer
-            # while self.microStepPointer < len(self.microSteps) and int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]) == int(self.hco['locations'][str(currentMicroStep)]['stmt'][0]):
-            #     # print(int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]))
-            #     self.microStepPointer = self.microStepPointer + 1
-            # print("!")
+        if self.singleStep.isChecked():
+            self.microStepPointer = self.microStepPointer + 1
+        # next statement if self.singleStep is NOT selected
+        else:
+            i = self.microStepPointer
+            while self.stmtIndicator[i] == True:
+                i += 1
+            i += 1
+            self.microStepPointer = i
+        
         self.highlightUpdate(self.microStepPointer)
         self.sharedVariableUpdate(self.microStepPointer)
         self.localVariableUpdate(self.microStepPointer)
         self.stackTopUpdate(self.microStepPointer)
         self.updateCheckBox(self.microStepPointer)
         self.threadBrowserUpdate(self.microStepPointer)
+
+        # if self.microStepPointer < len(self.microSteps):
+        #     pc = int(self.microSteps[self.microStepPointer]["pc"])
+        #     print(self.microStepPointer, self.hco['locations'][str(pc)]['stmt'], self.stmtIndicator[self.microStepPointer])
+        # else:
+        #     print(self.microStepPointer)
 
     def prevMicroStep(self):
         if self.byteCode.toPlainText() == "":
             return
         if self.microStepPointer == 0:
             return
+
         # next microstep if self.singleStep is selected
-        # if self.singleStep.isChecked():
-        self.microStepPointer = self.microStepPointer - 1
+        if self.singleStep.isChecked():
+            self.microStepPointer = self.microStepPointer - 1
         # next statement if self.singleStep NOT selected
-        # else:
+        else:
+            i = self.microStepPointer
+            while i > 0 and self.stmtIndicator[i - 1] == True:
+                i -= 1
+            if i > 0:
+                i -= 1
+            while i > 0 and self.stmtIndicator[i - 1] == True:
+                i -= 1
+            self.microStepPointer = i
 
-        #     # p = 0
-        #     # while p < len(self.nextstmt) and self.nextstmt[p] < self.microStepPointer:
-        #     #     p += 1
-        #     # if p == 0:
-        #     #     self.microStepPointer = 0
-        #     # else:
-        #     #     self.microstepPointer = self.nextstmt[p - 1]
-
-            
-        #     currentMicroStep = self.microStepPointer
-        #     while self.microStepPointer > 0 and int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]) == int(self.hco['locations'][str(currentMicroStep)]['stmt'][0]):
-        #         # print(int(self.hco['locations'][str(self.microStepPointer)]['stmt'][0]))
-        #         self.microStepPointer = self.microStepPointer - 1
-        #     # # print("!")
         self.highlightUpdate(self.microStepPointer)
         self.sharedVariableUpdate(self.microStepPointer)
         self.localVariableUpdate(self.microStepPointer)
@@ -589,33 +600,13 @@ class Ui_MainWindow(object):
         self.updateCheckBox(self.microStepPointer)
         self.threadBrowserUpdate(self.microStepPointer)
 
+        # if self.microStepPointer < len(self.microSteps):
+        #     pc = int(self.microSteps[self.microStepPointer]["pc"])
+        #     print(self.microStepPointer, self.hco['locations'][str(pc)]['stmt'], self.stmtIndicator[self.microStepPointer])
+        # else:
+        #     print(self.microStepPointer)
 
-    def constructPrevStmt(self):
-        self.prevstmt = copy.deepcopy(self.nextstmt)
-        self.prevstmt.insert(0, 0)
-        # print(self.prevstmt)
 
-
-    def constructNextStmt(self):
-        for i in range(len(self.microSteps)):
-            microstepPtr = i
-            curTid = int(self.microSteps[i]['tid'])
-            if (microstepPtr < len(self.microSteps) - 1) and (int(self.microSteps[microstepPtr + 1]['tid']) != curTid):
-                microstepPtr += 1
-            else:
-                while (microstepPtr < len(self.microSteps) - 1) and (int(self.microSteps[microstepPtr + 1]['tid']) == curTid) and (int(self.hco['locations'][str(microstepPtr + 1)]['stmt'][0]) == int(self.hco['locations'][str(i)]['stmt'][0])):
-                    microstepPtr += 1
-                if(microstepPtr < len(self.microSteps) - 1):
-                    microstepPtr += 1
-            if i < len(self.microSteps) - 1 and microstepPtr == i:
-                assert False
-                microstepPtr += 1
-            
-            self.nextstmt.append(microstepPtr)
-        # print(self.nextstmt)
-
-        
-    
     def upMicroStep(self):
         pass
         # if self.byteCode.toPlainText() == "":
@@ -743,11 +734,6 @@ class Ui_MainWindow(object):
         fmt = QtGui.QTextCharFormat()
         fmt.setBackground(QtCore.Qt.red)
         cursor.setCharFormat(fmt)
-        # cursor.setPosition(jumpDesPos - 2)
-        # cursor.setPosition(jumpDesPos - 1, QtGui.QTextCursor.KeepAnchor)
-        # fmt = QtGui.QTextCharFormat()
-        # fmt.setBackground(QtCore.Qt.red)
-        # cursor.setCharFormat(fmt)
 
     def getPosition(self, editor, row, column):
         text = editor.toPlainText()
@@ -1242,10 +1228,6 @@ class Ui_MainWindow(object):
         #     print(self.threadMode[k])
         
 
-        
-
-
-                
     def displayIssue(self):
         issueText = self.hco["issue"]
         self.issue.setText(f"Issue: {issueText}")
