@@ -1151,7 +1151,24 @@ class Ui_MainWindow(object):
     def constructStackTraceTextList(self):
         assert len(self.stackTraceList) == self.threadNumber
         assert len(self.stackTraceTextList) == len(self.microSteps)
-        for i in range(len(self.microSteps)):
+        # base case for i = 0 to fix the initial stack trace
+        assert 'contexts' in self.hco['macrosteps'][0]
+        for thread in self.hco['macrosteps'][0]['contexts']:
+            tid = int(thread['tid'])
+            assert 'trace' in thread
+            trace = thread['trace']
+            traceLine = ""
+            assert len(trace) > 0
+            for j in range(len(trace) - 1):
+                traceLine = traceLine + trace[j]['method'] + ' -> '
+            traceLine += trace[len(trace) - 1]['method']
+            self.stackTraceList[tid] = traceLine
+        self.stackTraceTextList[0] = []
+        for stackTraceLine in self.stackTraceList:
+            self.stackTraceTextList[0].append(stackTraceLine)
+        print(self.stackTraceTextList)
+        # other microsteps for i > 0
+        for i in range(1, len(self.microSteps)):
             if 'trace' in self.microSteps[i]:
                 # there is a change in stack trace
                 trace = self.microSteps[i]['trace']
@@ -1169,6 +1186,8 @@ class Ui_MainWindow(object):
             else:
                 # there is no change in stack trace
                 self.stackTraceTextList[i] = copy.deepcopy(self.stackTraceTextList[i - 1])
+        
+
         for i in range(len(self.stackTraceTextList)):
             for j in range(len(self.stackTraceTextList[i])):
                 self.stackTraceTextList[i][j] = f"[{self.threadMode[i][j]}] " + self.stackTraceTextList[i][j] 
@@ -1299,6 +1318,7 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    # open file passed in as commandline argument
     n = len(sys.argv)
     if not 1 <= n <= 2:
         raise Exception("Cannot have more than 1 parameter")
