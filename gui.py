@@ -639,23 +639,25 @@ class Ui_MainWindow(object):
 
 
     def downMicroStep(self):
-        pass
-        # if self.byteCode.toPlainText() == "":
-        #     return
-        # if self.microStepPointer == len(self.microSteps) - 1:
-        #     return
-        # i = self.microStepPointer
-        # tid = int(self.microSteps[i]['tid'])
-        # curStackLength = len(self.stackTraceTextList[i][tid].split(" -> "))
-        # while i < len(self.microSteps) and len(self.stackTraceTextList[i][tid].split(" -> ")) >= curStackLength:
-        #     i += 1
-        # self.microStepPointer = i - 1
-        # self.highlightUpdate()
-        # self.sharedVariableUpdate()
-        # self.localVariableUpdate()
-        # self.stackTopUpdate()
-        # self.updateCheckBox()
-        # self.threadBrowserUpdate()
+        if self.byteCode.toPlainText() == "":
+            return
+        if self.microStepPointer == len(self.microSteps):
+            return
+        i = self.microStepPointer
+        tid = int(self.microSteps[i]['tid'])
+        curStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
+        while i < len(self.microSteps) and len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> ")) >= curStackLength and int(self.microSteps[i]['tid']) == tid:
+            i += 1
+        if i  == len(self.microSteps):
+            i = len(self.microSteps) - 1
+        self.microStepPointer = i
+
+        self.highlightUpdate(self.microStepPointer)
+        self.sharedVariableUpdate(self.microStepPointer)
+        self.localVariableUpdate(self.microStepPointer)
+        self.stackTopUpdate(self.microStepPointer)
+        self.updateCheckBox(self.microStepPointer)
+        self.threadBrowserUpdate(self.microStepPointer)
 
     def sliderMoveUpdate(self):
         if self.byteCode.toPlainText() == "":
@@ -1166,7 +1168,6 @@ class Ui_MainWindow(object):
         self.stackTraceTextList[0] = []
         for stackTraceLine in self.stackTraceList:
             self.stackTraceTextList[0].append(stackTraceLine)
-        print(self.stackTraceTextList)
         # other microsteps for i > 0
         for i in range(1, len(self.microSteps)):
             if 'trace' in self.microSteps[i]:
@@ -1186,7 +1187,6 @@ class Ui_MainWindow(object):
             else:
                 # there is no change in stack trace
                 self.stackTraceTextList[i] = copy.deepcopy(self.stackTraceTextList[i - 1])
-        
 
         for i in range(len(self.stackTraceTextList)):
             for j in range(len(self.stackTraceTextList[i])):
