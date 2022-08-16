@@ -223,7 +223,7 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        self.browse.clicked.connect(self.browseFiles)
+        self.browse.clicked.connect(lambda: self.browseFiles(False, ""))
         self.next.clicked.connect(self.nextMicrostep)
         self.prev.clicked.connect(self.prevMicroStep)
         self.up.clicked.connect(self.upMicroStep)
@@ -259,6 +259,8 @@ class Ui_MainWindow(object):
         self.threadMode = []
         # self.stmtIndicator is a list of True/False value, where True indicates next microstep is in the same line, False not
         self.stmtIndicator = []
+        # self.defaultFpath is the command line argument
+        self.defaultFilePath = ""
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -290,8 +292,18 @@ class Ui_MainWindow(object):
         text = open(file).read()
         editor.setPlainText(text)
     
-    def browseFiles(self):
-        fname = QFileDialog.getOpenFileName(None, "Title", "..", "Harmony source code (*.hny)")[0]
+    def browseFiles(self, defaultBool, defaultFilePath):
+        # if defaultBool is True, defaultFilePath is the file path of commandline argument
+        if defaultBool:
+            # no commandline argument
+            if len(defaultFilePath) == 0:
+                return
+            # there is a commandline argument
+            else:
+                fname = defaultFilePath
+        # otherwise, just do browse file
+        else:
+            fname = QFileDialog.getOpenFileName(None, "Title", "..", "Harmony source code (*.hny)")[0]
         if(fname == ""):
             return
         self.filePathText.setText(fname)
@@ -605,7 +617,6 @@ class Ui_MainWindow(object):
         #     print(self.microStepPointer, self.hco['locations'][str(pc)]['stmt'], self.stmtIndicator[self.microStepPointer])
         # else:
         #     print(self.microStepPointer)
-
 
     def upMicroStep(self):
         pass
@@ -1288,4 +1299,11 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    n = len(sys.argv)
+    if not 1 <= n <= 2:
+        raise Exception("Cannot have more than 1 parameter")
+    if n == 2:
+        fpath = os.path.join(os.getcwd(), sys.argv[1])
+        ui.browseFiles(True, fpath)
+        
     sys.exit(app.exec_())
