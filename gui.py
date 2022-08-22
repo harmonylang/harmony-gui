@@ -306,6 +306,9 @@ class Ui_MainWindow(object):
             fname = QFileDialog.getOpenFileName(None, "Title", "..", "Harmony source code (*.hny)")[0]
         if(fname == ""):
             return
+        # initialize microstep pointer to 0
+        self.microStepPointer = 0
+        self.horizontalSlider.setValue(0)
         self.filePathText.setText(fname)
         # try open source code file
         try:
@@ -348,6 +351,27 @@ class Ui_MainWindow(object):
         # set self.hco and self.hvm
         self.hco = hcoData
         self.hvm = hvmData
+        # if there are no issues
+        if "macrosteps" not in self.hco:
+            assert self.hco['issue'] == 'No issues'
+            self.filePathText.setText("")
+            # clear all states
+            self.byteCode.setPlainText("")
+            self.threadBrowser.setText("")
+            self.microstepExplain.setPlainText("")
+            self.sharedVariables.clear()
+            self.localVariables.clear()
+            self.stackTop.clear()
+            self.issue.setText("Issue: No issues")
+
+            msg = QMessageBox()
+            msg.setText("There are no issues in the program.")
+            msg.setIcon(QMessageBox.Information)
+            msg.exec_()
+            self.filePathText.setText("")
+            self.sourceCode.setPlainText("")
+            self.issue.setText("Issue: ")
+            return
         # construct self.microSteps to be a list of microsteps
         self.constructMicrosteps()
         # construct self.threadMode
