@@ -589,25 +589,26 @@ class Ui_MainWindow(object):
         if self.singleStep.isChecked():
             self.microStepPointer = self.microStepPointer + 1
         # next statement if self.singleStep is NOT selected
+        # step over (does not go into any function)
         else:
             i = self.microStepPointer
+            tid = int(self.microSteps[i]['tid'])
+            curStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
             while self.stmtIndicator[i] == True:
                 i += 1
             i += 1
             self.microStepPointer = i
-        
-        self.highlightUpdate(self.microStepPointer)
-        self.sharedVariableUpdate(self.microStepPointer)
-        self.localVariableUpdate(self.microStepPointer)
-        self.stackTopUpdate(self.microStepPointer)
-        self.updateCheckBox(self.microStepPointer)
-        self.threadBrowserUpdate(self.microStepPointer)
+            nextsmtStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
+            if nextsmtStackLength > curStackLength:
+                self.downMicroStep()
+        self.updateState()
 
         # if self.microStepPointer < len(self.microSteps):
         #     pc = int(self.microSteps[self.microStepPointer]["pc"])
         #     print(self.microStepPointer, self.hco['locations'][str(pc)]['stmt'], self.stmtIndicator[self.microStepPointer])
         # else:
         #     print(self.microStepPointer)
+
 
     def prevMicroStep(self):
         if self.byteCode.toPlainText() == "":
@@ -619,8 +620,11 @@ class Ui_MainWindow(object):
         if self.singleStep.isChecked():
             self.microStepPointer = self.microStepPointer - 1
         # next statement if self.singleStep NOT selected
+        # step over (does not go into any function)
         else:
             i = self.microStepPointer
+            tid = int(self.microSteps[i]['tid'])
+            curStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
             while i > 0 and self.stmtIndicator[i - 1] == True:
                 i -= 1
             if i > 0:
@@ -628,13 +632,10 @@ class Ui_MainWindow(object):
             while i > 0 and self.stmtIndicator[i - 1] == True:
                 i -= 1
             self.microStepPointer = i
-
-        self.highlightUpdate(self.microStepPointer)
-        self.sharedVariableUpdate(self.microStepPointer)
-        self.localVariableUpdate(self.microStepPointer)
-        self.stackTopUpdate(self.microStepPointer)
-        self.updateCheckBox(self.microStepPointer)
-        self.threadBrowserUpdate(self.microStepPointer)
+            prevsmtStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
+            if prevsmtStackLength > curStackLength:
+                    self.upMicroStep()
+        self.updateState()
 
         # if self.microStepPointer < len(self.microSteps):
         #     pc = int(self.microSteps[self.microStepPointer]["pc"])
@@ -660,13 +661,7 @@ class Ui_MainWindow(object):
             if i < 0:
                 i = 0
             self.microStepPointer = i
-
-        self.highlightUpdate(self.microStepPointer)
-        self.sharedVariableUpdate(self.microStepPointer)
-        self.localVariableUpdate(self.microStepPointer)
-        self.stackTopUpdate(self.microStepPointer)
-        self.updateCheckBox(self.microStepPointer)
-        self.threadBrowserUpdate(self.microStepPointer)
+        self.updateState()
 
 
     def downMicroStep(self):
@@ -682,25 +677,22 @@ class Ui_MainWindow(object):
         if i == len(self.microSteps):
             i = len(self.microSteps) - 1
         self.microStepPointer = i
-
-        self.highlightUpdate(self.microStepPointer)
-        self.sharedVariableUpdate(self.microStepPointer)
-        self.localVariableUpdate(self.microStepPointer)
-        self.stackTopUpdate(self.microStepPointer)
-        self.updateCheckBox(self.microStepPointer)
-        self.threadBrowserUpdate(self.microStepPointer)
+        self.updateState()
 
     def sliderMoveUpdate(self):
         if self.byteCode.toPlainText() == "":
             return
         self.microStepPointer = self.horizontalSlider.value()
+        self.updateState()
+    
+    def updateState(self):
         self.highlightUpdate(self.microStepPointer)
         self.sharedVariableUpdate(self.microStepPointer)
         self.localVariableUpdate(self.microStepPointer)
         self.stackTopUpdate(self.microStepPointer)
         self.updateCheckBox(self.microStepPointer)
         self.threadBrowserUpdate(self.microStepPointer)
-    
+            
     def openFileByTypedPath(self):
         filepath = self.filePathText.text()
         try:
