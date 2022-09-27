@@ -928,7 +928,7 @@ class Ui_MainWindow(object):
             mostRecentLocalVariablePointer -= 1
         microstep = self.microSteps[mostRecentLocalVariablePointer]
         localVariableList = microstep['local']
-        assert microstep['tid'] == self.microSteps[microStepPointer]['tid']
+        # assert microstep['tid'] == self.microSteps[microStepPointer]['tid']
         primitiveTypes = {'int', 'bool', 'atom', 'pc'}
         # iterate through harmony values in localVariableList
         counter = 0 
