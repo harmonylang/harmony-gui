@@ -622,6 +622,11 @@ class Ui_MainWindow(object):
         # next statement if self.singleStep NOT selected
         # step over (does not go into any function)
         else:
+            # handle special case and fix bug
+            if self.microStepPointer == len(self.microSteps):
+                self.microStepPointer -= 1
+                self.updateState()
+                return
             i = self.microStepPointer
             tid = int(self.microSteps[i]['tid'])
             curStackLength = len(self.stackTraceTextList[i - 1 if i > 0 else i][tid].split(" -> "))
