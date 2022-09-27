@@ -427,7 +427,7 @@ class Ui_MainWindow(object):
     def constructMicrosteps(self):
         self.microSteps = []
         # initialize self.threadNumber to be number of threads
-        self.threadNumber = len(self.hco['macrosteps'][0]['contexts'])
+        self.threadNumber = len(self.hco['macrosteps'][-1]['contexts']) # fix bug - change 0 to -1
         # initialize self.threadColor index of colors
         self.threadColor = np.random.permutation(self.threadNumber).tolist()
         # initialize self.microSteps
