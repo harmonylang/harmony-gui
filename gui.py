@@ -758,7 +758,8 @@ class Ui_MainWindow(object):
         cursor.setPosition(startPos - 1)
         cursor.setPosition(endPos - 1, QtGui.QTextCursor.KeepAnchor)
         fmt = QtGui.QTextCharFormat()
-        fmt.setBackground(QtCore.Qt.yellow)
+        # change bytecode color from yellow to green
+        fmt.setBackground(QtCore.Qt.yellow if editor == self.sourceCode else QtCore.Qt.green)
         cursor.setCharFormat(fmt)
         editor.verticalScrollBar().setValue(r1 - 8)
 
