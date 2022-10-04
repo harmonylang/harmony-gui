@@ -1216,6 +1216,10 @@ class Ui_MainWindow(object):
             else:
                 # there is no change in stack trace
                 self.stackTraceTextList[i] = copy.deepcopy(self.stackTraceTextList[i - 1])
+            # print failure in stack trace
+            if 'failure' in self.microSteps[i]:
+                tid = int(self.microSteps[i]['tid'])
+                self.stackTraceTextList[i][tid] += f" -> {self.microSteps[i]['failure']}!"
 
         for i in range(len(self.stackTraceTextList)):
             for j in range(len(self.stackTraceTextList[i])):
