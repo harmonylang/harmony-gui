@@ -1216,10 +1216,25 @@ class Ui_MainWindow(object):
             else:
                 # there is no change in stack trace
                 self.stackTraceTextList[i] = copy.deepcopy(self.stackTraceTextList[i - 1])
-            # print failure in stack trace
-            if 'failure' in self.microSteps[i]:
-                tid = int(self.microSteps[i]['tid'])
-                self.stackTraceTextList[i][tid] += f" -> {self.microSteps[i]['failure']}!"
+            # print failure in stack trace (commented out since already covered by next)
+            # if 'failure' in self.microSteps[i]:
+            #     tid = int(self.microSteps[i]['tid'])
+            #     self.stackTraceTextList[i][tid] += f" -> {self.microSteps[i]['failure']}!"
+            
+        # add "about to" information to the end of stack trace line
+        i = 0
+        for macrostep in self.hco['macrosteps']:
+            i += len(macrostep['microsteps']) - 1
+            assert 'contexts' in macrostep
+            for context in macrostep['contexts']:
+                if 'next' in context and int(context['tid']) == int(self.microSteps[i]['tid']):
+                    tid = int(self.microSteps[i]['tid'])
+                    self.stackTraceTextList[i][tid] += f" ({self.about(context)})"
+                    tmp = i + 1
+                    while tmp < len(self.microSteps) and int(self.microSteps[tmp]['tid']) != tid:
+                        self.stackTraceTextList[tmp][tid] += f" ({self.about(context)})"
+                        tmp += 1
+            i += 1
 
         for i in range(len(self.stackTraceTextList)):
             for j in range(len(self.stackTraceTextList[i])):
@@ -1341,6 +1356,67 @@ class Ui_MainWindow(object):
         self.readOnly.setChecked(self.checkBoxList[i][tid]['readonly'])
         # update interrupt-disabled checkbox
         self.interruptDisabled.setChecked(self.checkBoxList[i][tid]['interrupt-disabled'])
+
+    def verbose_kv(self, js):
+        return (self.verbose_string(js["key"]), self.verbose_string(js["value"]))
+
+    def verbose_idx(self, js):
+        return "[" + self.verbose_string(js) + "]"
+
+    def verbose_string(self, js):
+        type = js["type"]
+        v = js["value"]
+        if type == "bool":
+            return v
+        if type == "int":
+            return str(v) if isinstance(v, int) else v
+        if type == "atom":
+            return json.dumps(v, ensure_ascii=False)
+        if type == "set":
+            if v == []:
+                return "{}"
+            lst = [ self.verbose_string(val) for val in v ]
+            return "{ " + ", ".join(lst) + " }"
+        if type == "list":
+            if v == []:
+                return "[]"
+            lst = [ self.verbose_string(val) for val in v ]
+            return "[ " + ", ".join(lst) + " ]"
+        if type == "dict":
+            if v == []:
+                return "{:}"
+            lst = [ self.verbose_kv(kv) for kv in v ]
+            keys = [ k for k,v in lst ]
+            if keys == [str(i) for i in range(len(v))]:
+                return "[ " + ", ".join([v for k,v in lst]) + " ]" 
+            else:
+                return "{ " + ", ".join([k + ": " + v for k,v in lst]) + " }" 
+        if type == "pc":
+            return "PC(%s)"%v
+        if type == "address":
+            if v == []:
+                return "None"
+            return "?" + v[0]["value"] + "".join([ self.verbose_idx(kv) for kv in v[1:] ])
+        if type == "context":
+            return "CONTEXT(" + str(v["pc"]) + ")"
+
+    def about(self, ctx):
+        nxt = ctx["next"]
+        if nxt["type"] == "Frame":
+            return f"about to run method {nxt['name']} with argument {self.verbose_string(nxt['value'])}"
+        elif nxt["type"] == "Load":
+            return f"about to load variable {nxt['var']}"
+        elif nxt["type"] == "Store":
+            return f"about to store: {nxt['var']}<-{self.verbose_string(nxt['value'])}"
+        elif nxt["type"] == "Print":
+            return f"about to print {self.verbose_string(nxt['value'])}"
+        elif nxt["type"] == "AtomicInc":
+            return "about to execute atomic section"
+        elif nxt["type"] == "Assert":
+            return "assertion failed"
+        else:
+            return f"about to {nxt['type']}"
+
     
 
 
