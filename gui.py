@@ -85,7 +85,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.byteCode)
         self.sourceCode = CodeEditor(self.centralwidget)
         font = QtGui.QFont()
-        font.setFamily("Monaco")
+        # font.setBold(True)
+        # font.setItalic(True)
+        # font.setUnderline(True)
+        font.setFamily("Times New Roman")
+        font.setPointSize(14)
         self.sourceCode.setFont(font)
         self.sourceCode.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.sourceCode.setObjectName("sourceCode")
@@ -229,6 +233,8 @@ class Ui_MainWindow(object):
         self.up.clicked.connect(self.upMicroStep)
         self.down.clicked.connect(self.downMicroStep)
 
+        # load keywords dictionary from gui_import/keywords.json
+        self.keywords = json.load(open("gui_import/keywords.json"))
 
         self.horizontalSlider.valueChanged.connect(self.sliderMoveUpdate)
         # self.open.clicked.connect(self.openFileByTypedPath)
@@ -290,8 +296,19 @@ class Ui_MainWindow(object):
 
     def openFile(self, editor, file):
         text = open(file).read()
-        editor.setPlainText(text)
-    
+        if editor == self.byteCode:
+            editor.setPlainText(text)
+        else:
+            assert editor == self.sourceCode
+            self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
+            assert self.sourceCodeCursor.position() == 0
+            assert self.sourceCodeCursor.anchor() == 0
+            editor.clear()
+            self.sourceCodeCursor.insertText(text)
+            self.sourceCodeCursor.clearSelection()
+            self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
+        
+
     def browseFiles(self, defaultBool, defaultFilePath):
         # if defaultBool is True, defaultFilePath is the file path of commandline argument
         if defaultBool:
@@ -311,13 +328,14 @@ class Ui_MainWindow(object):
         self.horizontalSlider.setValue(0)
         self.filePathText.setText(fname)
         # try open source code file
-        try:
-            self.openFile(self.sourceCode, fname)
+        # try:
+        # self.openFile(self.sourceCode, fname)
             # self.fileNameLabel.setText(fname)
-        except:
-            self.filePathText.setText("")
-            self.errorMsgBox("This file cannot be opened. Please open another file.")
-            return
+        # except:
+        #     print("!")
+        #     self.filePathText.setText("")
+        #     self.errorMsgBox("This file cannot be opened. Please open another file.")
+        #     return
         
         # try compile hvm file
         runcmd = subprocess.run(["./harmony", "--noweb", fname], capture_output=True)
@@ -351,6 +369,7 @@ class Ui_MainWindow(object):
         # set self.hco and self.hvm
         self.hco = hcoData
         self.hvm = hvmData
+        # print(self.hvm['identifiers'])
         # if there are no issues
         if "macrosteps" not in self.hco:
             assert self.hco['issue'] == 'No issues'
@@ -525,7 +544,7 @@ class Ui_MainWindow(object):
             self.sourceCodeCursor.setPosition(stmtEndPos - 1, QtGui.QTextCursor.KeepAnchor)
             fmt = QtGui.QTextCharFormat()
             fmt.setBackground(QtCore.Qt.yellow)
-            self.sourceCodeCursor.setCharFormat(fmt)
+            self.sourceCodeCursor.mergeCharFormat(fmt)
 
             startPos = self.getPosition(self.sourceCode, sourceCodeR1, sourceCodeC1)
             endPos = self.getPosition(self.sourceCode, sourceCodeR2, sourceCodeC2)
@@ -533,7 +552,7 @@ class Ui_MainWindow(object):
             self.sourceCodeCursor.setPosition(endPos - 1, QtGui.QTextCursor.KeepAnchor)
             fmt = QtGui.QTextCharFormat()
             fmt.setBackground(QtCore.Qt.green)
-            self.sourceCodeCursor.setCharFormat(fmt)
+            self.sourceCodeCursor.mergeCharFormat(fmt)
             self.sourceCode.verticalScrollBar().setValue(sourceCodeR1 - 8)
 
             # self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
@@ -549,7 +568,7 @@ class Ui_MainWindow(object):
             self.sourceCodeCursor.setPosition(stmtEndPos - 1, QtGui.QTextCursor.KeepAnchor)
             fmt = QtGui.QTextCharFormat()
             fmt.setBackground(QtCore.Qt.yellow)
-            self.sourceCodeCursor.setCharFormat(fmt)
+            self.sourceCodeCursor.mergeCharFormat(fmt)
 
             startPos = self.getPosition(self.sourceCode, sourceCodeR1, sourceCodeC1)
             endPos = self.getPosition(self.sourceCode, sourceCodeR2, sourceCodeC2)
@@ -557,7 +576,7 @@ class Ui_MainWindow(object):
             self.sourceCodeCursor.setPosition(endPos - 1, QtGui.QTextCursor.KeepAnchor)
             fmt = QtGui.QTextCharFormat()
             fmt.setBackground(QtCore.Qt.green)
-            self.sourceCodeCursor.setCharFormat(fmt)
+            self.sourceCodeCursor.mergeCharFormat(fmt)
             self.sourceCode.verticalScrollBar().setValue(sourceCodeR1 - 8)
 
         # hightlight machine code
@@ -760,7 +779,7 @@ class Ui_MainWindow(object):
         fmt = QtGui.QTextCharFormat()
         # change bytecode color from yellow to green
         fmt.setBackground(QtCore.Qt.yellow if editor == self.sourceCode else QtCore.Qt.green)
-        cursor.setCharFormat(fmt)
+        cursor.mergeCharFormat(fmt)
         editor.verticalScrollBar().setValue(r1 - 8)
 
     def highlightJumpCoordinate(self, row, col):
@@ -775,7 +794,7 @@ class Ui_MainWindow(object):
         cursor.setPosition(position, QtGui.QTextCursor.KeepAnchor)
         fmt = QtGui.QTextCharFormat()
         fmt.setBackground(QtCore.Qt.red)
-        cursor.setCharFormat(fmt)
+        cursor.mergeCharFormat(fmt)
 
     def getPosition(self, editor, row, column):
         text = editor.toPlainText()
@@ -798,7 +817,8 @@ class Ui_MainWindow(object):
 
     def clearFormat(self, cursor):
         fmt = QtGui.QTextCharFormat()
-        cursor.setCharFormat(fmt)
+        fmt.setBackground(QtCore.Qt.transparent)
+        cursor.mergeCharFormat(fmt)
 
     def createThreadImg(self):
         h, w = 8, 600
