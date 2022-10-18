@@ -232,6 +232,8 @@ class Ui_MainWindow(object):
 
         # load keywords dictionary from gui_import/keywords.json
         self.keywords = json.load(open("gui_import/keywords.json"))
+        # load identifier of all modules from gui_import/modules.json
+        self.moduleIdentifiers = json.load(open("gui_import/modules.json"))
 
         self.horizontalSlider.valueChanged.connect(self.sliderMoveUpdate)
         # self.open.clicked.connect(self.openFileByTypedPath)
@@ -291,7 +293,7 @@ class Ui_MainWindow(object):
         self.threadOffsetLabel.setText(_translate("MainWindow", "    "))
 
 
-    def openFile(self, editor, file):
+    def openFile(self, editor, file, microStepPointer):
         text = open(file).read()
         if editor == self.byteCode:
             editor.setPlainText(text)
@@ -304,18 +306,37 @@ class Ui_MainWindow(object):
             assert self.sourceCodeCursor.anchor() == 0
             editor.clear()
 
-            self.insertFormatSourceCode(text)
+            self.insertFormatSourceCode(text, microStepPointer)
 
             self.sourceCodeCursor.clearSelection()
             self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
         
-    def insertFormatSourceCode(self, text):
+    def insertFormatSourceCode(self, text, microStepPointer):
         """
         Insert text into self.sourceCode with syntactic highlighting.
         text is the sourceCode string. 
         """
         fmt = QtGui.QTextCharFormat()
         left = 0
+
+        # set identifier dictionary for 3 different cases: (1) source file, 
+        # (2) library file, (3) self-defined import
+        pc = int(self.microSteps[microStepPointer]["pc"])
+        fileName = self.hco['locations'][str(pc)]['file']
+        sourceFileName = self.hco["locations"]["0"]["file"]
+        fileNameLst = fileName.split('/')
+        # case 1: source file
+        if fileName == sourceFileName: 
+            identifierDic = self.hvm['identifiers']
+        # case 2: library file
+        elif len(fileNameLst) > 3 and fileNameLst[-3] == "harmony_model_checker" \
+            and fileNameLst[-2] == "modules" and len(fileNameLst[-1]) > 4\
+                and fileNameLst[-1][:-4] in self.moduleIdentifiers: 
+            identifierDic = self.moduleIdentifiers[fileNameLst[-1][:-4]]
+        # case 3: self-defined import
+        else: 
+            raise Exception("Not implemented: identifier for self-defined import file")
+
         # insertText = "" # for checking purpose
 
         # parse text into words
@@ -345,36 +366,36 @@ class Ui_MainWindow(object):
                 fmt.setFontWeight(QtGui.QFont.Normal)
                 self.sourceCodeCursor.mergeCharFormat(fmt)
             # word is in identifiers
-            elif word in self.hvm['identifiers']:
-                if self.hvm['identifiers'][word] == "module":
+            elif word in identifierDic:
+                if identifierDic[word] == "module":
                     # roman
                     fmt.setFontStyleHint(QtGui.QFont.Times)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
                     self.sourceCodeCursor.insertText(text[left:right])
                     fmt.setFontStyleHint(QtGui.QFont.AnyStyle)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
-                elif self.hvm['identifiers'][word] == "local-const":
+                elif identifierDic[word] == "local-const":
                     # italics
                     fmt.setFontItalic(True)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
                     self.sourceCodeCursor.insertText(text[left:right])
                     fmt.setFontItalic(False)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
-                elif self.hvm['identifiers'][word] == "local-var":
+                elif identifierDic[word] == "local-var":
                     # italics
                     fmt.setFontItalic(True)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
                     self.sourceCodeCursor.insertText(text[left:right])
                     fmt.setFontItalic(False)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
-                elif self.hvm['identifiers'][word] == "global":
+                elif identifierDic[word] == "global":
                     # roman
                     fmt.setFontStyleHint(QtGui.QFont.Times)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
                     self.sourceCodeCursor.insertText(text[left:right])
                     fmt.setFontStyleHint(QtGui.QFont.AnyStyle)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
-                elif self.hvm['identifiers'][word] == "constant":
+                elif identifierDic[word] == "constant":
                     # roman
                     fmt.setFontStyleHint(QtGui.QFont.Times)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
@@ -389,10 +410,6 @@ class Ui_MainWindow(object):
             # print(text[left:right]) -- highight candidate
             left = right
         # assert insertText == text
-
-
-
-
 
 
     def browseFiles(self, defaultBool, defaultFilePath):
@@ -620,7 +637,7 @@ class Ui_MainWindow(object):
         # self.threadBrowser.verticalScrollBar().setValue(threadId)
         if self.hco["locations"][str(pc)]["file"] == sourceFileName: 
             # if code is in sourcefile
-            self.openFile(self.sourceCode, self.sourceFile)
+            self.openFile(self.sourceCode, self.sourceFile, microStepPointer)
 
             self.clearFormat(self.sourceCodeCursor)
             
@@ -644,7 +661,7 @@ class Ui_MainWindow(object):
             # self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
         else:
             # if code is in library file
-            self.openFile(self.sourceCode, self.hco["locations"][str(pc)]["file"])
+            self.openFile(self.sourceCode, self.hco["locations"][str(pc)]["file"], microStepPointer)
 
             self.clearFormat(self.sourceCodeCursor)
             
@@ -802,17 +819,6 @@ class Ui_MainWindow(object):
         self.stackTopUpdate(self.microStepPointer)
         self.updateCheckBox(self.microStepPointer)
         self.threadBrowserUpdate(self.microStepPointer)
-            
-    def openFileByTypedPath(self):
-        filepath = self.filePathText.text()
-        try:
-            self.openFile(filepath)
-            # self.fileNameLabel.setText(filepath)
-        except FileNotFoundError:
-            self.errorMsgBox(f"No such file or directory: '{filepath}'")
-        except:
-            self.filePathText.setText("")
-            self.errorMsgBox("This file cannot be opened. Please open another file.")
             
     def errorMsgBox(self, text):
         msg = QMessageBox()
