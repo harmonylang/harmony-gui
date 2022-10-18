@@ -85,11 +85,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.byteCode)
         self.sourceCode = CodeEditor(self.centralwidget)
         font = QtGui.QFont()
-        # font.setBold(True)
-        # font.setItalic(True)
-        # font.setUnderline(True)
         font.setFamily("Times New Roman")
-        font.setPointSize(14)
+        font.setPointSize(16)
         self.sourceCode.setFont(font)
         self.sourceCode.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.sourceCode.setObjectName("sourceCode")
@@ -299,15 +296,104 @@ class Ui_MainWindow(object):
         if editor == self.byteCode:
             editor.setPlainText(text)
         else:
+            # reset sourceCodeCursor's position before and after
+            # self.insertFormatSourceCode to maintain invariant
             assert editor == self.sourceCode
             self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
             assert self.sourceCodeCursor.position() == 0
             assert self.sourceCodeCursor.anchor() == 0
             editor.clear()
-            self.sourceCodeCursor.insertText(text)
+
+            self.insertFormatSourceCode(text)
+
             self.sourceCodeCursor.clearSelection()
             self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
         
+    def insertFormatSourceCode(self, text):
+        """
+        Insert text into self.sourceCode with syntactic highlighting.
+        text is the sourceCode string. 
+        """
+        fmt = QtGui.QTextCharFormat()
+        left = 0
+        # insertText = "" # for checking purpose
+
+        # parse text into words
+        while left < len(text):
+            # no word matched
+            if not text[left].isalpha():
+                # insert text[left]
+                # insertText += text[left]
+                self.sourceCodeCursor.insertText(text[left])
+                left += 1
+                continue
+            # try to match a word
+            right = left
+            while right < len(text) and text[right].isalpha():
+                right += 1
+            # insert word = text[left:right]
+            # insertText += text[left:right]
+            word = text[left:right]
+
+            # differenct cases for formatting word
+            # word is in keywords
+            if word in self.keywords:
+                # bold
+                fmt.setFontWeight(QtGui.QFont.Bold)
+                self.sourceCodeCursor.mergeCharFormat(fmt)
+                self.sourceCodeCursor.insertText(text[left:right])
+                fmt.setFontWeight(QtGui.QFont.Normal)
+                self.sourceCodeCursor.mergeCharFormat(fmt)
+            # word is in identifiers
+            elif word in self.hvm['identifiers']:
+                if self.hvm['identifiers'][word] == "module":
+                    # roman
+                    fmt.setFontStyleHint(QtGui.QFont.Times)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                    self.sourceCodeCursor.insertText(text[left:right])
+                    fmt.setFontStyleHint(QtGui.QFont.AnyStyle)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                elif self.hvm['identifiers'][word] == "local-const":
+                    # italics
+                    fmt.setFontItalic(True)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                    self.sourceCodeCursor.insertText(text[left:right])
+                    fmt.setFontItalic(False)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                elif self.hvm['identifiers'][word] == "local-var":
+                    # italics
+                    fmt.setFontItalic(True)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                    self.sourceCodeCursor.insertText(text[left:right])
+                    fmt.setFontItalic(False)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                elif self.hvm['identifiers'][word] == "global":
+                    # roman
+                    fmt.setFontStyleHint(QtGui.QFont.Times)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                    self.sourceCodeCursor.insertText(text[left:right])
+                    fmt.setFontStyleHint(QtGui.QFont.AnyStyle)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                elif self.hvm['identifiers'][word] == "constant":
+                    # roman
+                    fmt.setFontStyleHint(QtGui.QFont.Times)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                    self.sourceCodeCursor.insertText(text[left:right])
+                    fmt.setFontStyleHint(QtGui.QFont.AnyStyle)
+                    self.sourceCodeCursor.mergeCharFormat(fmt)
+                else:
+                    self.sourceCodeCursor.insertText(text[left:right])
+            else:
+                self.sourceCodeCursor.insertText(text[left:right])
+
+            # print(text[left:right]) -- highight candidate
+            left = right
+        # assert insertText == text
+
+
+
+
+
 
     def browseFiles(self, defaultBool, defaultFilePath):
         # if defaultBool is True, defaultFilePath is the file path of commandline argument
@@ -1438,7 +1524,6 @@ class Ui_MainWindow(object):
             return f"about to {nxt['type']}"
 
     
-
 
 if __name__ == "__main__":
     import sys
