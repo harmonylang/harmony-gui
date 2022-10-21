@@ -327,15 +327,11 @@ class Ui_MainWindow(object):
         fileNameLst = fileName.split('/')
         # case 1: source file
         if fileName == sourceFileName: 
-            identifierDic = self.hvm['identifiers']
-        # case 2: library file
-        elif len(fileNameLst) > 3 and fileNameLst[-3] == "harmony_model_checker" \
-            and fileNameLst[-2] == "modules" and len(fileNameLst[-1]) > 4\
-                and fileNameLst[-1][:-4] in self.moduleIdentifiers: 
-            identifierDic = self.moduleIdentifiers[fileNameLst[-1][:-4]]
-        # case 3: self-defined import
+            identifierDic = self.hvm['modules']['__main__']['identifiers']
+        # case 2: import modules
         else: 
-            raise Exception("Not implemented: identifier for self-defined import file")
+            moduleName = fileNameLst[-1][:-4]
+            identifierDic = self.hvm['modules'][moduleName]['identifiers']
 
         # insertText = "" # for checking purpose
 
@@ -365,6 +361,14 @@ class Ui_MainWindow(object):
                 self.sourceCodeCursor.insertText(text[left:right])
                 fmt.setFontWeight(QtGui.QFont.Normal)
                 self.sourceCodeCursor.mergeCharFormat(fmt)
+            # special case: word == "result" -> italicize
+            elif word == "result":
+                # italics
+                fmt.setFontItalic(True)
+                self.sourceCodeCursor.mergeCharFormat(fmt)
+                self.sourceCodeCursor.insertText(text[left:right])
+                fmt.setFontItalic(False)
+                self.sourceCodeCursor.mergeCharFormat(fmt)
             # word is in identifiers
             elif word in identifierDic:
                 if identifierDic[word] == "module":
@@ -390,10 +394,10 @@ class Ui_MainWindow(object):
                     self.sourceCodeCursor.mergeCharFormat(fmt)
                 elif identifierDic[word] == "global":
                     # roman
-                    fmt.setFontStyleHint(QtGui.QFont.Times)
+                    fmt.setFontItalic(True)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
                     self.sourceCodeCursor.insertText(text[left:right])
-                    fmt.setFontStyleHint(QtGui.QFont.AnyStyle)
+                    fmt.setFontItalic(False)
                     self.sourceCodeCursor.mergeCharFormat(fmt)
                 elif identifierDic[word] == "constant":
                     # roman
@@ -406,6 +410,7 @@ class Ui_MainWindow(object):
                     self.sourceCodeCursor.insertText(text[left:right])
             else:
                 self.sourceCodeCursor.insertText(text[left:right])
+            # special case "result" in italics
 
             # print(text[left:right]) -- highight candidate
             left = right
@@ -460,14 +465,14 @@ class Ui_MainWindow(object):
             self.errorMsgBox("Cannot open hco file. ")
             return
         # try open hvm file
-        try: 
-            hvmName = fname[:-3] + "hvm"
-            hvmFile = open(hvmName)
-            hvmData = json.load(hvmFile)
-        except:
-            self.filePathText.setText("")
-            self.errorMsgBox("Cannot open hvm file. ")
-            return
+        # try: 
+        hvmName = fname[:-3] + "hvm"
+        hvmFile = open(hvmName)
+        hvmData = json.load(hvmFile)
+        # except:
+        #     self.filePathText.setText("")
+        #     self.errorMsgBox("Cannot open hvm file. ")
+        #     return
         
         # set self.hco and self.hvm
         self.hco = hcoData
