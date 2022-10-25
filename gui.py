@@ -295,21 +295,18 @@ class Ui_MainWindow(object):
 
     def openFile(self, editor, file, microStepPointer):
         text = open(file).read()
-        if editor == self.byteCode:
-            editor.setPlainText(text)
-        else:
-            # reset sourceCodeCursor's position before and after
-            # self.insertFormatSourceCode to maintain invariant
-            assert editor == self.sourceCode
-            self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
-            assert self.sourceCodeCursor.position() == 0
-            assert self.sourceCodeCursor.anchor() == 0
-            editor.clear()
+        # reset sourceCodeCursor's position before and after
+        # self.insertFormatSourceCode to maintain invariant
+        assert editor == self.sourceCode
+        self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
+        assert self.sourceCodeCursor.position() == 0
+        assert self.sourceCodeCursor.anchor() == 0
+        editor.clear()
 
-            self.insertFormatSourceCode(text, microStepPointer)
+        self.insertFormatSourceCode(text, microStepPointer)
 
-            self.sourceCodeCursor.clearSelection()
-            self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
+        self.sourceCodeCursor.clearSelection()
+        self.sourceCodeCursor.movePosition(QTextCursor.Start, QtGui.QTextCursor.MoveAnchor)
         
     def insertFormatSourceCode(self, text, microStepPointer):
         """
@@ -428,7 +425,7 @@ class Ui_MainWindow(object):
                 fname = defaultFilePath
         # otherwise, just do browse file
         else:
-            fname = QFileDialog.getOpenFileName(None, "Title", "..", "Harmony source code (*.hny)")[0]
+            fname = QFileDialog.getOpenFileName(None, "Title", "..", "Harmony file (*.hny *.hco)")[0]
         if(fname == ""):
             return
         # initialize microstep pointer to 0
@@ -445,15 +442,19 @@ class Ui_MainWindow(object):
         #     self.errorMsgBox("This file cannot be opened. Please open another file.")
         #     return
         
-        # try compile hvm file
-        runcmd = subprocess.run(["./harmony", "--noweb", fname], capture_output=True)
-        returncode = runcmd.returncode
-        stdout =  runcmd.stdout.decode()
-        stderr =  runcmd.stderr.decode()
-        # .hny file fail to compile
-        if returncode != 0:
-            self.errorMsgBox("Run Failed\n" + stdout + stderr)
-            return
+        if fname[-3:] == "hny": 
+            # try compile hny file
+            runcmd = subprocess.run(["./harmony", "--noweb", fname], capture_output=True)
+            returncode = runcmd.returncode
+            stdout =  runcmd.stdout.decode()
+            stderr =  runcmd.stderr.decode()
+            # .hny file fail to compile
+            if returncode != 0:
+                self.errorMsgBox("Run Failed\n" + stdout + stderr)
+                return
+        else:
+            assert fname[-3:] == "hco"
+            fname = fname[:-3] + "hny"
         
         # try open hco file
         try:
@@ -465,14 +466,14 @@ class Ui_MainWindow(object):
             self.errorMsgBox("Cannot open hco file. ")
             return
         # try open hvm file
-        # try: 
-        hvmName = fname[:-3] + "hvm"
-        hvmFile = open(hvmName)
-        hvmData = json.load(hvmFile)
-        # except:
-        #     self.filePathText.setText("")
-        #     self.errorMsgBox("Cannot open hvm file. ")
-        #     return
+        try: 
+            hvmName = fname[:-3] + "hvm"
+            hvmFile = open(hvmName)
+            hvmData = json.load(hvmFile)
+        except:
+            self.filePathText.setText("")
+            self.errorMsgBox("Cannot open hvm file. ")
+            return
         
         # set self.hco and self.hvm
         self.hco = hcoData
@@ -640,7 +641,7 @@ class Ui_MainWindow(object):
         stmtC2 = int(self.hco['locations'][str(pc)]['stmt'][3])
         # # update thread browser scroll bar
         # self.threadBrowser.verticalScrollBar().setValue(threadId)
-        if self.hco["locations"][str(pc)]["file"] == sourceFileName: 
+        if self.hco["locations"][str(pc)]["file"] == sourceFileName:
             # if code is in sourcefile
             self.openFile(self.sourceCode, self.sourceFile, microStepPointer)
 
