@@ -440,7 +440,7 @@ class Ui_MainWindow(object):
         lst = []
         for k in self.moduleDic:
             lst.append("-m")
-            lst.append(f"{k}={self.constantDic[k]}")
+            lst.append(f"{k}={self.moduleDic[k]}")
         return lst
 
     def browseFiles(self, defaultBool, defaultFilePath):
