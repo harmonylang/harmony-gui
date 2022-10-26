@@ -285,7 +285,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Harmony"))
         self.browse.setText(_translate("MainWindow", "Browse"))
         self.issue.setText(_translate("MainWindow", "Issue: "))
         self.atomic.setText(_translate("MainWindow", "Atomic"))
@@ -343,8 +343,12 @@ class Ui_MainWindow(object):
             identifierDic = self.hvm['modules']['__main__']['identifiers']
         # case 2: import modules
         else: 
-            moduleName = fileNameLst[-1][:-4]
-            identifierDic = self.hvm['modules'][moduleName]['identifiers']
+            # fix bug, find by file path, not module name
+            for moduleName in self.hvm['modules']:
+                if self.hvm['modules'][moduleName]['file'] == fileName:
+                    identifierDic = self.hvm['modules'][moduleName]['identifiers']
+                    break
+            
 
         # insertText = "" # for checking purpose
 
@@ -1162,11 +1166,13 @@ class Ui_MainWindow(object):
         elif variable['type'] == 'context':
             # base case
             node.setText(0, f"{variableName} <context>")
-            ctxKeys = ['pc', 'atomic', 'initial', 'atomicFlag', 'stopped', 'sp']
+            # TODO: Improve on displaying context value (what information is included?)
+            ctxKeys = ['pc', 'atomic', 'atomicFlag', 'stopped', 'sp']
             for i in range(len(ctxKeys)):
                 new_items = []
                 new_items.append(QtWidgets.QTreeWidgetItem(item))
             for i in range(len(ctxKeys)):
+                print(ctxKeys)
                 node.child(i).setText(0, f"{ctxKeys[i]}: {self.variableToText(variable['value'][ctxKeys[i]]['type'], variable['value'][ctxKeys[i]])}")
         elif variable['type'] == 'address':
             if self.isNaive(variable):
