@@ -1172,7 +1172,6 @@ class Ui_MainWindow(object):
                 new_items = []
                 new_items.append(QtWidgets.QTreeWidgetItem(item))
             for i in range(len(ctxKeys)):
-                print(ctxKeys)
                 node.child(i).setText(0, f"{ctxKeys[i]}: {self.variableToText(variable['value'][ctxKeys[i]]['type'], variable['value'][ctxKeys[i]])}")
         elif variable['type'] == 'address':
             if self.isNaive(variable):
