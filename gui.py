@@ -20,7 +20,6 @@ import subprocess
 import copy
 import sys
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -1167,7 +1166,7 @@ class Ui_MainWindow(object):
             # base case
             node.setText(0, f"{variableName} <context>")
             # TODO: Improve on displaying context value (what information is included?)
-            ctxKeys = ['pc', 'atomic', 'atomicFlag', 'stopped', 'sp']
+            ctxKeys = ['pc', 'sp']
             for i in range(len(ctxKeys)):
                 new_items = []
                 new_items.append(QtWidgets.QTreeWidgetItem(item))
@@ -1311,7 +1310,7 @@ class Ui_MainWindow(object):
             for element in value['value']:
                 if element['type'] not in primitiveTypes:
                     # Do not return False if this is a naive address
-                    if element['type'] == 'address' and self.isNaive(value):
+                    if element['type'] == 'address' and self.isNaive(element):
                         continue
                     return False
             return True
@@ -1320,7 +1319,7 @@ class Ui_MainWindow(object):
             for keyValuePair in value['value']:
                 if keyValuePair['key']['type'] not in primitiveTypes:
                     # Do not return False if this is a naive address
-                    if element['type'] == 'address' and self.isNaive(value):
+                    if keyValuePair['key']['type'] == 'address' and self.isNaive(value):
                         continue
                     return False
             return True
