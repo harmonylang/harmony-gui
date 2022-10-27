@@ -1208,6 +1208,11 @@ class Ui_MainWindow(object):
         elif variable['type'] == 'dict':
             # dictionary is naive (all keys are primitive types)
             if self.isNaive(variable):
+                # special case empty dictionary
+                if len(variable['value']) == 0:
+                    assert variable['value'] == []
+                    node.setText(0, f"{variableName} = {{}}")
+                    return
                 node.setText(0, f"{variableName} <dict>")
                 for i in range(len(variable['value'])):
                     new_items = []
@@ -1319,7 +1324,7 @@ class Ui_MainWindow(object):
             for keyValuePair in value['value']:
                 if keyValuePair['key']['type'] not in primitiveTypes:
                     # Do not return False if this is a naive address
-                    if keyValuePair['key']['type'] == 'address' and self.isNaive(value):
+                    if keyValuePair['key']['type'] == 'address' and self.isNaive(keyValuePair['key']):
                         continue
                     return False
             return True
