@@ -1438,8 +1438,11 @@ class Ui_MainWindow(object):
         # default stack for each thread
         for t in range(self.threadNumber):
             i = 0
-            while int(self.microSteps[i]['tid']) != t:
+            while i < len(self.microSteps) and int(self.microSteps[i]['tid']) != t:
                 i += 1
+            # fix bug for threads that don't run
+            if i == len(self.microSteps):
+                continue
             stacks[t] = self.microSteps[i]['context']['stack']
         framePointer = -1
         for i in range(len(self.microSteps)):
@@ -1677,7 +1680,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog, diagType):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", diagType))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Dialog", "Name"))
         item = self.tableWidget.horizontalHeaderItem(1)
