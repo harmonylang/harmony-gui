@@ -27,13 +27,11 @@ import sys
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(900, 676)
+        MainWindow.resize(900, 710)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.filePathText = QtWidgets.QLineEdit(self.centralwidget)
@@ -46,7 +44,7 @@ class Ui_MainWindow(object):
         self.runFile = QtWidgets.QPushButton(self.centralwidget)
         self.runFile.setObjectName("runFile")
         self.horizontalLayout.addWidget(self.runFile)
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.verticalLayout_8.addLayout(self.horizontalLayout)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.issue = QtWidgets.QLabel(self.centralwidget)
@@ -69,13 +67,15 @@ class Ui_MainWindow(object):
         self.interruptDisabled.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.interruptDisabled.setObjectName("interruptDisabled")
         self.horizontalLayout_2.addWidget(self.interruptDisabled)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-        self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout_8.addLayout(self.horizontalLayout_2)
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
         self.byteCode = QtWidgets.QPlainTextEdit(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Monaco")
@@ -83,7 +83,24 @@ class Ui_MainWindow(object):
         self.byteCode.setFont(font)
         self.byteCode.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.byteCode.setObjectName("byteCode")
-        self.horizontalLayout_3.addWidget(self.byteCode)
+        self.verticalLayout.addWidget(self.byteCode)
+        self.printLogLabel = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setFamily(".AppleSystemUIFont")
+        font.setPointSize(12)
+        font.setBold(True)
+        self.printLogLabel.setFont(font)
+        self.printLogLabel.setObjectName("printLogLabel")
+        self.verticalLayout.addWidget(self.printLogLabel)
+        self.printLog = QtWidgets.QPlainTextEdit(self.centralwidget)
+        font = QtGui.QFont()
+        font.setFamily("Monaco")
+        font.setPointSize(12)
+        self.printLog.setFont(font)
+        self.printLog.setReadOnly(True)
+        self.printLog.setObjectName("printLog")
+        self.verticalLayout.addWidget(self.printLog)
+        self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.sourceCode = CodeEditor(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -98,9 +115,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.sourceCode)
         self.horizontalLayout_3.setStretch(0, 1)
         self.horizontalLayout_3.setStretch(1, 2)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
         self.microstepExplain = QtWidgets.QPlainTextEdit(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Monaco")
@@ -108,12 +123,8 @@ class Ui_MainWindow(object):
         self.microstepExplain.setFont(font)
         self.microstepExplain.setReadOnly(True)
         self.microstepExplain.setObjectName("microstepExplain")
-        self.horizontalLayout_9.addWidget(self.microstepExplain)
-        self.horizontalLayout_9.setStretch(0, 3)
-        self.verticalLayout.addLayout(self.horizontalLayout_9)
-        self.verticalLayout.setStretch(0, 10)
-        self.verticalLayout.setStretch(1, 1)
-        self.horizontalLayout_10.addLayout(self.verticalLayout)
+        self.verticalLayout_2.addWidget(self.microstepExplain)
+        self.horizontalLayout_7.addLayout(self.verticalLayout_2)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.microstepsLabel = QtWidgets.QLabel(self.centralwidget)
@@ -145,14 +156,6 @@ class Ui_MainWindow(object):
         self.stackTop.setFont(font)
         self.stackTop.setObjectName("stackTop")
         self.verticalLayout_3.addWidget(self.stackTop)
-        self.printLog = QtWidgets.QPlainTextEdit(self.centralwidget)
-        font = QtGui.QFont()
-        font.setFamily("Monaco")
-        font.setPointSize(12)
-        self.printLog.setFont(font)
-        self.printLog.setReadOnly(True)
-        self.printLog.setObjectName("printLog")
-        self.verticalLayout_3.addWidget(self.printLog)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.singleStep = QtWidgets.QCheckBox(self.centralwidget)
@@ -189,12 +192,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setStretch(1, 10)
         self.verticalLayout_3.setStretch(2, 10)
         self.verticalLayout_3.setStretch(3, 10)
-        self.verticalLayout_3.setStretch(4, 10)
-        self.verticalLayout_3.setStretch(5, 1)
-        self.horizontalLayout_10.addLayout(self.verticalLayout_3)
-        self.horizontalLayout_10.setStretch(0, 4)
-        self.horizontalLayout_10.setStretch(1, 2)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_10)
+        self.verticalLayout_3.setStretch(4, 1)
+        self.horizontalLayout_7.addLayout(self.verticalLayout_3)
+        self.horizontalLayout_7.setStretch(0, 2)
+        self.horizontalLayout_7.setStretch(1, 1)
+        self.verticalLayout_8.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.threadOffsetLabel = QtWidgets.QLabel(self.centralwidget)
@@ -212,7 +214,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.addWidget(self.horizontalSlider)
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem3)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_8)
+        self.verticalLayout_8.addLayout(self.horizontalLayout_8)
         self.threadBrowser = QtWidgets.QTextEdit(self.centralwidget)
         self.threadBrowser.setMinimumSize(QtCore.QSize(670, 0))
         font = QtGui.QFont()
@@ -222,13 +224,7 @@ class Ui_MainWindow(object):
         self.threadBrowser.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.threadBrowser.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.threadBrowser.setObjectName("threadBrowser")
-        self.verticalLayout_2.addWidget(self.threadBrowser)
-        self.verticalLayout_2.setStretch(0, 1)
-        self.verticalLayout_2.setStretch(1, 1)
-        self.verticalLayout_2.setStretch(2, 20)
-        self.verticalLayout_2.setStretch(3, 1)
-        self.verticalLayout_2.setStretch(4, 5)
-        self.horizontalLayout_7.addLayout(self.verticalLayout_2)
+        self.verticalLayout_8.addWidget(self.threadBrowser)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 900, 22))
@@ -243,10 +239,12 @@ class Ui_MainWindow(object):
         self.actionConstants.setObjectName("actionConstants")
         self.actionModules = QtWidgets.QAction(MainWindow)
         self.actionModules.setObjectName("actionModules")
+        self.actionCompare_Behaviors = QtWidgets.QAction(MainWindow)
+        self.actionCompare_Behaviors.setObjectName("actionCompare_Behaviors")
         self.menuConfiguration.addAction(self.actionConstants)
         self.menuConfiguration.addAction(self.actionModules)
+        self.menuConfiguration.addAction(self.actionCompare_Behaviors)
         self.menubar.addAction(self.menuConfiguration.menuAction())
-
 
         self.browse.clicked.connect(lambda: self.browseFiles(False, ""))
         self.next.clicked.connect(self.nextMicrostep)
@@ -257,6 +255,7 @@ class Ui_MainWindow(object):
 
         self.actionConstants.triggered.connect(self.constantWindow)
         self.actionModules.triggered.connect(self.moduleWindow)
+        self.actionCompare_Behaviors.triggered.connect(self.behaviorWindow)
 
         # load keywords dictionary from gui_import/keywords.json
         self.keywords = json.load(open("gui_import/keywords.json"))
@@ -303,6 +302,7 @@ class Ui_MainWindow(object):
         # source file path to compile
         self.runName = ""
 
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -315,6 +315,7 @@ class Ui_MainWindow(object):
         self.atomic.setText(_translate("MainWindow", "Atomic"))
         self.readOnly.setText(_translate("MainWindow", "Read-only"))
         self.interruptDisabled.setText(_translate("MainWindow", "Interrupt-disabled"))
+        self.printLogLabel.setText(_translate("MainWindow", "Print Log"))
         self.sharedVariables.headerItem().setText(0, _translate("MainWindow", "Shared Variables"))
         self.localVariables.headerItem().setText(0, _translate("MainWindow", "Local Variables"))
         self.stackTop.headerItem().setText(0, _translate("MainWindow", "Stack Top"))
@@ -331,6 +332,7 @@ class Ui_MainWindow(object):
         self.menuConfiguration.setTitle(_translate("MainWindow", "Configuration"))
         self.actionConstants.setText(_translate("MainWindow", "Constants"))
         self.actionModules.setText(_translate("MainWindow", "Modules"))
+        self.actionCompare_Behaviors.setText(_translate("MainWindow", "Compare Behavior"))
 
 
     def openFile(self, editor, file, microStepPointer):
@@ -470,6 +472,7 @@ class Ui_MainWindow(object):
             lst.append("-m")
             lst.append(f"{k}={self.moduleDic[k]}")
         return lst
+    
 
     def browseFiles(self, defaultBool, defaultFilePath):
         # if defaultBool is True, defaultFilePath is the file path of commandline argument
@@ -520,10 +523,15 @@ class Ui_MainWindow(object):
             self.runName = ""
             self.compileAndDisplay(fname)
 
-    def compileAndDisplay(self, fname):
+    def compileAndDisplay(self, fname, hfa=""):
         if fname[-3:] == "hny": 
             # try compile hny file
-            runcmd = subprocess.run(["./harmony", "--noweb"] + self.const_flag() + self.module_flag() + [fname], capture_output=True)
+            print(hfa)
+            if not hfa:
+                cmdlst = ["./harmony", "--noweb"] + self.const_flag() + self.module_flag() + [fname]
+            else:
+                cmdlst = ["./harmony", "--noweb"] + self.const_flag() + self.module_flag() + ["-B", hfa] + [fname]
+            runcmd = subprocess.run(cmdlst, capture_output=True)
             returncode = runcmd.returncode
             stdout =  runcmd.stdout.decode()
             stderr =  runcmd.stderr.decode()
@@ -635,9 +643,9 @@ class Ui_MainWindow(object):
         self.updateCheckBox(self.microStepPointer)
         # print(self.hco["code"][49])
     
-    def runSource(self):
-        if len(self.runName) > 3 and self.runName[-3:] == "hny":
-            self.compileAndDisplay(self.runName)
+    def runSource(self, hfa=""):
+        print(hfa)
+        self.compileAndDisplay(self.runName, hfa)
     
 
     def constructMicrosteps(self):
@@ -676,7 +684,7 @@ class Ui_MainWindow(object):
 
     def constructPrintLog(self):
         self.printLst = []
-        self.printLst.append("> Print Log\n")
+        self.printLst.append("")
         for i in range(len(self.microSteps) - 1):
             self.printLst.append(self.printLst[i])
             if "print" in self.microSteps[i]:
@@ -981,7 +989,10 @@ class Ui_MainWindow(object):
         # change bytecode color from yellow to green
         fmt.setBackground(QtCore.Qt.yellow if editor == self.sourceCode else QtCore.Qt.green)
         cursor.mergeCharFormat(fmt)
-        editor.verticalScrollBar().setValue(r1 - 8)
+        if editor == self.byteCode:
+            editor.verticalScrollBar().setValue(r1 - 5)
+        else:
+            editor.verticalScrollBar().setValue(r1 - 8)
 
     def highlightJumpCoordinate(self, row, col):
         editor = self.sourceCode
@@ -1227,7 +1238,7 @@ class Ui_MainWindow(object):
     
     def printLogUpdate(self, microStepPointer):
         if microStepPointer == 0:
-            self.printLog.setPlainText("> Print Log")
+            self.printLog.setPlainText("")
         else:
             microStepPointer -= 1
             self.printLog.setPlainText(self.printLst[microStepPointer])
@@ -1669,6 +1680,12 @@ class Ui_MainWindow(object):
         constant.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         constant.exec_()
 
+    def behaviorWindow(self):
+        behavior = QDialog()
+        behavior.ui = Ui_Bdialog()
+        behavior.ui.setupUi(behavior)
+        behavior.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        behavior.exec_()
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog, dic, diagType):
@@ -1768,6 +1785,58 @@ class Ui_Dialog(object):
     def _run(self):
         self._apply()
         ui.runSource()
+
+class Ui_Bdialog(object):
+    def setupUi(self, Bdialog):
+        Bdialog.setObjectName("Bdialog")
+        Bdialog.resize(500, 100)
+        self.horizontalLayoutWidget = QtWidgets.QWidget(Bdialog)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 481, 51))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.hfaLine = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
+        self.hfaLine.setReadOnly(True)
+        self.hfaLine.setObjectName("hfaLine")
+        self.horizontalLayout.addWidget(self.hfaLine)
+        self.hfaBrowse = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.hfaBrowse.setObjectName("hfaBrowse")
+        self.horizontalLayout.addWidget(self.hfaBrowse)
+        self.horizontalLayout.setStretch(0, 10)
+        self.cancel = QtWidgets.QPushButton(Bdialog)
+        self.cancel.setGeometry(QtCore.QRect(290, 60, 91, 32))
+        self.cancel.setObjectName("cancel")
+        self.compare = QtWidgets.QPushButton(Bdialog)
+        self.compare.setGeometry(QtCore.QRect(400, 60, 91, 32))
+        self.compare.setObjectName("compare")
+
+        self.d = Bdialog
+
+        self.cancel.clicked.connect(self._cancel)
+        self.compare.clicked.connect(self._compare)
+        self.hfaBrowse.clicked.connect(self._browse)
+
+        self.retranslateUi(Bdialog)
+        QtCore.QMetaObject.connectSlotsByName(Bdialog)
+
+    def retranslateUi(self, Bdialog):
+        _translate = QtCore.QCoreApplication.translate
+        Bdialog.setWindowTitle(_translate("Bdialog", "Dialog"))
+        self.hfaBrowse.setText(_translate("Bdialog", "Browse"))
+        self.cancel.setText(_translate("Bdialog", "Cancel"))
+        self.compare.setText(_translate("Bdialog", "Compare"))
+    
+    def _browse(self):
+        fname = QFileDialog.getOpenFileName(None, "Title", "..", "Harmony finite automata (*.hfa)")[0]
+        self.hfaLine.setText(fname)
+    
+    def _compare(self):
+        ui.runSource(self.hfaLine.text())
+
+    def _cancel(self):
+        self.d.close()
+
 
 
 if __name__ == "__main__":
