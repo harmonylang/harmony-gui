@@ -259,8 +259,8 @@ class Ui_MainWindow(object):
 
         # load keywords dictionary from gui_import/keywords.json
         self.keywords = json.load(open("gui_import/keywords.json"))
-        # load identifier of all modules from gui_import/modules.json
-        self.moduleIdentifiers = json.load(open("gui_import/modules.json"))
+        # # load identifier of all modules from gui_import/modules.json
+        # self.moduleIdentifiers = json.load(open("gui_import/modules.json"))
 
         self.horizontalSlider.valueChanged.connect(self.sliderMoveUpdate)
         # self.open.clicked.connect(self.openFileByTypedPath)
@@ -361,17 +361,15 @@ class Ui_MainWindow(object):
         # set identifier dictionary for 3 different cases: (1) source file, 
         # (2) library file, (3) self-defined import
         pc = int(self.microSteps[microStepPointer]["pc"])
-        fileName = self.hco['locations'][str(pc)]['file']
-        sourceFileName = self.hco["locations"]["0"]["file"]
-        fileNameLst = fileName.split('/')
+        curModuleName = self.hvm['locs'][pc]['module']
         # case 1: source file
-        if fileName == sourceFileName: 
+        if curModuleName == "__main__": 
             identifierDic = self.hvm['modules']['__main__']['identifiers']
         # case 2: import modules
         else: 
             # fix bug, find by file path, not module name
             for moduleName in self.hvm['modules']:
-                if self.hvm['modules'][moduleName]['file'] == fileName:
+                if moduleName == curModuleName:
                     identifierDic = self.hvm['modules'][moduleName]['identifiers']
                     break
             
@@ -526,7 +524,6 @@ class Ui_MainWindow(object):
     def compileAndDisplay(self, fname, hfa=""):
         if fname[-3:] == "hny": 
             # try compile hny file
-            print(hfa)
             if not hfa:
                 cmdlst = ["./harmony", "--noweb"] + self.const_flag() + self.module_flag() + [fname]
             else:
@@ -552,19 +549,19 @@ class Ui_MainWindow(object):
             self.filePathText.setText("")
             self.errorMsgBox("Cannot open hco file. ")
             return
-        # try open hvm file
-        try: 
-            hvmName = fname[:-3] + "hvm"
-            hvmFile = open(hvmName)
-            hvmData = json.load(hvmFile)
-        except:
-            self.filePathText.setText("")
-            self.errorMsgBox("Cannot open hvm file. ")
-            return
+        # # try open hvm file
+        # try: 
+        #     hvmName = fname[:-3] + "hvm"
+        #     hvmFile = open(hvmName)
+        #     hvmData = json.load(hvmFile)
+        # except:
+        #     self.filePathText.setText("")
+        #     self.errorMsgBox("Cannot open hvm file. ")
+        #     return
         
         # set self.hco and self.hvm
         self.hco = hcoData
-        self.hvm = hvmData
+        self.hvm = self.hco['hvm']
         # print(self.hvm['identifiers'])
         # if there are no issues
         if "macrosteps" not in self.hco:
@@ -602,14 +599,14 @@ class Ui_MainWindow(object):
 
         # initialize bytecode display, <adding pc value before each line>
         text = ""
-        pcMAX = len(self.hco["code"]) - 1
+        pcMAX = len(self.hvm["pretty"]) - 1
         offsetDigit = len(str(pcMAX))
         for i in range(len(self.microSteps)):
             pc = int(self.microSteps[i]["pc"])
             spaceOffset = ""
             for j in range(offsetDigit - len(str(pc))):
                 spaceOffset = spaceOffset + " "
-            microstepLine = spaceOffset + str(pc) + " " + self.hco["code"][int(self.microSteps[i]["pc"])]
+            microstepLine = spaceOffset + str(pc) + " " + self.hvm["pretty"][int(self.microSteps[i]["pc"])][0]
             text += (microstepLine + "\n")
         self.byteCode.setPlainText(text)
         # initialize microstep pointer to 0
@@ -644,7 +641,6 @@ class Ui_MainWindow(object):
         # print(self.hco["code"][49])
     
     def runSource(self, hfa=""):
-        print(hfa)
         self.compileAndDisplay(self.runName, hfa)
     
 
@@ -661,7 +657,7 @@ class Ui_MainWindow(object):
                 cpMicroStep = dict(microStep)
                 cpMicroStep['tid'] = macroStep['tid']
                 cpMicroStep['name'] = macroStep['name']
-                cpMicroStep['invfails'] = macroStep['invfails']
+                # cpMicroStep['invfails'] = macroStep['invfails']
                 cpMicroStep['contexts'] = macroStep['contexts']
                 cpMicroStep['context'] = macroStep['context']
                 self.microSteps.append(cpMicroStep)
@@ -702,13 +698,13 @@ class Ui_MainWindow(object):
             pc = int(self.microSteps[i]["pc"])
             nextMicroStepPc = int(self.microSteps[i + 1]["pc"])
             # compare file name
-            if self.hco['locations'][str(pc)]['file'] != self.hco['locations'][str(nextMicroStepPc)]['file']:
+            if self.hvm['locs'][pc]['module'] != self.hvm['locs'][nextMicroStepPc]['module']:
                 self.stmtIndicator.append(False)
             # compare thread id
             elif int(self.microSteps[i]['tid']) != int(self.microSteps[i + 1]['tid']):
                 self.stmtIndicator.append(False)
             # compare line 
-            elif self.hco['locations'][str(pc)]['stmt'][0] != self.hco['locations'][str(nextMicroStepPc)]['stmt'][0]:
+            elif self.hvm['locs'][pc]['stmt'][0] != self.hvm['locs'][nextMicroStepPc]['stmt'][0]:
                 self.stmtIndicator.append(False)
             # all three checks passes
             else:
@@ -733,24 +729,24 @@ class Ui_MainWindow(object):
         threadId = int(self.microSteps[microStepPointer]['tid'])
         assert int(self.microSteps[microStepPointer]['contexts'][threadId]['tid']) == threadId
         threadName = self.microSteps[microStepPointer]['contexts'][threadId]['name']
-        fileName = self.hco['locations'][str(pc)]['file']
+        moduleName = self.hvm['locs'][pc]['module'] 
+        fileName = self.hvm['modules'][moduleName]['file']
         explanationText = f"T{threadId} {threadName}: {explanation}\n{fileName}"
         self.microstepExplain.setPlainText(explanationText)
         # highlight source code
-        sourceFileName = self.hco["locations"]["0"]["file"]
         # start row; start col; end row; end col of current microstep
-        sourceCodeR1 = int(self.hco["locations"][str(pc)]["line"])
-        sourceCodeR2 = int(self.hco["locations"][str(pc)]["endline"])
-        sourceCodeC1 = int(self.hco["locations"][str(pc)]["column"])
-        sourceCodeC2 = int(self.hco["locations"][str(pc)]["endcolumn"]) + 1
+        sourceCodeR1 = self.hvm["locs"][pc]["line"]
+        sourceCodeR2 = self.hvm["locs"][pc]["endline"]
+        sourceCodeC1 = self.hvm["locs"][pc]["column"]
+        sourceCodeC2 = self.hvm["locs"][pc]["endcolumn"] + 1
         # start row; start col; end row; end col of stmt
-        stmtR1 = int(self.hco['locations'][str(pc)]['stmt'][0])
-        stmtC1 = int(self.hco['locations'][str(pc)]['stmt'][1])
-        stmtR2 = int(self.hco['locations'][str(pc)]['stmt'][2])
-        stmtC2 = int(self.hco['locations'][str(pc)]['stmt'][3])
+        stmtR1 = self.hvm['locs'][pc]['stmt'][0]
+        stmtC1 = self.hvm['locs'][pc]['stmt'][1]
+        stmtR2 = self.hvm['locs'][pc]['stmt'][2]
+        stmtC2 = self.hvm['locs'][pc]['stmt'][3]
         # # update thread browser scroll bar
         # self.threadBrowser.verticalScrollBar().setValue(threadId)
-        if self.hco["locations"][str(pc)]["file"] == sourceFileName:
+        if self.hvm['locs'][pc]['module'] == '__main__':
             # if code is in sourcefile
             self.openFile(self.sourceCode, self.sourceFile, microStepPointer)
 
@@ -776,7 +772,7 @@ class Ui_MainWindow(object):
             # self.highlightByCoordinate(self.sourceCode, self.sourceCodeCursor, sourceCodeR1, sourceCodeR2, sourceCodeC1, sourceCodeC2)
         else:
             # if code is in library file
-            self.openFile(self.sourceCode, self.hco["locations"][str(pc)]["file"], microStepPointer)
+            self.openFile(self.sourceCode, self.hvm['modules'][self.hvm["locs"][pc]["module"]]['file'], microStepPointer)
 
             self.clearFormat(self.sourceCodeCursor)
             
@@ -798,23 +794,23 @@ class Ui_MainWindow(object):
             self.sourceCode.verticalScrollBar().setValue(sourceCodeR1 - 8)
 
         # hightlight machine code
-        pcMAX = len(self.hco["code"]) - 1
+        pcMAX = len(self.hvm["pretty"]) - 1
         offsetDigit = len(str(pcMAX))
         byteCodeR1 = self.microStepPointer + 1
         byteCodeR2 = self.microStepPointer + 1
         byteCodeC1 = 1 + (offsetDigit) + 1
-        byteCodeC2 = 1 + len(self.hco["code"][pc]) + (offsetDigit) + 1 # account for pc value at start
+        byteCodeC2 = 1 + len(self.hvm["pretty"][pc][0]) + (offsetDigit) + 1 # account for pc value at start
         self.highlightByCoordinate(self.byteCode, self.byteCodeCursor, byteCodeR1, byteCodeR2, byteCodeC1, byteCodeC2)
         # if current microstep is an unconditional jump, then update an arrow (do a red highlight)
-        microstep = self.hco['code'][pc]
+        microstep = self.hvm['pretty'][pc]
         npc = int(self.microSteps[microStepPointer]["npc"])
-        nrow = int(self.hco["locations"][str(npc)]["line"])
-        ncol = int(self.hco["locations"][str(npc)]["column"])
+        nrow = self.hvm["locs"][npc]["line"]
+        ncol = self.hvm["locs"][npc]["column"]
 
-        curFile = self.hco["locations"][str(pc)]["file"]
-        nextFile = self.hco["locations"][str(npc)]["file"]
+        curModule = self.hvm["locs"][pc]["module"]
+        nextModule = self.hvm["locs"][npc]["module"]
         # print(microstep)
-        if len(microstep) >= 5 and microstep[:5] == "Jump " and curFile == nextFile:
+        if len(microstep) >= 5 and microstep[:5] == "Jump " and curModule == nextModule:
             self.highlightJumpCoordinate(nrow, ncol)
 
     def nextMicrostep(self):
@@ -1054,7 +1050,7 @@ class Ui_MainWindow(object):
         # save all the image in imgList
         for i in range(len(imgList)):
             img = Image.fromarray(imgList[i], 'RGB')
-            filePath = self.hco["locations"]["0"]["file"][:-4]
+            filePath = self.hvm["modules"]["__main__"]["file"][:-4]
             fileName = filePath.rsplit('/', 1)[-1]
             imageName = f"{fileName}_t{i}.png"
             imageDirName = f"{self.sourceFile[:-4]}_threadImg"
@@ -1073,7 +1069,7 @@ class Ui_MainWindow(object):
             microStepPointer -= 1
         self.threadBrowser.setText("")
         cursorPosition = 4
-        filePath = self.hco["locations"]["0"]["file"][:-4]
+        filePath = self.hvm["modules"]["__main__"]["file"][:-4]
         fileName = filePath.rsplit('/', 1)[-1]
         imageDirName = f"{self.sourceFile[:-4]}_threadImg"
         # print(fileName)
@@ -1267,11 +1263,13 @@ class Ui_MainWindow(object):
                 node.setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
                 return
             node.setText(0, f"{variableName} <address>")
-            for i in range(len(variable['value'])):
+            addrArgs = self.processAddress(variable)
+            for i in range(len(addrArgs)):
                 new_items = []
                 new_items.append(QtWidgets.QTreeWidgetItem(item))
-            for i in range(len(variable['value'])):
-                self.recursiveAdd(node.child(i), node.child(i), variable['value'][i], f"[{i}]")
+            addrArgs = self.processAddress(variable)
+            for i in range(len(addrArgs)):
+                self.recursiveAdd(node.child(i), node.child(i), addrArgs[i], f"[{i}]")
         elif variable['type'] == 'list':
             if self.isNaive(variable):
                 # base case
@@ -1338,7 +1336,7 @@ class Ui_MainWindow(object):
             return f"\"{value['value']}\""
         elif type == 'pc':
             pc = int(value['value'])
-            byteCode = self.hco['code'][pc]
+            byteCode = self.hvm['pretty'][pc][0]
             # If pc points to a method or is lambda, then bytecode is "Frame ..."
             # shows everything after "Frame "
             if byteCode[:6] == 'Frame ':
@@ -1355,12 +1353,13 @@ class Ui_MainWindow(object):
                 return f"pc({pc} = {methodName} + {offset})"
         elif type == 'address':
             assert self.isNaive(value)
-            if len(value['value']) == 0:
+            addrArgs = self.processAddress(value)
+            if len(addrArgs) == 0:
                 return "None"
             addrStr = "?"
-            addrStr += value['value'][0]['value']
-            for i in range(1, len(value['value'])):
-                addrStr += f"[{value['value'][i]['value']}]"
+            addrStr += addrArgs[0]['value']
+            for i in range(1, len(addrArgs)):
+                addrStr += f"[{addrArgs[i]['value']}]"
             return addrStr
         elif type == 'list':
             assert self.isNaive(value)
@@ -1418,12 +1417,19 @@ class Ui_MainWindow(object):
                         continue
                     return False
             return True
-        # handle the case of a dictionary
+        # handle the case of an address
         elif value['type'] == 'address':
-            for element in value['value']:
+            for element in self.processAddress(value):
                 if element['type'] not in primitiveTypes:
                     return False
             return True
+    
+    def processAddress(self, value):
+        assert "type" in value and value["type"] == "address"
+        if "args" in value:
+            return value["args"]
+        else:
+            return []
         
     def constructStackTraceTextList(self):
         assert len(self.stackTraceList) == self.threadNumber
@@ -1614,6 +1620,24 @@ class Ui_MainWindow(object):
 
     def verbose_string(self, js):
         type = js["type"]
+        if type == "address":
+            if "func" not in js:
+                return "None"
+            result = "?"
+            func = js["func"]
+            args = js["args"]
+            if func["type"] == "pc":
+                if int(func["value"]) in { -1, -2 }:
+                    result += args[0]["value"]
+                    args = args[1:]
+                elif int(func["value"]) == -3:
+                    result += "this." + args[0]["value"]
+                    args = args[1:]
+                else:
+                    result += self.verbose_string(func)
+            else:
+                result += self.verbose_string(func)
+            return result + "".join([ self.verbose_idx(kv) for kv in args ])
         v = js["value"]
         if type == "bool":
             return v
@@ -1642,10 +1666,6 @@ class Ui_MainWindow(object):
                 return "{ " + ", ".join([k + ": " + v for k,v in lst]) + " }" 
         if type == "pc":
             return "PC(%s)"%v
-        if type == "address":
-            if v == []:
-                return "None"
-            return "?" + v[0]["value"] + "".join([ self.verbose_idx(kv) for kv in v[1:] ])
         if type == "context":
             return "CONTEXT(" + str(v["pc"]) + ")"
 
