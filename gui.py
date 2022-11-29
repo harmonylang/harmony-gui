@@ -124,6 +124,8 @@ class Ui_MainWindow(object):
         self.microstepExplain.setReadOnly(True)
         self.microstepExplain.setObjectName("microstepExplain")
         self.verticalLayout_2.addWidget(self.microstepExplain)
+        self.verticalLayout_2.setStretch(0, 10)
+        self.verticalLayout_2.setStretch(1, 1)
         self.horizontalLayout_7.addLayout(self.verticalLayout_2)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -204,6 +206,7 @@ class Ui_MainWindow(object):
         font.setFamily("Monaco")
         font.setPointSize(12)
         self.threadOffsetLabel.setFont(font)
+        self.threadOffsetLabel.setText("    ")
         self.threadOffsetLabel.setObjectName("threadOffsetLabel")
         self.horizontalLayout_8.addWidget(self.threadOffsetLabel)
         self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
@@ -245,6 +248,7 @@ class Ui_MainWindow(object):
         self.menuConfiguration.addAction(self.actionModules)
         self.menuConfiguration.addAction(self.actionCompare_Behaviors)
         self.menubar.addAction(self.menuConfiguration.menuAction())
+
 
         self.browse.clicked.connect(lambda: self.browseFiles(False, ""))
         self.next.clicked.connect(self.nextMicrostep)
@@ -328,7 +332,6 @@ class Ui_MainWindow(object):
         self.prev.setShortcut(_translate("MainWindow", "Left"))
         self.next.setText(_translate("MainWindow", "Next >"))
         self.next.setShortcut(_translate("MainWindow", "Right"))
-        self.threadOffsetLabel.setText(_translate("MainWindow", "    "))
         self.menuConfiguration.setTitle(_translate("MainWindow", "Configuration"))
         self.actionConstants.setText(_translate("MainWindow", "Constants"))
         self.actionModules.setText(_translate("MainWindow", "Modules"))
@@ -537,6 +540,9 @@ class Ui_MainWindow(object):
                 self.errorMsgBox("Run Failed\n" + stdout + stderr)
                 return
         else:
+            if fname[-3:] != "hco":
+                self.errorMsgBox("Cannot run hco file. Please choose hny file to run.\n")
+                return
             assert fname[-3:] == "hco"
             fname = fname[:-3] + "hny"
         
