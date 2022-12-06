@@ -1119,6 +1119,8 @@ class Ui_MainWindow(object):
         mostRecentSharedVariablePointer = microStepPointer
         while 'shared' not in self.microSteps[mostRecentSharedVariablePointer]:
             mostRecentSharedVariablePointer -= 1
+            if mostRecentSharedVariablePointer < 0:
+                return
         microstep = self.microSteps[mostRecentSharedVariablePointer]
         sharedVariableList = microstep['shared']
         primitiveTypes = {'int', 'bool', 'atom', 'pc'}
@@ -1129,7 +1131,7 @@ class Ui_MainWindow(object):
             if variable['type'] in primitiveTypes: 
                 self.sharedVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
             elif variable['type'] == 'address':
-                if self.isNaive(variable):
+                if True: # to be fixed
                     self.sharedVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
                 else:
                     self.recursiveAdd(item_0, self.sharedVariables.topLevelItem(counter), variable, variableName)
@@ -1159,8 +1161,11 @@ class Ui_MainWindow(object):
         microStepPointer -= 1
         # find current local variable state
         mostRecentLocalVariablePointer = microStepPointer
+
         while 'local' not in self.microSteps[mostRecentLocalVariablePointer]:
             mostRecentLocalVariablePointer -= 1
+            if mostRecentLocalVariablePointer < 0:
+                return
         microstep = self.microSteps[mostRecentLocalVariablePointer]
         localVariableList = microstep['local']
         # assert microstep['tid'] == self.microSteps[microStepPointer]['tid']
@@ -1172,7 +1177,7 @@ class Ui_MainWindow(object):
             if variable['type'] in primitiveTypes: 
                 self.localVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
             elif variable['type'] == 'address':
-                if self.isNaive(variable):
+                if True: # to be fixed
                     self.localVariables.topLevelItem(counter).setText(0, f"{variableName}: {self.variableToText(variable['type'], variable)}")
                 else:
                     self.recursiveAdd(item_0, self.localVariables.topLevelItem(counter), variable, variableName)
@@ -1212,7 +1217,7 @@ class Ui_MainWindow(object):
             if variable['type'] in primitiveTypes: 
                 self.stackTop.topLevelItem(counter).setText(0, f"{self.variableToText(variable['type'], variable)}")
             elif variable['type'] == 'address':
-                if self.isNaive(variable):
+                if True: # to be fixed
                     self.stackTop.topLevelItem(counter).setText(0, f"{self.variableToText(variable['type'], variable)}")
                 else:
                     self.recursiveAdd(item_0, self.stackTop.topLevelItem(counter), variable, "")
@@ -1358,6 +1363,7 @@ class Ui_MainWindow(object):
                 methodName = self.hco['code'][int(self.microSteps[i]["pc"])][6:]
                 return f"pc({pc} = {methodName} + {offset})"
         elif type == 'address':
+            return self.verbose_string(value)
             assert self.isNaive(value)
             addrArgs = self.processAddress(value)
             if len(addrArgs) == 0:
@@ -1432,10 +1438,10 @@ class Ui_MainWindow(object):
     
     def processAddress(self, value):
         assert "type" in value and value["type"] == "address"
-        if "args" in value:
-            return value["args"]
-        else:
+        if "args" not in value:
             return []
+        else:
+            return [value["func"]] + value["args"]
         
     def constructStackTraceTextList(self):
         assert len(self.stackTraceList) == self.threadNumber
@@ -1633,7 +1639,11 @@ class Ui_MainWindow(object):
             func = js["func"]
             args = js["args"]
             if func["type"] == "pc":
-                if int(func["value"]) in { -1, -2 }:
+                if int(func["value"]) == -1:
+                    result += args[0]["value"]
+                    args = args[1:]
+                elif int(func["value"]) == -2:
+                    result += "@"
                     result += args[0]["value"]
                     args = args[1:]
                 elif int(func["value"]) == -3:
