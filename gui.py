@@ -726,12 +726,18 @@ class Ui_MainWindow(object):
         self.microstepsLabel.setText(f"Microsteps: {microStepPointer}/{len(self.microSteps)}")
         # update horizontal slider
         self.horizontalSlider.setValue(microStepPointer)
+        checkFailure = False # FIX: explanation to include special case for failure
         if microStepPointer == len(self.microSteps):
             microStepPointer -= 1
+            checkFailure = True
         # update highlight part
         pc = int(self.microSteps[microStepPointer]["pc"])
         # update microstepExplain label
-        explanation = self.microSteps[microStepPointer]['explain']
+        # FIX: explanation to include special case for failure
+        if checkFailure and 'failure' in self.microSteps[microStepPointer]:
+            explanation = self.microSteps[microStepPointer]['failure']
+        else:
+            explanation = self.microSteps[microStepPointer]['explain']
         threadId = int(self.microSteps[microStepPointer]['tid'])
         assert int(self.microSteps[microStepPointer]['contexts'][threadId]['tid']) == threadId
         threadName = self.microSteps[microStepPointer]['contexts'][threadId]['name']
