@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMessageBox
 from PyQt5.QtGui import QTextCursor, QColor, QRegExpValidator, QSyntaxHighlighter, QTextCharFormat 
 from PIL import Image
 import numpy as np
-from gui_import.codeeditor import CodeEditor
+from harmony_gui.gui_import.codeeditor import CodeEditor
 import json
 import os
 import subprocess
@@ -262,7 +262,10 @@ class Ui_MainWindow(object):
         self.actionCompare_Behaviors.triggered.connect(self.behaviorWindow)
 
         # load keywords dictionary from gui_import/keywords.json
-        self.keywords = json.load(open("gui_import/keywords.json"))
+        this_dir = os.path.abspath(os.path.join(__file__, os.pardir))
+        keywords_json_filename = os.path.join(this_dir, 'gui_import', 'keywords.json')
+        with open(keywords_json_filename, 'r') as f:
+            self.keywords = json.load(f)
         # # load identifier of all modules from gui_import/modules.json
         # self.moduleIdentifiers = json.load(open("gui_import/modules.json"))
 
@@ -339,7 +342,8 @@ class Ui_MainWindow(object):
 
 
     def openFile(self, editor, file, microStepPointer):
-        text = open(file).read()
+        with open(file, 'r') as f:
+            text = f.read()
         # reset sourceCodeCursor's position before and after
         # self.insertFormatSourceCode to maintain invariant
         assert editor == self.sourceCode
@@ -505,7 +509,8 @@ class Ui_MainWindow(object):
         #     self.errorMsgBox("This file cannot be opened. Please open another file.")
         #     return
         if fname[-3:] == "hny":
-            sourceText = open(fname).read()
+            with open(fname, 'r') as f:
+                sourceText = f.read()
             self.clearFormat(self.sourceCodeCursor)
             self.sourceCode.clear()
             self.sourceCode.setPlainText(sourceText)
@@ -528,9 +533,9 @@ class Ui_MainWindow(object):
         if fname[-3:] == "hny": 
             # try compile hny file
             if not hfa:
-                cmdlst = ["./harmony", "--noweb"] + self.const_flag() + self.module_flag() + [fname]
+                cmdlst = ["harmony", "--noweb"] + self.const_flag() + self.module_flag() + [fname]
             else:
-                cmdlst = ["./harmony", "--noweb"] + self.const_flag() + self.module_flag() + ["-B", hfa] + [fname]
+                cmdlst = ["harmony", "--noweb"] + self.const_flag() + self.module_flag() + ["-B", hfa] + [fname]
             runcmd = subprocess.run(cmdlst, capture_output=True)
             returncode = runcmd.returncode
             stdout =  runcmd.stdout.decode()
@@ -549,8 +554,8 @@ class Ui_MainWindow(object):
         # try open hco file
         try:
             hcoName = fname[:-3] + "hco"
-            hcoFile = open(hcoName)
-            hcoData = json.load(hcoFile)
+            with open(hcoName, 'r') as hcoFile:
+                hcoData = json.load(hcoFile)
         except:
             self.filePathText.setText("")
             self.errorMsgBox("Cannot open hco file. ")
@@ -1880,8 +1885,7 @@ class Ui_Bdialog(object):
         self.d.close()
 
 
-
-if __name__ == "__main__":
+def main():
     app = QtWidgets.QApplication(sys.argv)
 
     MainWindow = QtWidgets.QMainWindow()
@@ -1896,5 +1900,5 @@ if __name__ == "__main__":
     if n == 2:
         fpath = os.path.join(os.getcwd(), sys.argv[1])
         ui.browseFiles(True, fpath)
-        
-    sys.exit(app.exec_())
+
+    return app.exec_()
