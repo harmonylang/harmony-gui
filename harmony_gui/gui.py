@@ -532,11 +532,15 @@ class Ui_MainWindow(object):
     def compileAndDisplay(self, fname, hfa=""):
         if fname[-3:] == "hny": 
             # try compile hny file
-            if not hfa:
-                cmdlst = ["harmony", "--noweb"] + self.const_flag() + self.module_flag() + [fname]
-            else:
-                cmdlst = ["harmony", "--noweb"] + self.const_flag() + self.module_flag() + ["-B", hfa] + [fname]
-            runcmd = subprocess.run(cmdlst, capture_output=True)
+            try:
+                if not hfa:
+                    cmdlst = ["harmony", "--noweb"] + self.const_flag() + self.module_flag() + [fname]
+                else:
+                    cmdlst = ["harmony", "--noweb"] + self.const_flag() + self.module_flag() + ["-B", hfa] + [fname]
+                runcmd = subprocess.run(cmdlst, capture_output=True)
+            except:
+                self.errorMsgBox("Running harmony fails. Check that harmony is installed properly. \n")
+                return
             returncode = runcmd.returncode
             stdout =  runcmd.stdout.decode()
             stderr =  runcmd.stderr.decode()
