@@ -1,11 +1,14 @@
 
 all:
 	rm -rf build/  # Remove previous build files
+	pip3 install pyqt5
+	pip3 install pillow
+	pip3 install numpy
 	python3 setup.py install
 
 
 dependencies:
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt
 
 
 dist:
