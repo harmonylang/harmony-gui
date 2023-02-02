@@ -1,5 +1,5 @@
 
-all:
+all: dependencies
 	rm -rf build/  # Remove previous build files
 	pip3 install pyqt5
 	pip3 install pillow
