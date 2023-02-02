@@ -5,7 +5,6 @@ certifi==2022.12.7
 charset-normalizer==3.0.1
 frozendict==2.3.4
 harmony==1.2.3126
-harmony-gui==1.0.0
 idna==3.4
 networkx==2.6.3
 numpy==1.21.6
