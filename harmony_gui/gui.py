@@ -25,7 +25,8 @@ import sys
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, ui):
+        self.mainui = ui
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(900, 710)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -1720,30 +1721,31 @@ class Ui_MainWindow(object):
     def constantWindow(self):
         constant = QDialog()
         constant.ui = Ui_Dialog()
-        constant.ui.setupUi(constant, self.constantDic, "Enter constants")
+        constant.ui.setupUi(constant, self.constantDic, "Enter constants", self.mainui)
         constant.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         constant.exec_()
     
     def moduleWindow(self):
         constant = QDialog()
         constant.ui = Ui_Dialog()
-        constant.ui.setupUi(constant, self.moduleDic, "Enter modules")
+        constant.ui.setupUi(constant, self.moduleDic, "Enter modules", self.mainui)
         constant.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         constant.exec_()
 
     def behaviorWindow(self):
         behavior = QDialog()
         behavior.ui = Ui_Bdialog()
-        behavior.ui.setupUi(behavior)
+        behavior.ui.setupUi(behavior, self.mainui)
         behavior.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         behavior.exec_()
 
 class Ui_Dialog(object):
-    def setupUi(self, Dialog, dic, diagType):
+    def setupUi(self, Dialog, dic, diagType, ui):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 300)
         Dialog.setMinimumSize(QtCore.QSize(400, 300))
         Dialog.setMaximumSize(QtCore.QSize(400, 300))
+        self.mainui = ui
         self.tableWidget = QtWidgets.QTableWidget(Dialog)
         self.tableWidget.setGeometry(QtCore.QRect(10, 20, 371, 231))
         self.tableWidget.setObjectName("tableWidget")
@@ -1835,12 +1837,13 @@ class Ui_Dialog(object):
 
     def _run(self):
         self._apply()
-        ui.runSource()
+        self.mainui.runSource()
 
 class Ui_Bdialog(object):
-    def setupUi(self, Bdialog):
+    def setupUi(self, Bdialog, ui):
         Bdialog.setObjectName("Bdialog")
         Bdialog.resize(500, 100)
+        self.mainui = ui
         self.horizontalLayoutWidget = QtWidgets.QWidget(Bdialog)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 481, 51))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -1883,7 +1886,7 @@ class Ui_Bdialog(object):
         self.hfaLine.setText(fname)
     
     def _compare(self):
-        ui.runSource(self.hfaLine.text())
+        self.mainui.runSource(self.hfaLine.text())
 
     def _cancel(self):
         self.d.close()
@@ -1894,7 +1897,7 @@ def main():
 
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
+    ui.setupUi(MainWindow, ui)
     MainWindow.show()
 
     # open file passed in as commandline argument
