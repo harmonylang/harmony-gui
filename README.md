@@ -4,7 +4,7 @@ Harmony-GUI is a graphical, interactive debugger for the [Harmony](https://harmo
 
 Note: Harmony-GUI is a newly-developed feature and this is its first time being used in CS 4410. Therefore, this version of Harmony-GUI is meant to be a __beta version__. You should feel free to use it, but in case it does not work properly, you can always switch back to the html output for debugging.  
 
-Please report on Ed any error you find with Harmony-GUI. Also free to give any feedback! 
+Please report on Ed any error you find with Harmony-GUI. Also feel free to give any feedback! 
 
 
 ## Installlation
@@ -37,7 +37,7 @@ Now, click the `run` button and Harmony will compile the program and run model c
 
 ![](readmeImg/p3.png)
 
-Now, you can play around with it a little bit and see how it works. In the next section, we are going to introduce in more detail how to use it as well as how to interpret the information shown at different parts of the window. 
+Now, you can play around with it a little bit and see how it works. In the next section, we are going to introduce in more detail how to use it as well as how to interpret the information shown in different parts of the window. 
 
 Notice that if your code has no issues, then Harmony-GUI won't display any information shown as above but will only pop up a message box telling you that Harmony finds no issue in the program. 
 
