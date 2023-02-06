@@ -1381,7 +1381,7 @@ class Ui_MainWindow(object):
                 # i points to the nearest bytecode that starts with "Frame "
                 # show "pc({pcNumber} = {methodName} + {offset})"
                 i = self.microStepPointer - 1 # !!!!!!!
-                while self.hvm["pretty"][int(self.microSteps[i]["pc"])][0] != 'Frame ':
+                while self.hvm["pretty"][int(self.microSteps[i]["pc"])][0][:6] != 'Frame ':
                     i -= 1
                 assert i >= 0
                 offset = pc - int(self.microSteps[i]["pc"])
