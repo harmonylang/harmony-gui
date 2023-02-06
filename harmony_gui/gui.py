@@ -1082,7 +1082,7 @@ class Ui_MainWindow(object):
         for i in range(len(imgList)):
             img = Image.fromarray(imgList[i], 'RGB')
             filePath = self.hvm["modules"]["__main__"]["file"][:-4]
-            fileName = filePath.rsplit('/', 1)[-1]
+            fileName = os.path.basename(filePath)
             imageName = f"{fileName}_t{i}.png"
             imageDirName = f"{self.sourceFile[:-4]}_threadImg"
             # print(filePath)
@@ -1090,10 +1090,10 @@ class Ui_MainWindow(object):
             # print(imageName)
             # print(imageDirName)
             try:
-                img.save(f"{imageDirName}/{imageName}")
+                img.save(os.path.join(imageDirName, imageName))
             except:
                 os.mkdir(f"{imageDirName}")
-                img.save(f"{imageDirName}/{imageName}")
+                img.save(os.path.join(imageDirName, imageName))
 
     def threadBrowserUpdate(self, microStepPointer):
         if microStepPointer > 0:
@@ -1101,7 +1101,7 @@ class Ui_MainWindow(object):
         self.threadBrowser.setText("")
         cursorPosition = 4
         filePath = self.hvm["modules"]["__main__"]["file"][:-4]
-        fileName = filePath.rsplit('/', 1)[-1]
+        fileName = os.path.basename(filePath)
         imageDirName = f"{self.sourceFile[:-4]}_threadImg"
         # print(fileName)
         # print(imageDirName)
@@ -1119,7 +1119,7 @@ class Ui_MainWindow(object):
             document = self.threadBrowser.document()
             cursor = QTextCursor(document)
             cursor.setPosition(cursorPosition)
-            cursor.insertImage(f"{imageDirName}/{imageName}")
+            cursor.insertImage(os.path.join(imageDirName, imageName))
             cursorPosition += 1
             cursor.setPosition(cursorPosition)
             cursor.insertText(f" {self.stackTraceTextList[microStepPointer][i]}")
