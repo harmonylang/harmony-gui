@@ -10,11 +10,15 @@ if python_version < (3, 7):
     print("{} requires Python version 3.7 or later".format(PACKAGE_NAME))
     print("(Version {}.{} detected)".format(*python_version))
     sys.exit(1)
+elif python_version >= (3, 10):
+    print("{} is not compatible with Python 3.10 or above".format(PACKAGE_NAME))
+    print("(Version {}.{} detected)".format(*python_version))
+    sys.exit(1)
 
 setuptools.setup(
     name=PACKAGE_NAME,
     version=PACKAGE_VERSION,
-    author="Robin Li",
+    author="Renyu (Robin) Li",
     author_email="rl626@cornell.edu",
     description="Harmony Programming Language GUI",
     packages=setuptools.find_packages(),

@@ -215,6 +215,7 @@ class Ui_MainWindow(object):
         self.horizontalSlider.setMaximumSize(QtCore.QSize(605, 16777215))
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
+        self.horizontalSlider.setTracking(True)
         self.horizontalLayout_8.addWidget(self.horizontalSlider)
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem3)
@@ -499,6 +500,8 @@ class Ui_MainWindow(object):
         # initialize microstep pointer to 0
         self.microStepPointer = 0
         self.horizontalSlider.setValue(0)
+        self.horizontalSlider.update()
+        self.horizontalSlider.repaint()
         self.filePathText.setText(fname)
         # try open source code file
         # try:
@@ -632,6 +635,8 @@ class Ui_MainWindow(object):
         self.horizontalSlider.setMaximum(len(self.microSteps))
         self.horizontalSlider.setSingleStep(1)
         self.horizontalSlider.setValue(0)
+        self.horizontalSlider.update()
+        self.horizontalSlider.repaint()
         # initalize cursor
         # self.sourceCodeCursor = self.sourceCode.textCursor()
         self.byteCodeCursor = self.byteCode.textCursor()
@@ -736,6 +741,8 @@ class Ui_MainWindow(object):
         self.microstepsLabel.setText(f"Microsteps: {microStepPointer}/{len(self.microSteps)}")
         # update horizontal slider
         self.horizontalSlider.setValue(microStepPointer)
+        self.horizontalSlider.update()
+        self.horizontalSlider.repaint()
         checkFailure = False # FIX: explanation to include special case for failure
         if microStepPointer == len(self.microSteps):
             microStepPointer -= 1
@@ -943,6 +950,8 @@ class Ui_MainWindow(object):
         if self.byteCode.toPlainText() == "":
             return
         self.microStepPointer = self.horizontalSlider.value()
+        self.horizontalSlider.update()
+        self.horizontalSlider.repaint()
         self.updateState()
     
     def updateState(self):
@@ -1372,11 +1381,11 @@ class Ui_MainWindow(object):
                 # i points to the nearest bytecode that starts with "Frame "
                 # show "pc({pcNumber} = {methodName} + {offset})"
                 i = self.microStepPointer - 1 # !!!!!!!
-                while self.hco['code'][int(self.microSteps[i]["pc"])][:6] != 'Frame ':
+                while self.hvm["pretty"][int(self.microSteps[i]["pc"])][0] != 'Frame ':
                     i -= 1
                 assert i >= 0
                 offset = pc - int(self.microSteps[i]["pc"])
-                methodName = self.hco['code'][int(self.microSteps[i]["pc"])][6:]
+                methodName = self.hvm["pretty"][int(self.microSteps[i]["pc"])][0][6:]
                 return f"pc({pc} = {methodName} + {offset})"
         elif type == 'address':
             return self.verbose_string(value)

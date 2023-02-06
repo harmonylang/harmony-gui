@@ -8,15 +8,20 @@ Please report on Ed any error you find with Harmony-GUI. Also feel free to give 
 
 
 ## Installlation
-Before installing Harmony-GUI, make sure you have the latest version of Harmony [installed](https://harmonylang.dev/docs/textbook/install/) on your machine. You can check that by running in your terminal the following command: 
+Harmony-GUI currently supports Python __3.7-3.9__ only. Before installing Harmony-GUI, you must have one of those versions installed on your machine.  
 
-    harmony --version
+Harmony-GUI depends on the latest version of Harmony, which Harmony-GUI will automaticallly install. 
     
-After that, you can install Harmony-GUI by running:
+If running `python3 --version` in your terminal gives version 3.7-3.9, you can install Harmony-GUI by running:
 
     pip3 install harmony-gui
 
-After it is successfully installed, run the following command to start it:
+Alternatively, if you have multiple versions of Python on your machine and one of them is between 3.7-3.9, you can also run
+
+    pip3.x install harmony-gui
+where 7<=x<=9. 
+
+After Harmony-GUI has been successfully installed, run the following command to start it:
 
     harmony-gui
 
