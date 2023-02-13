@@ -28,6 +28,10 @@ After Harmony-GUI has been successfully installed, run the following command to 
 A window like this should pop up:
 ![](readmeImg/p1.png)
 
+If you would like to open a file directly, you can also do:
+
+    harmony-gui <file_to_open>
+to open a `hny` or `hco` file. 
 
 ## Run the First Program
 To run a Harmony program, click the `Browse` button, and choose any Harmony source code file that ends with `.hny` to open. 
