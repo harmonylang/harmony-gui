@@ -563,7 +563,7 @@ class Ui_MainWindow(object):
         try:
             hcoName = fname[:-3] + "hco"
             with open(hcoName, 'r') as hcoFile:
-                hcoData = json.load(hcoFile)
+                hcoData = json.load(hcoFile, strict=False)
         except:
             self.filePathText.setText("")
             self.errorMsgBox("Cannot open hco file. ")
