@@ -3,7 +3,7 @@ import setuptools
 
 PACKAGE_NAME = 'harmony_gui'
 PROJECT_DIR_NAME = 'harmony_gui'
-PACKAGE_VERSION = '1.0.3'
+PACKAGE_VERSION = '1.0.4'
 
 python_version = sys.version_info[:2]
 if python_version < (3, 7):
