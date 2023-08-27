@@ -2,13 +2,15 @@
 
 Harmony-GUI is a graphical, interactive debugger for the [Harmony](https://harmonylang.dev/) programming language. It allows users to better discover and diagnoze concurrency bugs in Harmony programs. When a bug exists, Harmony-GUI displays a trace (i.e, a possible interleaving of instructions) leading to that bug and allows users to step through each instruction and find out the cause of the bug. 
 
-Note: Harmony-GUI is a newly-developed feature and this is its first time being used in CS 4410. Therefore, this version of Harmony-GUI is meant to be a __beta version__. You should feel free to use it, but in case it does not work properly, you can always switch back to the html output for debugging.  
+Note: Harmony-GUI is a newly-developed feature and this is its second time being used in CS 4410. Therefore, this version of Harmony-GUI is meant to be a __beta version__. You should feel free to use it, but in case it does not work properly, you can always switch back to the html output for debugging.  
 
 Please report on Ed any error you find with Harmony-GUI. Also feel free to give any feedback! 
 
 
 ## Installation
 Harmony-GUI currently supports Python __3.7-3.9__ only. Before installing Harmony-GUI, you must have one of those versions installed on your machine.  
+
+__Note__: If you are using a mac with Apple silicon chip, the steps below may not work. To fix that, you will need to run your terminal using Rosetta (this [link](https://dev.to/courier/tips-and-tricks-to-setup-your-apple-m1-for-development-547g) explains how to do that under section "1. Create a Rosetta Terminal")
 
 Harmony-GUI depends on the latest version of Harmony, which Harmony-GUI will automatically install. 
     
